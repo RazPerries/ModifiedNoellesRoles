@@ -498,12 +498,14 @@ public class Noellesroles implements ModInitializer {
                 }
 
             }
+            //Phantom go invisible ability
             if (gameWorldComponent.isRole(context.player(), PHANTOM) && abilityPlayerComponent.cooldown <= 0) {
                 context.player().addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 20 * 20,0,true,false,true));
+                // NOTE: Ability cooldown goes down DURING invsibility. Add the ability uptime to cooldown duration.
                 abilityPlayerComponent.cooldown = GameConstants.getInTicks(2, 20);
             }
 
-            //Morphling force remove disguise
+            //Morphling force remove disguise ability
             if (gameWorldComponent.isRole(context.player(), MORPHLING) && abilityPlayerComponent.cooldown <= 0) {
                 MorphlingPlayerComponent morphlingPlayerComponent = MorphlingPlayerComponent.KEY.get(context.player());
                 if (morphlingPlayerComponent.getMorphTicks() > 0) {

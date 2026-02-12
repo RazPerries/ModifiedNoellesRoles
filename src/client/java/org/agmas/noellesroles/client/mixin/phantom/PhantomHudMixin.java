@@ -28,9 +28,13 @@ public abstract class PhantomHudMixin {
         if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.PHANTOM)) {
             int drawY = context.getScaledWindowHeight();
 
-            Text line = Text.translatable("tip.phantom", NoellesrolesClient.abilityBind.getBoundKeyLocalizedText());
+            //Invisibility ability cooldown (in seconds). Subtract from the ability uptime.
+            int abilityCooldown = 140 - 20;
 
-            if (abilityPlayerComponent.cooldown > 0) {
+            Text line = Text.translatable("tip.phantom", NoellesrolesClient.abilityBind.getBoundKeyLocalizedText());
+            if (abilityCooldown <= abilityPlayerComponent.cooldown/20)  {
+                line = Text.translatable("tip.phantom.invisibility", (abilityPlayerComponent.cooldown/20) - abilityCooldown);
+            } else if (abilityPlayerComponent.cooldown > 0) {
                 line = Text.translatable("tip.noellesroles.cooldown", abilityPlayerComponent.cooldown/20);
             }
 

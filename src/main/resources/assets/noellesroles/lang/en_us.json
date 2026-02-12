@@ -95,6 +95,7 @@
   "death_reason.noellesroles.modded_backfire": "guilt.",
 
   "tip.phantom": "Use %s to go invisible!",
+  "tip.phantom.invisibility": "%ss until invisibility ends.",
   "tip.recaller.place": "Use %s to save your location!",
   "tip.recaller.teleport": "Use %s to teleport!",
   "tip.vulture": "%s/%s bodies eaten.",
@@ -105,7 +106,7 @@
   "tip.master_key_invisible": "Master Keys look like lockpicks.",
   "tip.trapper.caught": "You caught %s players in your trap. Their roles were:",
   "tip.morphling.disguise_required": "Requires a morph to use.",
-  "tip.morphling.remove_disguise": "Ends in %ss. Use %s to demorph.",
+  "tip.morphling.remove_disguise": "%ss until morph ends. Use %s to demorph.",
 
   "subtitles.noellesroles.role_mine_beep": "Role Mine Beeps"
 }
