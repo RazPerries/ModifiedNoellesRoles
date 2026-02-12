@@ -56,14 +56,14 @@ public abstract class InstinctMixin {
                 PlayerPoisonComponent playerPoisonComponent =  PlayerPoisonComponent.KEY.get((PlayerEntity) target);
                 if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.BARTENDER) && bartenderPlayerComponent.glowTicks > 0) {
                     cir.setReturnValue(Color.GREEN.getRGB());
-                }
+                } /*
                 if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.BARTENDER) && bartenderPlayerComponent.armor > 0) {
                     cir.setReturnValue(Color.BLUE.getRGB());
                     cir.cancel();
                 }
                 if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.BARTENDER) && playerPoisonComponent.poisonTicks > 0) {
                     cir.setReturnValue(Color.RED.getRGB());
-                }
+                } */
             }
         }
         if (target instanceof PlayerEntity) {
