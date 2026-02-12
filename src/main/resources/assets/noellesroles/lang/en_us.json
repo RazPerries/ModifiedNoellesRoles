@@ -104,6 +104,8 @@
   "tip.master_key_invisible_count": "Master Keys look like lockpicks with less than %s people.",
   "tip.master_key_invisible": "Master Keys look like lockpicks.",
   "tip.trapper.caught": "You caught %s players in your trap. Their roles were:",
+  "tip.morphling.disguise_required": "Requires a morph to use.",
+  "tip.morphling.remove_disguise": "Ends in %ss. Use %s to demorph.",
 
   "subtitles.noellesroles.role_mine_beep": "Role Mine Beeps"
 }

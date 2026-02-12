@@ -69,14 +69,14 @@ public class MorphlingPlayerComponent implements AutoSyncedComponent, ServerTick
     }
 
     public boolean startMorph(UUID id) {
-        setMorphTicks(GameConstants.getInTicks(0,35));
+        setMorphTicks(GameConstants.getInTicks(0,40));
         disguise = id;
         this.sync();
         return true;
     }
 
     public void stopMorph() {
-        this.morphTicks = -GameConstants.getInTicks(0,20);
+        this.morphTicks = -GameConstants.getInTicks(0,25);
     }
 
     public int getMorphTicks() {

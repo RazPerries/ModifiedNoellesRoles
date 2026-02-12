@@ -19,6 +19,7 @@
     "guesser.GuesserSuggestorMixin",
     "morphling.MorphlingRendererMixin",
     "morphling.MorphlingRoleNameRendererMixin",
+    "morphling.MorphlingHudMixin",
     "morphling.MorphlingScreenMixin",
     "noisemaker.NoisemakerShopMixin",
     "phantom.PhantomHudMixin",

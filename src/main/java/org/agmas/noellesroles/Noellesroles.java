@@ -60,6 +60,9 @@ import org.agmas.noellesroles.recaller.RecallerPlayerComponent;
 import org.agmas.noellesroles.voodoo.VoodooPlayerComponent;
 import org.agmas.noellesroles.vulture.VulturePlayerComponent;
 
+//Custom import
+import org.agmas.noellesroles.morphling.MorphlingPlayerComponent;
+
 import java.awt.*;
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -496,8 +499,17 @@ public class Noellesroles implements ModInitializer {
 
             }
             if (gameWorldComponent.isRole(context.player(), PHANTOM) && abilityPlayerComponent.cooldown <= 0) {
-                context.player().addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 30 * 20,0,true,false,true));
-                abilityPlayerComponent.cooldown = GameConstants.getInTicks(1, 30);
+                context.player().addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 20 * 20,0,true,false,true));
+                abilityPlayerComponent.cooldown = GameConstants.getInTicks(2, 20);
+            }
+
+            //Morphling force remove disguise
+            if (gameWorldComponent.isRole(context.player(), MORPHLING) && abilityPlayerComponent.cooldown <= 0) {
+                MorphlingPlayerComponent morphlingPlayerComponent = MorphlingPlayerComponent.KEY.get(context.player());
+                if (morphlingPlayerComponent.getMorphTicks() > 0) {
+                    morphlingPlayerComponent.reset();
+                    abilityPlayerComponent.cooldown = morphlingPlayerComponent.getMorphTicks();
+                }
             }
         });
     }
