@@ -107,6 +107,8 @@
   "tip.trapper.caught": "You caught %s players in your trap. Their roles were:",
   "tip.morphling.disguise_required": "Requires a morph to use.",
   "tip.morphling.remove_disguise": "%ss until morph ends. Use %s to demorph.",
+  "tip.executioner.target_reroll":"Use %s to change your target. (One time only!)",
+  "tip.executioner.no_more_rerolls":"Already changed your target.",
 
   "subtitles.noellesroles.role_mine_beep": "Role Mine Beeps"
 }

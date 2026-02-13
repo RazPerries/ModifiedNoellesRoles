@@ -37,6 +37,8 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.Vec3d;
@@ -513,9 +515,31 @@ public class Noellesroles implements ModInitializer {
                     abilityPlayerComponent.cooldown = morphlingPlayerComponent.getMorphTicks();
                 }
             }
+
+            // Executioner reroll ability
+            if (gameWorldComponent.isRole(context.player(), EXECUTIONER)) {
+                ExecutionerPlayerComponent executionerPlayerComponent = ExecutionerPlayerComponent.KEY.get(context.player());
+
+                if (!executionerPlayerComponent.hasRerolled) {
+                    List<UUID> innocentPlayers = new ArrayList<>();
+                    gameWorldComponent.getRoles().forEach((uuid2, role1) -> {
+                        PlayerEntity player2 = context.player().getWorld().getPlayerByUuid(uuid2);
+                        if (uuid2 == null) return;
+                        if (role1.isInnocent() && GameFunctions.isPlayerAliveAndSurvival(player2) && !role1.equals(WatheRoles.VIGILANTE) && !role1.equals(Noellesroles.MIMIC) && uuid2 != executionerPlayerComponent.target) {
+                            innocentPlayers.add(uuid2);
+                        }
+                    });
+
+                    Collections.shuffle(innocentPlayers);
+                    if (!innocentPlayers.isEmpty()) {
+                        executionerPlayerComponent.target = innocentPlayers.getFirst();
+                    } else {
+                        context.player().sendMessage(Text.literal("Target switch failed! No other valid targets.").formatted(Formatting.DARK_RED), true);
+                    }
+                    executionerPlayerComponent.hasRerolled = true;
+                    executionerPlayerComponent.sync();
+                }
+            }
         });
     }
-
-
-
 }

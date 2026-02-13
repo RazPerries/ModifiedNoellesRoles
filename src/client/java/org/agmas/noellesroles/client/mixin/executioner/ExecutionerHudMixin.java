@@ -74,5 +74,24 @@ public abstract class ExecutionerHudMixin {
     private static void executionerGetTarget(TextRenderer renderer, ClientPlayerEntity player, DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci, @Local PlayerEntity target) {
         NoellesrolesClient.target = target;
     }
+
+
+    @Inject(method = "renderHud", at = @At("TAIL"))
+    private static void executionerAbilityText(TextRenderer renderer, ClientPlayerEntity player, DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
+        GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(player.getWorld());
+        ExecutionerPlayerComponent executionerPlayerComponent = (ExecutionerPlayerComponent) ExecutionerPlayerComponent.KEY.get(player);
+
+        if (gameWorldComponent.isRole(player, Noellesroles.EXECUTIONER)) {
+            int drawY = context.getScaledWindowHeight();
+            Text line = Text.translatable("tip.executioner.target_reroll", NoellesrolesClient.abilityBind.getBoundKeyLocalizedText());
+
+            if (executionerPlayerComponent.hasRerolled) {
+                line = Text.translatable("tip.executioner.no_more_rerolls");
+            }
+
+            drawY -= renderer.getWrappedLinesHeight(line, 999999);
+            context.drawTextWithShadow(renderer, line, context.getScaledWindowWidth() - renderer.getWidth(line), drawY, Colors.RED);
+        }
+    }
 }
 

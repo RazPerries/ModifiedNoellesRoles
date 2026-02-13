@@ -27,9 +27,11 @@ public class ExecutionerPlayerComponent implements AutoSyncedComponent, ServerTi
     private final PlayerEntity player;
     public UUID target;
     public boolean won = false;
+    public boolean hasRerolled = false;
 
 
     public void reset() {
+        this.hasRerolled = false;
         this.target = player.getUuid();
         this.sync();
     }
