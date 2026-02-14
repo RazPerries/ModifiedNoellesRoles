@@ -35,6 +35,7 @@ import org.agmas.noellesroles.ModItems;
 import org.agmas.noellesroles.NoellesRolesEntities;
 import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.client.renderer.RoleMineEntityRenderer;
+import org.agmas.noellesroles.client.renderer.ShortFuseFirecrackerEntityRenderer;
 import org.agmas.noellesroles.packet.AbilityC2SPacket;
 import org.agmas.noellesroles.packet.MorphC2SPacket;
 import org.agmas.noellesroles.packet.VultureEatC2SPacket;
@@ -86,11 +87,13 @@ public class NoellesrolesClient implements ClientModInitializer {
             }
         });
         EntityRendererRegistry.register(NoellesRolesEntities.ROLE_MINE_ENTITY_ENTITY_TYPE, RoleMineEntityRenderer::new);
+        EntityRendererRegistry.register(NoellesRolesEntities.SHORTFUSE_FIRECRACKER_ENTITY_ENTITY_TYPE, ShortFuseFirecrackerEntityRenderer::new);
 
         ItemTooltipCallback.EVENT.register(((itemStack, tooltipContext, tooltipType, list) -> {
             tooltipHelper(ModItems.DEFENSE_VIAL, itemStack, list);
             tooltipHelper(ModItems.ROLE_MINE, itemStack, list);
             tooltipHelper(ModItems.DELUSION_VIAL, itemStack, list);
+            tooltipHelper(ModItems.SHORTFUSE_FIRECRACKER, itemStack, list);
         }));
     }
 
