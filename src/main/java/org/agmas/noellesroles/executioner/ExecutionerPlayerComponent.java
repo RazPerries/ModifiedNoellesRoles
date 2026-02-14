@@ -77,9 +77,11 @@ public class ExecutionerPlayerComponent implements AutoSyncedComponent, ServerTi
 
     public void writeToNbt(@NotNull NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         tag.putUuid("target", this.target);
+        tag.putBoolean("hasRerolled", this.hasRerolled);
     }
 
     public void readFromNbt(@NotNull NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         this.target = tag.contains("target") ? tag.getUuid("target") : player.getUuid();
+        this.hasRerolled = tag.getBoolean("hasRerolled");
     }
 }
