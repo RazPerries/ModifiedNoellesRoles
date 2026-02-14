@@ -278,7 +278,16 @@ public class Noellesroles implements ModInitializer {
             if (role.equals(VULTURE)) {
                 VulturePlayerComponent vulturePlayerComponent = VulturePlayerComponent.KEY.get(player);
                 vulturePlayerComponent.reset();
-                vulturePlayerComponent.bodiesRequired = (int)((player.getWorld().getPlayers().size()/3f) - Math.floor(player.getWorld().getPlayers().size()/6f));
+                if (player.getWorld().getPlayers().size() < 10){
+                    // If player count is 9-
+                    vulturePlayerComponent.bodiesRequired = 2;
+                } else if (player.getWorld().getPlayers().size() >= 10 && player.getWorld().getPlayers().size() < 15){
+                    // If player count is 10-14
+                    vulturePlayerComponent.bodiesRequired = 3;
+                } else {
+                    // If player count is 15+
+                    vulturePlayerComponent.bodiesRequired = 4;
+                }
                 vulturePlayerComponent.sync();
             }
             if (role.equals(BETTER_VIGILANTE)) {
@@ -318,11 +327,6 @@ public class Noellesroles implements ModInitializer {
                 Harpymodloader.setRoleMaximum(MIMIC,1);
             } else {
                 Harpymodloader.setRoleMaximum(MIMIC,0);
-            }
-            if (server.getPlayerManager().getCurrentPlayerCount() >= 8) {
-                Harpymodloader.setRoleMaximum(VULTURE,1);
-            } else {
-                Harpymodloader.setRoleMaximum(VULTURE,0);
             }
         }));
         if (!NoellesRolesConfig.HANDLER.instance().shitpostRoles) {

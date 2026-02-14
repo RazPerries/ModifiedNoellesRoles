@@ -89,7 +89,7 @@ public abstract class InstinctMixin {
                 if (role != null) {
                     if (WatheClient.isKiller() && WatheClient.isPlayerAliveAndInSurvival()) {
                         if (Noellesroles.KILLER_SIDED_NEUTRALS.contains(role)) {
-                            cir.setReturnValue(role.color());
+                            cir.setReturnValue(new Color(255, 90, 40).getRGB());
                             cir.cancel();
                         } else if (!role.isInnocent() && !role.canUseKiller()) {
                            cir.setReturnValue(5168437);
