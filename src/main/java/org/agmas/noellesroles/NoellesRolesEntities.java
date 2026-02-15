@@ -16,8 +16,8 @@ public class NoellesRolesEntities {
     );
     public static final EntityType<ShortFuseFirecrackerEntity> SHORTFUSE_FIRECRACKER_ENTITY_ENTITY_TYPE = Registry.register(
             Registries.ENTITY_TYPE,
-            Identifier.of(Noellesroles.MOD_ID, "cube"),
-            EntityType.Builder.create(ShortFuseFirecrackerEntity::new, SpawnGroup.MISC).dimensions(0.75f, 0.75f).build("cube")
+            Identifier.of(Noellesroles.MOD_ID, "shortfuse_firecracker"),
+            EntityType.Builder.create(ShortFuseFirecrackerEntity::new, SpawnGroup.MISC).dimensions(0.75f, 0.75f).build("shortfuse_firecracker")
     );
     public static void init() {}
 }
