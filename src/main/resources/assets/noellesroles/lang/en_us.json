@@ -83,8 +83,6 @@
   "item.noellesroles.delusion_vial.tooltip": "Right click on food/drink trays to use\nCreates fakes poison, making the consumer of the poisoned item\nthink they are poisoned, but have no physical effect.",
   "item.noellesroles.role_mine": "Role Mine",
   "item.noellesroles.role_mine.tooltip": "Right click to Place down on Floors or Ceilings.\nInvisible to other players, both placed and in hand.",
-  "item.noellesroles.shortfuse_firecracker": "Short-Fused Firecracker",
-  "item.noellesroles.shortfuse_firecracker.tooltip": "Detonates after 5 seconds.\nSimulates the sound of a gunshot.",
 
   "death_reason.wathe.gun_shot": "a bullet.",
   "death_reason.wathe.knife_stab": "a knife!",

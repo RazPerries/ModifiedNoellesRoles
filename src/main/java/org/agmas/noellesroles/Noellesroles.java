@@ -163,9 +163,8 @@ public class Noellesroles implements ModInitializer {
 
         FRAMING_ROLES_SHOP.add(new FramingShopEntry(WatheItems.LOCKPICK.getDefaultStack(), 50, ShopEntry.Type.TOOL));
         FRAMING_ROLES_SHOP.add(new FramingShopEntry(ModItems.DELUSION_VIAL.getDefaultStack(), 30, ShopEntry.Type.POISON));
-        FRAMING_ROLES_SHOP.add(new FramingShopEntry(WatheItems.NOTE.getDefaultStack(), 5, ShopEntry.Type.TOOL));
         FRAMING_ROLES_SHOP.add(new FramingShopEntry(WatheItems.FIRECRACKER.getDefaultStack(), 5, ShopEntry.Type.TOOL));
-        FRAMING_ROLES_SHOP.add(new FramingShopEntry(ModItems.SHORTFUSE_FIRECRACKER.getDefaultStack(), 5, ShopEntry.Type.TOOL));
+        FRAMING_ROLES_SHOP.add(new FramingShopEntry(WatheItems.NOTE.getDefaultStack(), 5, ShopEntry.Type.TOOL));
 
         NoellesRolesConfig.HANDLER.load();
         ModItems.init();
