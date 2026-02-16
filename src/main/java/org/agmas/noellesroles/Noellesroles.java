@@ -140,6 +140,7 @@ public class Noellesroles implements ModInitializer {
     public static final ArrayList<Role> VANNILA_ROLES = new ArrayList<>();
     public static final ArrayList<Identifier> VANNILA_ROLE_IDS = new ArrayList<>();
     public static final ArrayList<Role> KILLER_SIDED_NEUTRALS = new ArrayList<>();
+    public static final ArrayList<Role> ENABLED_NEUTRALS = new ArrayList<>();
 
     public static ArrayList<ShopEntry> FRAMING_ROLES_SHOP = new ArrayList<>();
 
@@ -155,6 +156,9 @@ public class Noellesroles implements ModInitializer {
         KILLER_SIDED_NEUTRALS.add(VULTURE);
         KILLER_SIDED_NEUTRALS.add(JESTER);
         KILLER_SIDED_NEUTRALS.add(EXECUTIONER);
+
+        ENABLED_NEUTRALS.add(VULTURE);
+        ENABLED_NEUTRALS.add(EXECUTIONER);
 
         VANNILA_ROLE_IDS.add(WatheRoles.LOOSE_END.identifier());
         VANNILA_ROLE_IDS.add(WatheRoles.VIGILANTE.identifier());
@@ -324,10 +328,24 @@ public class Noellesroles implements ModInitializer {
             }
         });
         ServerTickEvents.END_SERVER_TICK.register(((server) -> {
+            /*
             if (server.getPlayerManager().getCurrentPlayerCount() >= 12) {
                 Harpymodloader.setRoleMaximum(MIMIC,1);
             } else {
                 Harpymodloader.setRoleMaximum(MIMIC,0);
+            }*/
+            if (server.getPlayerManager().getCurrentPlayerCount() < 8) {
+                Harpymodloader.setRoleMaximum(EXECUTIONER,0);
+                Harpymodloader.setRoleMaximum(VULTURE,0);
+            } else {
+                if (server.getPlayerManager().getCurrentPlayerCount() >= 8 && server.getPlayerManager().getCurrentPlayerCount() < 13) {
+                    Collections.shuffle(ENABLED_NEUTRALS);
+                    Harpymodloader.setRoleMaximum(ENABLED_NEUTRALS.getFirst(),1);
+                    Harpymodloader.setRoleMaximum(ENABLED_NEUTRALS.getLast(),0);
+                } else {
+                    Harpymodloader.setRoleMaximum(VULTURE,1);
+                    Harpymodloader.setRoleMaximum(EXECUTIONER,1);
+                }
             }
         }));
         if (!NoellesRolesConfig.HANDLER.instance().shitpostRoles) {
