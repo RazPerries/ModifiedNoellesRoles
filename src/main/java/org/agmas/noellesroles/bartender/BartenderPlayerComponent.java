@@ -58,7 +58,7 @@ public class BartenderPlayerComponent implements AutoSyncedComponent, ServerTick
 
 
     public boolean startGlow() {
-        setGlowTicks(GameConstants.getInTicks(0,8));
+        setGlowTicks(GameConstants.getInTicks(0,10));
         this.sync();
         return true;
     }

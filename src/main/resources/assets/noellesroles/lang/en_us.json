@@ -98,19 +98,19 @@
 
   "tip.phantom": "Use %s to go invisible!",
   "tip.phantom.invisibility": "%ss until invisibility ends.",
-  "tip.recaller.place": "Use %s to save your location!",
-  "tip.recaller.teleport": "Use %s to teleport!",
+  "tip.recaller.place": "Use %s to save your location (One time only!)",
+  "tip.recaller.teleport": "Use %s to teleport (One time only!)",
   "tip.vulture": "%s/%s bodies eaten.",
-  "tip.recaller.not_enough_money": "100\uE781 required to teleport.",
+  "tip.recaller.not_enough_money": "200\uE781 required to teleport.",
   "tip.selected": "Selected",
   "tip.noellesroles.cooldown": "Ability usable in %ss",
+  "tip.noellesroles.ability_used": "Ability cannot be used anymore.",
   "tip.master_key_invisible_count": "Master Keys look like lockpicks with less than %s people.",
   "tip.master_key_invisible": "Master Keys look like lockpicks.",
   "tip.trapper.caught": "You caught %s players in your trap. Their roles were:",
   "tip.morphling.disguise_required": "Requires a morph to use.",
   "tip.morphling.remove_disguise": "%ss until morph ends. Use %s to demorph.",
   "tip.executioner.target_reroll":"Use %s to change your target. (One time only!)",
-  "tip.executioner.no_more_rerolls":"Already changed your target.",
 
   "subtitles.noellesroles.role_mine_beep": "Role Mine Beeps"
 }

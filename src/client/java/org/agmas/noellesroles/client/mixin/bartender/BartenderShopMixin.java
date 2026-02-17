@@ -3,6 +3,7 @@ package org.agmas.noellesroles.client.mixin.bartender;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.client.gui.screen.ingame.LimitedHandledScreen;
 import dev.doctor4t.wathe.client.gui.screen.ingame.LimitedInventoryScreen;
+import dev.doctor4t.wathe.index.WatheItems;
 import dev.doctor4t.wathe.util.ShopEntry;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -38,7 +39,11 @@ public abstract class BartenderShopMixin extends LimitedHandledScreen<PlayerScre
         if (gameWorldComponent.isRole(player,Noellesroles.BARTENDER)) {
             if (ConfigWorldComponent.KEY.get(player.getWorld()).maximumDefenseVials == 0 || BartenderPlayerComponent.KEY.get(player).vialsBought < ConfigWorldComponent.KEY.get(player.getWorld()).maximumDefenseVials) {
                 List<ShopEntry> entries = new ArrayList<>();
-                entries.add(new ShopEntry(ModItems.DEFENSE_VIAL.getDefaultStack(), ConfigWorldComponent.KEY.get(player.getWorld()).defenseVialPrice, ShopEntry.Type.POISON));
+                entries.add(new ShopEntry(WatheItems.OLD_FASHIONED.getDefaultStack(),75, ShopEntry.Type.POISON));
+                entries.add(new ShopEntry(WatheItems.MOJITO.getDefaultStack(),75, ShopEntry.Type.POISON));
+                entries.add(new ShopEntry(WatheItems.MARTINI.getDefaultStack(),75, ShopEntry.Type.POISON));
+                entries.add(new ShopEntry(WatheItems.COSMOPOLITAN.getDefaultStack(),75, ShopEntry.Type.POISON));
+                entries.add(new ShopEntry(WatheItems.CHAMPAGNE.getDefaultStack(),75, ShopEntry.Type.POISON));
                 int apart = 36;
                 int x = width / 2 - (entries.size()) * apart / 2 + 9;
                 int shouldBeY = (((LimitedInventoryScreen) (Object) this).height - 32) / 2;

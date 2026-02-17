@@ -37,13 +37,17 @@ public abstract class RecallerHudMixin {
             if (!recallerPlayerComponent.placed) {
                 line = Text.translatable("tip.recaller.place", NoellesrolesClient.abilityBind.getBoundKeyLocalizedText());
             } else {
-                if (playerShopComponent.balance < 100) {
+                if (playerShopComponent.balance < 200) {
                     line = Text.translatable("tip.recaller.not_enough_money");
                 }
             }
 
             if (abilityPlayerComponent.cooldown > 0) {
                 line = Text.translatable("tip.noellesroles.cooldown", abilityPlayerComponent.cooldown/20);
+            }
+
+            if (recallerPlayerComponent.hasRecalled) {
+                line = Text.translatable("tip.noellesroles.ability_used");
             }
 
             drawY -= getTextRenderer().getWrappedLinesHeight(line, 999999);

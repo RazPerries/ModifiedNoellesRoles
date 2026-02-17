@@ -4,6 +4,7 @@ import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.cca.PlayerShopComponent;
 import dev.doctor4t.wathe.client.gui.screen.ingame.LimitedHandledScreen;
 import dev.doctor4t.wathe.client.gui.screen.ingame.LimitedInventoryScreen;
+import dev.doctor4t.wathe.index.WatheItems;
 import dev.doctor4t.wathe.index.WatheSounds;
 import dev.doctor4t.wathe.util.ShopEntry;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,6 +19,7 @@ import net.minecraft.util.Formatting;
 import org.agmas.noellesroles.ConfigWorldComponent;
 import org.agmas.noellesroles.ModItems;
 import org.agmas.noellesroles.Noellesroles;
+import org.agmas.noellesroles.ShopComponent;
 import org.agmas.noellesroles.bartender.BartenderPlayerComponent;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,30 +43,75 @@ public abstract class BartenderPlayerShopComponentMixin {
     void bartenderBuy(int index, CallbackInfo ci) {
         GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(player.getWorld());
         if (gameWorldComponent.isRole(player,Noellesroles.BARTENDER)) {
-            if (ConfigWorldComponent.KEY.get(player.getWorld()).maximumDefenseVials == 0 || BartenderPlayerComponent.KEY.get(player).vialsBought < ConfigWorldComponent.KEY.get(player.getWorld()).maximumDefenseVials) {
-                if (index == 0) {
-                    if (balance >= ConfigWorldComponent.KEY.get(player.getWorld()).defenseVialPrice) {
-                        this.balance -= ConfigWorldComponent.KEY.get(player.getWorld()).defenseVialPrice;
-                        sync();
-                        player.giveItemStack(ModItems.DEFENSE_VIAL.getDefaultStack());
-                        PlayerEntity var6 = this.player;
-                        if (var6 instanceof ServerPlayerEntity) {
-                            ServerPlayerEntity player = (ServerPlayerEntity) var6;
-                            player.networkHandler.sendPacket(new PlaySoundS2CPacket(Registries.SOUND_EVENT.getEntry(WatheSounds.UI_SHOP_BUY), SoundCategory.PLAYERS, player.getX(), player.getY(), player.getZ(), 1.0F, 0.9F + this.player.getRandom().nextFloat() * 0.2F, player.getRandom().nextLong()));
-                        }
-                        BartenderPlayerComponent.KEY.get(player).vialsBought++;
-                        BartenderPlayerComponent.KEY.get(player).sync();
-                        if (BartenderPlayerComponent.KEY.get(player).vialsBought >= ConfigWorldComponent.KEY.get(player.getWorld()).maximumDefenseVials) {
-                            ((ServerPlayerEntity) player).closeHandledScreen();
-                        }
-                    } else {
-                        this.player.sendMessage(Text.literal("Purchase Failed").formatted(Formatting.DARK_RED), true);
-                        PlayerEntity var4 = this.player;
-                        if (var4 instanceof ServerPlayerEntity) {
-                            ServerPlayerEntity player = (ServerPlayerEntity) var4;
-                            player.networkHandler.sendPacket(new PlaySoundS2CPacket(Registries.SOUND_EVENT.getEntry(WatheSounds.UI_SHOP_BUY_FAIL), SoundCategory.PLAYERS, player.getX(), player.getY(), player.getZ(), 1.0F, 0.9F + this.player.getRandom().nextFloat() * 0.2F, player.getRandom().nextLong()));
-                        }
+            // Is this the most efficient way to do this? No. I don't care enough to optimize it.
+            if (index == 0) {
+                if (balance >= 75) {
+                    this.balance -= 75;
+                    sync();
+                    player.giveItemStack(WatheItems.OLD_FASHIONED.getDefaultStack());
+                    PlayerEntity var6 = this.player;
+                    if (var6 instanceof ServerPlayerEntity) {
+                        ServerPlayerEntity player = (ServerPlayerEntity) var6;
+                        player.networkHandler.sendPacket(new PlaySoundS2CPacket(Registries.SOUND_EVENT.getEntry(WatheSounds.UI_SHOP_BUY), SoundCategory.PLAYERS, player.getX(), player.getY(), player.getZ(), 1.0F, 0.9F + this.player.getRandom().nextFloat() * 0.2F, player.getRandom().nextLong()));
                     }
+                } else {
+                    ShopComponent.failedPurchase(this.player);
+                }
+            }
+            if (index == 1) {
+                if (balance >= 75) {
+                    this.balance -= 75;
+                    sync();
+                    player.giveItemStack(WatheItems.MOJITO.getDefaultStack());
+                    PlayerEntity var6 = this.player;
+                    if (var6 instanceof ServerPlayerEntity) {
+                        ServerPlayerEntity player = (ServerPlayerEntity) var6;
+                        player.networkHandler.sendPacket(new PlaySoundS2CPacket(Registries.SOUND_EVENT.getEntry(WatheSounds.UI_SHOP_BUY), SoundCategory.PLAYERS, player.getX(), player.getY(), player.getZ(), 1.0F, 0.9F + this.player.getRandom().nextFloat() * 0.2F, player.getRandom().nextLong()));
+                    }
+                } else {
+                    ShopComponent.failedPurchase(this.player);
+                }
+            }
+            if (index == 2) {
+                if (balance >= 75) {
+                    this.balance -= 75;
+                    sync();
+                    player.giveItemStack(WatheItems.MARTINI.getDefaultStack());
+                    PlayerEntity var6 = this.player;
+                    if (var6 instanceof ServerPlayerEntity) {
+                        ServerPlayerEntity player = (ServerPlayerEntity) var6;
+                        player.networkHandler.sendPacket(new PlaySoundS2CPacket(Registries.SOUND_EVENT.getEntry(WatheSounds.UI_SHOP_BUY), SoundCategory.PLAYERS, player.getX(), player.getY(), player.getZ(), 1.0F, 0.9F + this.player.getRandom().nextFloat() * 0.2F, player.getRandom().nextLong()));
+                    }
+                } else {
+                    ShopComponent.failedPurchase(this.player);
+                }
+            }
+            if (index == 3) {
+                if (balance >= 75) {
+                    this.balance -= 75;
+                    sync();
+                    player.giveItemStack(WatheItems.COSMOPOLITAN.getDefaultStack());
+                    PlayerEntity var6 = this.player;
+                    if (var6 instanceof ServerPlayerEntity) {
+                        ServerPlayerEntity player = (ServerPlayerEntity) var6;
+                        player.networkHandler.sendPacket(new PlaySoundS2CPacket(Registries.SOUND_EVENT.getEntry(WatheSounds.UI_SHOP_BUY), SoundCategory.PLAYERS, player.getX(), player.getY(), player.getZ(), 1.0F, 0.9F + this.player.getRandom().nextFloat() * 0.2F, player.getRandom().nextLong()));
+                    }
+                } else {
+                    ShopComponent.failedPurchase(this.player);
+                }
+            }
+            if (index == 4) {
+                if (balance >= 75) {
+                    this.balance -= 75;
+                    sync();
+                    player.giveItemStack(WatheItems.CHAMPAGNE.getDefaultStack());
+                    PlayerEntity var6 = this.player;
+                    if (var6 instanceof ServerPlayerEntity) {
+                        ServerPlayerEntity player = (ServerPlayerEntity) var6;
+                        player.networkHandler.sendPacket(new PlaySoundS2CPacket(Registries.SOUND_EVENT.getEntry(WatheSounds.UI_SHOP_BUY), SoundCategory.PLAYERS, player.getX(), player.getY(), player.getZ(), 1.0F, 0.9F + this.player.getRandom().nextFloat() * 0.2F, player.getRandom().nextLong()));
+                    }
+                } else {
+                    ShopComponent.failedPurchase(this.player);
                 }
             }
             ci.cancel();

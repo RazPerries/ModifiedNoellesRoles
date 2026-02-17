@@ -86,7 +86,7 @@ public abstract class ExecutionerHudMixin {
             Text line = Text.translatable("tip.executioner.target_reroll", NoellesrolesClient.abilityBind.getBoundKeyLocalizedText());
 
             if (executionerPlayerComponent.hasRerolled) {
-                line = Text.translatable("tip.executioner.no_more_rerolls");
+                line = Text.translatable("tip.noellesroles.ability_used");
             }
 
             drawY -= renderer.getWrappedLinesHeight(line, 999999);

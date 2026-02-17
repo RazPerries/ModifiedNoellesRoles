@@ -511,12 +511,12 @@ public class Noellesroles implements ModInitializer {
             if (gameWorldComponent.isRole(context.player(), RECALLER) && abilityPlayerComponent.cooldown <= 0) {
                 RecallerPlayerComponent recallerPlayerComponent = RecallerPlayerComponent.KEY.get(context.player());
                 PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(context.player());
-                if (!recallerPlayerComponent.placed) {
+                if (!recallerPlayerComponent.placed && !recallerPlayerComponent.hasRecalled) {
                     abilityPlayerComponent.cooldown = GameConstants.getInTicks(0,10);
                     recallerPlayerComponent.setPosition();
                 }
-                else if (playerShopComponent.balance >= 100) {
-                    playerShopComponent.balance -= 100;
+                else if (playerShopComponent.balance >= 200 && !recallerPlayerComponent.hasRecalled) {
+                    playerShopComponent.balance -= 200;
                     playerShopComponent.sync();
                     abilityPlayerComponent.cooldown = GameConstants.getInTicks(0,30);
                     recallerPlayerComponent.teleport();
