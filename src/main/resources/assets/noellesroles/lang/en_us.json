@@ -96,7 +96,7 @@
   "death_reason.noellesroles.voodoo": "voodoo magic.",
   "death_reason.noellesroles.modded_backfire": "guilt.",
 
-  "tip.phantom": "Use %s to go invisible!",
+  "tip.phantom": "Use %s to go invisible! (%s charges left.)",
   "tip.phantom.invisibility": "%ss until invisibility ends.",
   "tip.recaller.place": "Use %s to save your location (One time only!)",
   "tip.recaller.teleport": "Use %s to teleport (One time only!)",

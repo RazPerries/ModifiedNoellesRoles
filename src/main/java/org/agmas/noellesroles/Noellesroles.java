@@ -58,6 +58,7 @@ import org.agmas.noellesroles.executioner.ExecutionerPlayerComponent;
 import org.agmas.noellesroles.framing.FramingShopEntry;
 import org.agmas.noellesroles.morphling.MorphlingPlayerComponent;
 import org.agmas.noellesroles.packet.*;
+import org.agmas.noellesroles.phantom.PhantomPlayerComponent;
 import org.agmas.noellesroles.recaller.RecallerPlayerComponent;
 import org.agmas.noellesroles.voodoo.VoodooPlayerComponent;
 import org.agmas.noellesroles.vulture.VulturePlayerComponent;
@@ -525,9 +526,14 @@ public class Noellesroles implements ModInitializer {
             }
             //Phantom go invisible ability
             if (gameWorldComponent.isRole(context.player(), PHANTOM) && abilityPlayerComponent.cooldown <= 0) {
-                context.player().addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 20 * 20,0,true,false,true));
-                // NOTE: Ability cooldown goes down DURING invsibility. Add the ability uptime to cooldown duration.
-                abilityPlayerComponent.cooldown = GameConstants.getInTicks(2, 20);
+            PhantomPlayerComponent phantomPlayerComponent = PhantomPlayerComponent.KEY.get(context.player());
+                if (phantomPlayerComponent.invisCount > 0) {
+                    context.player().addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, phantomPlayerComponent.invisTimer * 20, 0, true, false, true));
+                    // NOTE: The ability cooldown, uptime, and charges are all handled in the PhantomPlayerComponent.java file. See there to modify the phantom.
+                    abilityPlayerComponent.cooldown = GameConstants.getInTicks(0, phantomPlayerComponent.invisCooldown);
+                    phantomPlayerComponent.invisCount--;
+                    phantomPlayerComponent.sync();
+                }
             }
 
             //Morphling force remove disguise ability
