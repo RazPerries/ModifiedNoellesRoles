@@ -17,8 +17,7 @@ import org.agmas.noellesroles.item.ShortFuseFirecrackerItem;
 public class ModItems {
     public static void init() {
         GameConstants.ITEM_COOLDOWNS.put(FAKE_REVOLVER, GameConstants.getInTicks(0,8));
-        int SHORTFUSED_FIRECRACKER_TIMER = GameConstants.getInTicks(0, 5);
-        GameConstants.SHOP_ENTRIES.add(7, new ShopEntry(SHORTFUSE_FIRECRACKER.getDefaultStack(), 10, ShopEntry.Type.TOOL));
+        GameConstants.SHOP_ENTRIES.add(8, new ShopEntry(SHORTFUSE_FIRECRACKER.getDefaultStack(), 10, ShopEntry.Type.TOOL));
     }
 
     public static final Item FAKE_KNIFE = register(
