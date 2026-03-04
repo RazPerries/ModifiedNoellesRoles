@@ -20,6 +20,7 @@ public class BodyDeathReasonComponent implements AutoSyncedComponent, ServerTick
     public static final ComponentKey<BodyDeathReasonComponent> KEY = ComponentRegistry.getOrCreate(Identifier.of(Noellesroles.MOD_ID, "body_death_reason"), BodyDeathReasonComponent.class);
     public Identifier deathReason = GameConstants.DeathReasons.GENERIC;
     public Identifier playerRole = WatheRoles.CIVILIAN.identifier();
+    public Identifier playerModifier = null;
     public boolean vultured = false;
     public PlayerBodyEntity playerBodyEntity;
 
@@ -38,12 +39,15 @@ public class BodyDeathReasonComponent implements AutoSyncedComponent, ServerTick
     public void writeToNbt(@NotNull NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         tag.putString("deathReason", deathReason.toString());
         tag.putString("playerRole", playerRole.toString());
+        if (playerModifier != null) { tag.putString("playerModifier", playerModifier.toString()); }
         tag.putBoolean("vultured", vultured);
     }
 
     public void readFromNbt(@NotNull NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         this.deathReason = Identifier.of(tag.getString("deathReason"));
         this.playerRole = Identifier.of(tag.getString("playerRole"));
+        if (tag.contains("playerModifier")) { this.playerModifier = Identifier.of(tag.getString("playerModifier")); }
+        else { this.playerModifier = null; }
         this.vultured = tag.getBoolean("vultured");
     }
 

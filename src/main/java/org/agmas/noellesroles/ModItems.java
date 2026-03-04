@@ -5,6 +5,7 @@ import dev.doctor4t.wathe.index.WatheItems;
 import dev.doctor4t.wathe.index.tag.WatheItemTags;
 import dev.doctor4t.wathe.item.RevolverItem;
 import dev.doctor4t.wathe.util.ShopEntry;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -54,6 +55,10 @@ public class ModItems {
 
         // Register the item.
         Item registeredItem = Registry.register(Registries.ITEM, itemID, item);
+
+        ItemGroupEvents.modifyEntriesEvent(WatheItems.EQUIPMENT_GROUP).register(content -> {
+            content.add(registeredItem);
+        });
 
         // Return the registered item!
         return registeredItem;

@@ -28,6 +28,8 @@ import net.minecraft.util.math.MathHelper;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.client.HarpymodloaderClient;
 import org.agmas.harpymodloader.component.WorldModifierComponent;
+import org.agmas.harpymodloader.modifiers.HMLModifiers;
+import org.agmas.harpymodloader.modifiers.Modifier;
 import org.agmas.noellesroles.AbilityPlayerComponent;
 import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.client.NoellesrolesClient;
@@ -49,6 +51,7 @@ public abstract class CoronerHudMixin {
     @Inject(method = "renderHud", at = @At("TAIL"))
     private static void coronerRoleNameRenderer(TextRenderer renderer, ClientPlayerEntity player, DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(player.getWorld());
+        WorldModifierComponent worldModifierComponent = WorldModifierComponent.KEY.get(player.getWorld());
         if (NoellesrolesClient.targetBody != null) {
             if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.CORONER) || gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.VULTURE) || WatheClient.isPlayerSpectatingOrCreative()) {
 
@@ -78,6 +81,22 @@ public abstract class CoronerHudMixin {
                     Text roleInfo = Text.translatable("hud.coroner.role_info").withColor(Colors.RED).append(Harpymodloader.getRoleName(foundRole).withColor(foundRole.color()));
                     context.drawTextWithShadow(renderer, roleInfo, -renderer.getWidth(roleInfo) / 2, 48, Colors.WHITE);
                 }
+                Modifier foundModifier = null;
+                for (Modifier modifier : HMLModifiers.MODIFIERS) {
+                    if (modifier.identifier().equals(bodyDeathReasonComponent.playerModifier)) foundModifier = modifier;
+                }
+                if (worldModifierComponent.isModifier(MinecraftClient.getInstance().player, Noellesroles.GRAVEROBBER) || WatheClient.isPlayerSpectatingOrCreative()) {
+                    if (foundModifier == null) {
+                        Text modifierInfo = Text.translatable("hud.coroner.modifier_info_no_modifier").withColor(Colors.RED);
+                        context.drawTextWithShadow(renderer, modifierInfo, -renderer.getWidth(modifierInfo) / 2, 64, Colors.WHITE);
+                    } else {
+                        String rawPath = bodyDeathReasonComponent.playerModifier.getPath();
+                        String prettyName = rawPath.substring(0, 1).toUpperCase() + rawPath.substring(1).replace("_", " ");
+                        Text modifierInfo = Text.translatable("hud.coroner.modifier_info").withColor(Colors.RED).append(Text.literal(prettyName).withColor(foundModifier.color()));
+                        context.drawTextWithShadow(renderer, modifierInfo, -renderer.getWidth(modifierInfo) / 2, 64, Colors.WHITE);
+                    }
+                }
+
                 if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.VULTURE) ) {
                     if (bodyDeathReasonComponent.vultured) {
                         Text roleInfo = Text.translatable("hud.vulture.already_consumed").withColor(Noellesroles.VULTURE.color());

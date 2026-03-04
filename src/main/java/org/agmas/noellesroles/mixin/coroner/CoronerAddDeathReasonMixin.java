@@ -8,6 +8,7 @@ import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
+import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.coroner.BodyDeathReasonComponent;
 import org.agmas.noellesroles.morphling.MorphlingPlayerComponent;
@@ -22,9 +23,13 @@ public abstract class CoronerAddDeathReasonMixin {
     @Inject(method = "killPlayer(Lnet/minecraft/entity/player/PlayerEntity;ZLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Identifier;)V", at = @At(value = "INVOKE", target = "Ldev/doctor4t/wathe/entity/PlayerBodyEntity;setHeadYaw(F)V"), cancellable = true)
     private static void setDeathReason(PlayerEntity victim, boolean spawnBody, PlayerEntity killer, Identifier identifier, CallbackInfo ci, @Local PlayerBodyEntity playerBodyEntity) {
         GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(victim.getWorld());
+        WorldModifierComponent worldModifierComponent = WorldModifierComponent.KEY.get(victim.getWorld());
         if (gameWorldComponent.getRole(victim) == null) return;
         (BodyDeathReasonComponent.KEY.get(playerBodyEntity)).deathReason = identifier;
         (BodyDeathReasonComponent.KEY.get(playerBodyEntity)).playerRole = gameWorldComponent.getRole(victim).identifier();
+        if (!worldModifierComponent.getModifiers(victim).isEmpty()) {
+            (BodyDeathReasonComponent.KEY.get(playerBodyEntity)).playerModifier = worldModifierComponent.getModifiers(victim).getFirst().identifier();
+        }
     }
 
 }

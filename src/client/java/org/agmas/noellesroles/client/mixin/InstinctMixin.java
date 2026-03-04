@@ -15,8 +15,10 @@ import net.fabricmc.loader.impl.util.log.LogCategory;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
+import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.bartender.BartenderPlayerComponent;
 import org.agmas.noellesroles.client.NoellesrolesClient;
@@ -50,6 +52,15 @@ public abstract class InstinctMixin {
     @Inject(method = "getInstinctHighlight", at = @At("HEAD"), cancellable = true)
     private static void getInstinctHighlightColor(Entity target, CallbackInfoReturnable<Integer> cir) {
         GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(MinecraftClient.getInstance().player.getWorld());
+        WorldModifierComponent worldModifierComponent = WorldModifierComponent.KEY.get(MinecraftClient.getInstance().player.getWorld());
+        if (worldModifierComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.SIXTH_SENSE) && !MinecraftClient.getInstance().player.isSpectator()) {
+            if (target instanceof ItemEntity) {
+                if (MinecraftClient.getInstance().player.squaredDistanceTo(target) <= (8.0 * 5.0)) {
+                    cir.setReturnValue(Color.ORANGE.getRGB());
+                    return;
+                }
+            }
+        }
         if (target instanceof PlayerEntity) {
             if (!((PlayerEntity)target).isSpectator()) {
                 BartenderPlayerComponent bartenderPlayerComponent = BartenderPlayerComponent.KEY.get((PlayerEntity) target);

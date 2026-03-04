@@ -98,6 +98,8 @@ public class Noellesroles implements ModInitializer {
     public static Identifier GRAVEROBBER_ID = Identifier.of(MOD_ID, "graverobber");
     public static Identifier FEATHER_ID = Identifier.of(MOD_ID, "feather");
     public static Identifier THE_INSANE_DAMNED_PARANOID_KILLER_OF_DOOM_DEATH_DESTRUCTION_AND_WAFFLES_ID = Identifier.of(MOD_ID, "the_insane_damned_paranoid_killer");
+    public static Identifier CELEBRITY_ID = Identifier.of(MOD_ID, "celebrity");
+    public static Identifier SIXTH_SENSE_ID = Identifier.of(MOD_ID, "sixth_sense");
 
     public static HashMap<Role, RoleAnnouncementTexts.RoleAnnouncementText> roleRoleAnnouncementTextHashMap = new HashMap<>();
     public static Role JESTER = WatheRoles.registerRole(new Role(JESTER_ID,new Color(200, 13, 156).getRGB() ,false,false, Role.MoodType.FAKE,Integer.MAX_VALUE,true));
@@ -130,8 +132,7 @@ public class Noellesroles implements ModInitializer {
     public static Modifier GUESSER = HMLModifiers.registerModifier(new Modifier(GUESSER_ID, new Color(158, 43, 25, 255).getRGB(),new ArrayList<>(List.of(THE_INSANE_DAMNED_PARANOID_KILLER_OF_DOOM_DEATH_DESTRUCTION_AND_WAFFLES)),null,true,false));
     public static Modifier GRAVEROBBER = HMLModifiers.registerModifier(new Modifier(GRAVEROBBER_ID, new Color(174, 95, 95, 255).getRGB(),null,null,true,false));
     public static Modifier FEATHER = HMLModifiers.registerModifier(new Modifier(FEATHER_ID, new Color(255, 236, 161, 255).getRGB(),null,null,false,false));
-
-
+    public static Modifier CELEBRITY = HMLModifiers.registerModifier(new Modifier(CELEBRITY_ID, new Color(174, 4, 109, 255).getRGB(), null, null, true, false));
 
     public static final CustomPayload.Id<MorphC2SPacket> MORPH_PACKET = MorphC2SPacket.ID;
     public static final CustomPayload.Id<SwapperC2SPacket> SWAP_PACKET = SwapperC2SPacket.ID;
@@ -142,6 +143,8 @@ public class Noellesroles implements ModInitializer {
     public static final ArrayList<Identifier> VANNILA_ROLE_IDS = new ArrayList<>();
     public static final ArrayList<Role> KILLER_SIDED_NEUTRALS = new ArrayList<>();
     public static final ArrayList<Role> ENABLED_NEUTRALS = new ArrayList<>();
+
+    public static Modifier SIXTH_SENSE = HMLModifiers.registerModifier(new Modifier(SIXTH_SENSE_ID, new Color(244, 201, 152, 255).getRGB(), KILLER_SIDED_NEUTRALS, null, false, true));
 
     public static ArrayList<ShopEntry> FRAMING_ROLES_SHOP = new ArrayList<>();
 
@@ -263,7 +266,8 @@ public class Noellesroles implements ModInitializer {
         }));
         CanSeePoison.EVENT.register((player)->{
             GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(player.getWorld());
-            if (gameWorldComponent.isRole((PlayerEntity) player, Noellesroles.BARTENDER)) {
+            Role role = gameWorldComponent.getRole((PlayerEntity) player);
+            if (gameWorldComponent.isRole((PlayerEntity) player, Noellesroles.BARTENDER) || Noellesroles.KILLER_SIDED_NEUTRALS.contains(role)) {
                 return true;
             }
             return false;
@@ -349,6 +353,31 @@ public class Noellesroles implements ModInitializer {
                 }
             }
         }));
+        ServerTickEvents.END_WORLD_TICK.register((world) -> {
+            Integer baseBalanceToAdd = GameConstants.PASSIVE_MONEY_TICKER.apply(world.getTime());
+            if (baseBalanceToAdd != null && baseBalanceToAdd > 0) {
+                WorldModifierComponent worldModifierComponent = WorldModifierComponent.KEY.get(world);
+                GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(world);
+                for (ServerPlayerEntity player : world.getPlayers()) {
+                    if (GameFunctions.isPlayerAliveAndSurvival(player) && worldModifierComponent.isRole(player, CELEBRITY)) {
+                        int nearbyPlayers = 0;
+                        for (ServerPlayerEntity otherPlayer : world.getPlayers()) {
+                            if (otherPlayer != player && GameFunctions.isPlayerAliveAndSurvival(otherPlayer)) {
+                                Role otherRole = gameWorldComponent.getRole(otherPlayer);
+                                boolean isActualKiller = otherRole != null && (otherRole.canUseKiller() || KILLER_SIDED_NEUTRALS.contains(otherRole));
+                                if (!isActualKiller && player.squaredDistanceTo(otherPlayer) <= 5.0 * 5.0) {
+                                    nearbyPlayers++;
+                                }
+                            }
+                        }
+                        if (nearbyPlayers > 0) {
+                            int extraGold = Math.min(nearbyPlayers * 5, 20);
+                            PlayerShopComponent.KEY.get(player).addToBalance(extraGold);
+                        }
+                    }
+                }
+            }
+        });
         if (!NoellesRolesConfig.HANDLER.instance().shitpostRoles) {
             HarpyModLoaderConfig.HANDLER.load();
             if (!HarpyModLoaderConfig.HANDLER.instance().disabled.contains(AWESOME_BINGLUS_ID.toString())) {
