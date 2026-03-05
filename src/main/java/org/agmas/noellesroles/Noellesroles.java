@@ -133,6 +133,7 @@ public class Noellesroles implements ModInitializer {
     public static Modifier GRAVEROBBER = HMLModifiers.registerModifier(new Modifier(GRAVEROBBER_ID, new Color(174, 95, 95, 255).getRGB(),null,null,true,false));
     public static Modifier FEATHER = HMLModifiers.registerModifier(new Modifier(FEATHER_ID, new Color(255, 236, 161, 255).getRGB(),null,null,false,false));
     public static Modifier CELEBRITY = HMLModifiers.registerModifier(new Modifier(CELEBRITY_ID, new Color(174, 4, 109, 255).getRGB(), null, null, true, false));
+    public static Modifier SIXTH_SENSE = HMLModifiers.registerModifier(new Modifier(SIXTH_SENSE_ID, new Color(244, 201, 152, 255).getRGB(), new ArrayList<>(List.of(WatheRoles.VIGILANTE, JESTER, VULTURE, EXECUTIONER, BARTENDER)), null, false, true));
 
     public static final CustomPayload.Id<MorphC2SPacket> MORPH_PACKET = MorphC2SPacket.ID;
     public static final CustomPayload.Id<SwapperC2SPacket> SWAP_PACKET = SwapperC2SPacket.ID;
@@ -143,8 +144,6 @@ public class Noellesroles implements ModInitializer {
     public static final ArrayList<Identifier> VANNILA_ROLE_IDS = new ArrayList<>();
     public static final ArrayList<Role> KILLER_SIDED_NEUTRALS = new ArrayList<>();
     public static final ArrayList<Role> ENABLED_NEUTRALS = new ArrayList<>();
-
-    public static Modifier SIXTH_SENSE = HMLModifiers.registerModifier(new Modifier(SIXTH_SENSE_ID, new Color(244, 201, 152, 255).getRGB(), KILLER_SIDED_NEUTRALS, null, false, true));
 
     public static ArrayList<ShopEntry> FRAMING_ROLES_SHOP = new ArrayList<>();
 
@@ -184,6 +183,8 @@ public class Noellesroles implements ModInitializer {
         Harpymodloader.setRoleMaximum(VULTURE_ID,1);
         Harpymodloader.setRoleMaximum(JESTER_ID,1);
         Harpymodloader.setRoleMaximum(BETTER_VIGILANTE_ID,1);
+        Harpymodloader.setRoleMaximum(SIXTH_SENSE_ID,1);
+        Harpymodloader.setRoleMaximum(BARTENDER_ID,1);
 
         PayloadTypeRegistry.playC2S().register(MorphC2SPacket.ID, MorphC2SPacket.CODEC);
         PayloadTypeRegistry.playC2S().register(AbilityC2SPacket.ID, AbilityC2SPacket.CODEC);
