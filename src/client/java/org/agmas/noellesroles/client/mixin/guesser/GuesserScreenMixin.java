@@ -56,7 +56,7 @@ public abstract class GuesserScreenMixin extends LimitedHandledScreen<PlayerScre
             int apart = 36;
             int x = ((LimitedInventoryScreen)(Object)this).width / 2 - (entries.size()) * apart / 2 + 9;
             int shouldBeY = (((LimitedInventoryScreen)(Object)this).height - 32) / 2;
-            int y = shouldBeY + 105;
+            int y = shouldBeY + 112;
 
             for(int i = 0; i < entries.size(); ++i) {
                 GuesserPlayerWidget child = new GuesserPlayerWidget(((LimitedInventoryScreen)(Object)this), x + apart * i, y, entries.get(i), player.networkHandler.getPlayerListEntry(entries.get(i)));

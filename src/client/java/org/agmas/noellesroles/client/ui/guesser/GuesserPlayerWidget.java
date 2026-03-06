@@ -10,7 +10,10 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.agmas.noellesroles.AbilityPlayerComponent;
+import org.agmas.noellesroles.Noellesroles;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.awt.*;
 import java.util.UUID;
@@ -20,7 +23,7 @@ public class GuesserPlayerWidget extends ButtonWidget{
     public final UUID targetUUID;
     public final PlayerListEntry targetPlayerEntry;
     public static UUID selectedPlayer;
-
+    @Unique private static final Identifier GUESSER_WIDGET = Identifier.of(Noellesroles.MOD_ID, "hud/shop_slot_guesser");
 
     public GuesserPlayerWidget(LimitedInventoryScreen screen, int x, int y, UUID targetUUID, PlayerListEntry targetPlayerEntry) {
         super(x, y, 16, 16, Text.literal(""), (a) -> {
@@ -36,7 +39,7 @@ public class GuesserPlayerWidget extends ButtonWidget{
     protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         super.renderWidget(context, mouseX, mouseY, delta);
         if ((AbilityPlayerComponent.KEY.get(MinecraftClient.getInstance().player)).cooldown == 0) {
-            context.drawGuiTexture(ShopEntry.Type.TOOL.getTexture(), this.getX() - 7, this.getY() - 7, 30, 30);
+            context.drawGuiTexture(GUESSER_WIDGET, this.getX() - 7, this.getY() - 7, 30, 30);
             PlayerSkinDrawer.draw(context, targetPlayerEntry.getSkinTextures().texture(), this.getX(), this.getY(), 16);
             if (this.isHovered()) {
                 this.drawShopSlotHighlight(context, this.getX(), this.getY(), 0);
@@ -46,7 +49,7 @@ public class GuesserPlayerWidget extends ButtonWidget{
 
         if ((AbilityPlayerComponent.KEY.get(MinecraftClient.getInstance().player)).cooldown > 0) {
             context.setShaderColor(0.25f,0.25f,0.25f,0.5f);
-            context.drawGuiTexture(ShopEntry.Type.TOOL.getTexture(), this.getX() - 7, this.getY() - 7, 30, 30);
+            context.drawGuiTexture(GUESSER_WIDGET, this.getX() - 7, this.getY() - 7, 30, 30);
             PlayerSkinDrawer.draw(context, targetPlayerEntry.getSkinTextures().texture(), this.getX(), this.getY(), 16);
             if (this.isHovered()) {
                 this.drawShopSlotHighlight(context, this.getX(), this.getY(), 0);

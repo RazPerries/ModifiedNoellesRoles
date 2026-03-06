@@ -567,7 +567,7 @@ public class Noellesroles implements ModInitializer {
             }
 
             //Morphling force remove disguise ability
-            if (gameWorldComponent.isRole(context.player(), MORPHLING) && abilityPlayerComponent.cooldown <= 0) {
+            if (gameWorldComponent.isRole(context.player(), MORPHLING)) {
                 MorphlingPlayerComponent morphlingPlayerComponent = MorphlingPlayerComponent.KEY.get(context.player());
                 if (morphlingPlayerComponent.getMorphTicks() > 0) {
                     morphlingPlayerComponent.reset();

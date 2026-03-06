@@ -10,15 +10,19 @@ import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.util.Identifier;
+import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.morphling.MorphlingPlayerComponent;
 import org.agmas.noellesroles.packet.MorphC2SPacket;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.awt.*;
 
 public class MorphlingPlayerWidget extends ButtonWidget{
     public final LimitedInventoryScreen screen;
     public final AbstractClientPlayerEntity disguiseTarget;
+    @Unique private static final Identifier MORPHLING_WIDGET = Identifier.of(Noellesroles.MOD_ID, "hud/shop_slot_morphling");
 
     public MorphlingPlayerWidget(LimitedInventoryScreen screen, int x, int y, @NotNull AbstractClientPlayerEntity disguiseTarget, int index) {
         super(x, y, 16, 16, disguiseTarget.getName(), (a) -> {if ((MorphlingPlayerComponent.KEY.get(MinecraftClient.getInstance().player)).getMorphTicks() == 0) {ClientPlayNetworking.send(new MorphC2SPacket(disguiseTarget.getUuid()));}}, DEFAULT_NARRATION_SUPPLIER);
@@ -29,7 +33,7 @@ public class MorphlingPlayerWidget extends ButtonWidget{
     protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         if ((MorphlingPlayerComponent.KEY.get(MinecraftClient.getInstance().player)).getMorphTicks() == 0) {
             super.renderWidget(context, mouseX, mouseY, delta);
-            context.drawGuiTexture(ShopEntry.Type.POISON.getTexture(), this.getX() - 7, this.getY() - 7, 30, 30);
+            context.drawGuiTexture(MORPHLING_WIDGET, this.getX() - 7, this.getY() - 7, 30, 30);
             PlayerSkinDrawer.draw(context, disguiseTarget.getSkinTextures().texture(), this.getX(), this.getY(), 16);
             if (this.isHovered()) {
                 this.drawShopSlotHighlight(context, this.getX(), this.getY(), 0);
@@ -41,7 +45,7 @@ public class MorphlingPlayerWidget extends ButtonWidget{
         if ((MorphlingPlayerComponent.KEY.get(MinecraftClient.getInstance().player)).getMorphTicks() < 0) {
             super.renderWidget(context, mouseX, mouseY, delta);
             context.setShaderColor(0.25f,0.25f,0.25f,0.5f);
-            context.drawGuiTexture(ShopEntry.Type.POISON.getTexture(), this.getX() - 7, this.getY() - 7, 30, 30);
+            context.drawGuiTexture(MORPHLING_WIDGET, this.getX() - 7, this.getY() - 7, 30, 30);
             PlayerSkinDrawer.draw(context, disguiseTarget.getSkinTextures().texture(), this.getX(), this.getY(), 16);
             if (this.isHovered()) {
                 this.drawShopSlotHighlight(context, this.getX(), this.getY(), 0);

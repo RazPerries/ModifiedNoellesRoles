@@ -4,26 +4,26 @@
   "announcement.goals.noellesroles.jester": "Find and co-operate with the Killers.",
   "announcement.role.noellesroles.jester": "Jester",
 
-  "announcement.goals.noellesroles.morphling": "Fool everyone.",
+  "announcement.goals.noellesroles.morphling": "Frame others by disguising as them.",
   "announcement.role.noellesroles.morphling": "Morphling",
 
   "announcement.goals.noellesroles.awesome_binglus": "Awesome Binglu",
   "announcement.role.noellesroles.awesome_binglus": "Awesome Binglus",
 
-  "announcement.goals.noellesroles.conductor": "Use the master key to open up every door on the train!",
+  "announcement.goals.noellesroles.conductor": "Use your master keys to access any door.",
   "announcement.role.noellesroles.conductor": "Conductor",
 
-  "announcement.goals.noellesroles.the_insane_damned_paranoid_killer": "I hear dead people.",
+  "announcement.goals.noellesroles.the_insane_damned_paranoid_killer": "You hear dead people.",
   "announcement.role.noellesroles.the_insane_damned_paranoid_killer": "The Insane Damned Paranoid Killer Of Doom Death Destruction And Waffles",
 
 
-  "announcement.goals.noellesroles.bartender": "See players that drink through walls!",
+  "announcement.goals.noellesroles.bartender": "See players that drink through walls and poisoned trays.",
   "announcement.role.noellesroles.bartender": "Bartender",
 
-  "announcement.goals.noellesroles.phantom": "Turn invisible; but watch out for collisions.",
+  "announcement.goals.noellesroles.phantom": "Turn invisible. Watch out when holding out items or collision.",
   "announcement.role.noellesroles.phantom": "Phantom",
 
-  "announcement.goals.noellesroles.noisemaker": "Alert players of your location upon death.",
+  "announcement.goals.noellesroles.noisemaker": "Alert players of your location upon your death.",
   "announcement.role.noellesroles.noisemaker": "Noisemaker",
 
   "announcement.goals.noellesroles.voodoo": "Choose another player to go down with you.",
@@ -35,7 +35,7 @@
   "hud.swapper.first_player_selection": "Select first player to swap",
   "hud.swapper.second_player_selection": "Select second player to swap",
 
-  "announcement.goals.noellesroles.coroner": "Get information from dead bodies.",
+  "announcement.goals.noellesroles.coroner": "Read information from dead bodies.",
   "announcement.role.noellesroles.coroner": "Coroner",
   "hud.coroner.sanity_requirements": "50% sanity required to use ability",
   "hud.coroner.death_info": "Died %ss ago to ",
