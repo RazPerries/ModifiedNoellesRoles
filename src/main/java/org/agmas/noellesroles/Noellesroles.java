@@ -129,10 +129,10 @@ public class Noellesroles implements ModInitializer {
 
     public static Modifier TINY = HMLModifiers.registerModifier(new Modifier(TINY_ID, new Color(255, 166, 0).getRGB(), new ArrayList<>(List.of(MORPHLING)),null,false,false));
     public static Modifier CHAMELEON = HMLModifiers.registerModifier(new Modifier(CHAMELEON_ID, new Color(198, 255, 137, 255).getRGB(),null,null,false,false));
-    public static Modifier GUESSER = HMLModifiers.registerModifier(new Modifier(GUESSER_ID, new Color(158, 43, 25, 255).getRGB(),new ArrayList<>(List.of(THE_INSANE_DAMNED_PARANOID_KILLER_OF_DOOM_DEATH_DESTRUCTION_AND_WAFFLES)),null,true,false));
-    public static Modifier GRAVEROBBER = HMLModifiers.registerModifier(new Modifier(GRAVEROBBER_ID, new Color(174, 95, 95, 255).getRGB(),null,null,true,false));
     public static Modifier FEATHER = HMLModifiers.registerModifier(new Modifier(FEATHER_ID, new Color(255, 236, 161, 255).getRGB(),null,null,false,false));
+    public static Modifier GUESSER = HMLModifiers.registerModifier(new Modifier(GUESSER_ID, new Color(158, 43, 25, 255).getRGB(),new ArrayList<>(List.of(THE_INSANE_DAMNED_PARANOID_KILLER_OF_DOOM_DEATH_DESTRUCTION_AND_WAFFLES)),null,true,false));
     public static Modifier CELEBRITY = HMLModifiers.registerModifier(new Modifier(CELEBRITY_ID, new Color(174, 4, 109, 255).getRGB(), null, null, true, false));
+    public static Modifier GRAVEROBBER = HMLModifiers.registerModifier(new Modifier(GRAVEROBBER_ID, new Color(174, 95, 95, 255).getRGB(),null,null,true,false));
     public static Modifier SIXTH_SENSE = HMLModifiers.registerModifier(new Modifier(SIXTH_SENSE_ID, new Color(244, 201, 152, 255).getRGB(), new ArrayList<>(List.of(WatheRoles.VIGILANTE, JESTER, VULTURE, EXECUTIONER, BARTENDER)), null, false, true));
 
     public static final CustomPayload.Id<MorphC2SPacket> MORPH_PACKET = MorphC2SPacket.ID;
@@ -184,6 +184,9 @@ public class Noellesroles implements ModInitializer {
         Harpymodloader.setRoleMaximum(JESTER_ID,1);
         Harpymodloader.setRoleMaximum(BETTER_VIGILANTE_ID,1);
         Harpymodloader.setRoleMaximum(BARTENDER_ID,1);
+
+        Harpymodloader.MODIFIER_MAX.put(SIXTH_SENSE_ID, 1);
+        Harpymodloader.MODIFIER_MAX.put(TINY_ID, 1);
 
         PayloadTypeRegistry.playC2S().register(MorphC2SPacket.ID, MorphC2SPacket.CODEC);
         PayloadTypeRegistry.playC2S().register(AbilityC2SPacket.ID, AbilityC2SPacket.CODEC);
@@ -351,6 +354,16 @@ public class Noellesroles implements ModInitializer {
                     Harpymodloader.setRoleMaximum(VULTURE,1);
                     Harpymodloader.setRoleMaximum(EXECUTIONER,1);
                 }
+            }
+            if (server.getPlayerManager().getCurrentPlayerCount() < 8) {
+                ArrayList<Identifier> killerModifiers = new ArrayList<>(List.of(CELEBRITY_ID, GUESSER_ID));
+                Collections.shuffle(killerModifiers);
+                Harpymodloader.MODIFIER_MAX.put(killerModifiers.getFirst(), 1);
+                Harpymodloader.MODIFIER_MAX.put(killerModifiers.getLast(), 0);
+            } else {
+                Harpymodloader.MODIFIER_MAX.put(CELEBRITY_ID, 1);
+                Harpymodloader.MODIFIER_MAX.put(GUESSER_ID, 1);
+                Harpymodloader.MODIFIER_MAX.put(GRAVEROBBER_ID, 1);
             }
         }));
         ServerTickEvents.END_WORLD_TICK.register((world) -> {
