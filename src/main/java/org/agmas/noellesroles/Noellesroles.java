@@ -183,7 +183,6 @@ public class Noellesroles implements ModInitializer {
         Harpymodloader.setRoleMaximum(VULTURE_ID,1);
         Harpymodloader.setRoleMaximum(JESTER_ID,1);
         Harpymodloader.setRoleMaximum(BETTER_VIGILANTE_ID,1);
-        Harpymodloader.setRoleMaximum(SIXTH_SENSE_ID,1);
         Harpymodloader.setRoleMaximum(BARTENDER_ID,1);
 
         PayloadTypeRegistry.playC2S().register(MorphC2SPacket.ID, MorphC2SPacket.CODEC);
