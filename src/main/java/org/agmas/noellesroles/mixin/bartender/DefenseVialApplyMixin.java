@@ -33,7 +33,7 @@ public abstract class DefenseVialApplyMixin {
         BlockEntity platter = world.getBlockEntity(pos);
         if (platter instanceof BeveragePlateBlockEntity blockEntity) {
             if (player.getStackInHand(Hand.MAIN_HAND).isOf(ModItems.DEFENSE_VIAL)) {
-                blockEntity.setPoisoner(player.getUuidAsString());
+                blockEntity.setPoisoner(null);
                 player.getStackInHand(Hand.MAIN_HAND).decrement(1);
                 player.playSoundToPlayer(SoundEvents.BLOCK_BREWING_STAND_BREW, SoundCategory.BLOCKS, 0.5F, 1.0F);
                 cir.setReturnValue(ActionResult.SUCCESS);
