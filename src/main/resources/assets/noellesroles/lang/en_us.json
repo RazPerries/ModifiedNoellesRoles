@@ -109,6 +109,7 @@
   "tip.selected": "Selected",
   "tip.noellesroles.cooldown": "Ability usable in %ss",
   "tip.noellesroles.ability_used": "Ability cannot be used anymore.",
+  "tip.noellesroles.phsycho_ability_disable": "Ability cannot be used during psycho.",
   "tip.master_key_invisible_count": "Master Keys look like lockpicks with less than %s people.",
   "tip.master_key_invisible": "Master Keys look like lockpicks.",
   "tip.trapper.caught": "You caught %s players in your trap. Their roles were:",

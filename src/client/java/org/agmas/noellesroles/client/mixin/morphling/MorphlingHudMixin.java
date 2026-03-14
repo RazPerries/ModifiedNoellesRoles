@@ -1,6 +1,7 @@
 package org.agmas.noellesroles.client.mixin.morphling;
 
 import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.cca.PlayerPsychoComponent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -29,6 +30,7 @@ public abstract class MorphlingHudMixin {
     public void phantomHud(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(MinecraftClient.getInstance().player.getWorld());
         AbilityPlayerComponent abilityPlayerComponent = (AbilityPlayerComponent) AbilityPlayerComponent.KEY.get(MinecraftClient.getInstance().player);
+        PlayerPsychoComponent playerPsychoComponent = PlayerPsychoComponent.KEY.get(MinecraftClient.getInstance().player);
 
         if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.MORPHLING)) {
             MorphlingPlayerComponent morphlingPlayerComponent = MorphlingPlayerComponent.KEY.get(MinecraftClient.getInstance().player);
@@ -40,6 +42,9 @@ public abstract class MorphlingHudMixin {
             }
             if (morphlingPlayerComponent.getMorphTicks() < 0) {
                 line = Text.translatable("tip.noellesroles.cooldown", morphlingPlayerComponent.getMorphTicks()/-20);
+            }
+            if (playerPsychoComponent.psychoTicks > 0){
+                line = Text.translatable("tip.noellesroles.phsycho_ability_disable");
             }
 
             drawY -= getTextRenderer().getWrappedLinesHeight(line, 999999);

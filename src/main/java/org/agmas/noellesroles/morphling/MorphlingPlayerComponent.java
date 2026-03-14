@@ -50,7 +50,10 @@ public class MorphlingPlayerComponent implements AutoSyncedComponent, ServerTick
     public void serverTick() {
         if (this.morphTicks > 0 && disguise != null) {
             if (player.getWorld().getPlayerByUuid(disguise) != null) {
+                PlayerPsychoComponent playerPsychoComponent = PlayerPsychoComponent.KEY.get(player);
                 if (((ServerPlayerEntity)player.getWorld().getPlayerByUuid(disguise)).interactionManager.getGameMode() == GameMode.SPECTATOR) {
+                    stopMorph();
+                } else if (playerPsychoComponent.psychoTicks > 0) {
                     stopMorph();
                 }
             } else {

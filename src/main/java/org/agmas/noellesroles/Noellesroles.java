@@ -336,12 +336,6 @@ public class Noellesroles implements ModInitializer {
             }
         });
         ServerTickEvents.END_SERVER_TICK.register(((server) -> {
-            /*
-            if (server.getPlayerManager().getCurrentPlayerCount() >= 12) {
-                Harpymodloader.setRoleMaximum(MIMIC,1);
-            } else {
-                Harpymodloader.setRoleMaximum(MIMIC,0);
-            }*/
             if (server.getPlayerManager().getCurrentPlayerCount() < 8) {
                 Harpymodloader.setRoleMaximum(EXECUTIONER,0);
                 Harpymodloader.setRoleMaximum(VULTURE,0);
@@ -568,8 +562,9 @@ public class Noellesroles implements ModInitializer {
             }
             //Phantom go invisible ability
             if (gameWorldComponent.isRole(context.player(), PHANTOM) && abilityPlayerComponent.cooldown <= 0) {
-            PhantomPlayerComponent phantomPlayerComponent = PhantomPlayerComponent.KEY.get(context.player());
-                if (phantomPlayerComponent.invisCount > 0) {
+                PhantomPlayerComponent phantomPlayerComponent = PhantomPlayerComponent.KEY.get(context.player());
+                PlayerPsychoComponent playerPsychoComponent = PlayerPsychoComponent.KEY.get(context.player());
+                if (phantomPlayerComponent.invisCount > 0 && playerPsychoComponent.psychoTicks == 0) {
                     context.player().addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, phantomPlayerComponent.invisTimer * 20, 0, true, false, true));
                     // NOTE: The ability cooldown, uptime, and charges are all handled in the PhantomPlayerComponent.java file. See there to modify the phantom.
                     abilityPlayerComponent.cooldown = GameConstants.getInTicks(0, phantomPlayerComponent.invisCooldown);
