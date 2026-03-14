@@ -56,7 +56,7 @@ public class RecallerPlayerComponent implements AutoSyncedComponent, ServerTicki
 
 
     public void teleport() {
-        player.refreshPositionAfterTeleport(x,y,z);
+        player.teleport(x,y,z, false);
         this.hasRecalled = true;
         placed = false;
         this.sync();
