@@ -24,7 +24,7 @@ public class NoTargetBackfireMixin {
             PlayerEntity executioner = player.getWorld().getPlayerByUuid(uuid);
             if (executioner == null) continue;
             ExecutionerPlayerComponent executionerPlayerComponent = ExecutionerPlayerComponent.KEY.get(executioner);
-            if (executionerPlayerComponent.target.equals(player.getUuid())) {
+            if (executionerPlayerComponent.target.equals(player.getUuid()) && (!gameWorldComponent.isRole(executioner, Noellesroles.EXECUTIONER))) {
                 return false;
             }
         }
