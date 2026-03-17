@@ -31,6 +31,7 @@
     "cardinal-components": [
       "noellesroles:morphling",
       "noellesroles:bartender",
+      "noellesroles:bellringer",
       "noellesroles:ability",
       "noellesroles:voodoo",
       "noellesroles:config",

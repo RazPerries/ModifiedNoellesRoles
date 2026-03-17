@@ -6,6 +6,7 @@
   "mixins": [
     "DoNotCollideWithFeatherMixin",
     "GiveCoinsOnMoodCompletionMixin",
+    "MoodMixin",
     "bartender.BartenderPlayerShopComponentMixin",
     "bartender.BartenderReseterMixin",
     "bartender.CocktailItemMixin",

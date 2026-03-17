@@ -7,6 +7,7 @@
     "InstinctMixin",
     "bartender.BartenderShopMixin",
     "bartender.DefenseVialHandMixin",
+    "bellringer.TimeRendererMixin",
     "chameleon.ChameleonCapeMixin",
     "chameleon.ChameleonShadowMixin",
     "chameleon.ChameleonSkinArmMixin",

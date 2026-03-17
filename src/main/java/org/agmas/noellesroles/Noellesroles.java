@@ -100,6 +100,8 @@ public class Noellesroles implements ModInitializer {
     public static Identifier THE_INSANE_DAMNED_PARANOID_KILLER_OF_DOOM_DEATH_DESTRUCTION_AND_WAFFLES_ID = Identifier.of(MOD_ID, "the_insane_damned_paranoid_killer");
     public static Identifier CELEBRITY_ID = Identifier.of(MOD_ID, "celebrity");
     public static Identifier SIXTH_SENSE_ID = Identifier.of(MOD_ID, "sixth_sense");
+    public static Identifier IRON_WILLED_ID = Identifier.of(MOD_ID, "iron_willed");
+    public static Identifier BELLRINGER_ID = Identifier.of(MOD_ID, "bellringer");
 
     public static HashMap<Role, RoleAnnouncementTexts.RoleAnnouncementText> roleRoleAnnouncementTextHashMap = new HashMap<>();
     public static Role JESTER = WatheRoles.registerRole(new Role(JESTER_ID,new Color(200, 13, 156).getRGB() ,false,false, Role.MoodType.FAKE,Integer.MAX_VALUE,true));
@@ -134,6 +136,8 @@ public class Noellesroles implements ModInitializer {
     public static Modifier CELEBRITY = HMLModifiers.registerModifier(new Modifier(CELEBRITY_ID, new Color(174, 4, 109, 255).getRGB(), null, null, true, false));
     public static Modifier GRAVEROBBER = HMLModifiers.registerModifier(new Modifier(GRAVEROBBER_ID, new Color(174, 95, 95, 255).getRGB(),null,null,true,false));
     public static Modifier SIXTH_SENSE = HMLModifiers.registerModifier(new Modifier(SIXTH_SENSE_ID, new Color(244, 201, 152, 255).getRGB(), new ArrayList<>(List.of(WatheRoles.VIGILANTE, JESTER, VULTURE, EXECUTIONER, BARTENDER)), null, false, true));
+    public static Modifier IRON_WILLED = HMLModifiers.registerModifier(new Modifier(IRON_WILLED_ID, new Color(128, 128, 128).getRGB(), null, null, false, true));
+    public static Modifier BELLRINGER = HMLModifiers.registerModifier(new Modifier(BELLRINGER_ID, new Color(244, 208, 63).getRGB(), null, null, false, true));
 
     public static final CustomPayload.Id<MorphC2SPacket> MORPH_PACKET = MorphC2SPacket.ID;
     public static final CustomPayload.Id<SwapperC2SPacket> SWAP_PACKET = SwapperC2SPacket.ID;
@@ -187,6 +191,8 @@ public class Noellesroles implements ModInitializer {
 
         Harpymodloader.MODIFIER_MAX.put(SIXTH_SENSE_ID, 1);
         Harpymodloader.MODIFIER_MAX.put(TINY_ID, 1);
+        Harpymodloader.MODIFIER_MAX.put(IRON_WILLED_ID, 1);
+        Harpymodloader.MODIFIER_MAX.put(BELLRINGER_ID, 1);
 
         PayloadTypeRegistry.playC2S().register(MorphC2SPacket.ID, MorphC2SPacket.CODEC);
         PayloadTypeRegistry.playC2S().register(AbilityC2SPacket.ID, AbilityC2SPacket.CODEC);
