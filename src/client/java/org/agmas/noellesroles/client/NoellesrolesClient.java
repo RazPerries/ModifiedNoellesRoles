@@ -38,8 +38,13 @@ import org.agmas.noellesroles.client.renderer.RoleMineEntityRenderer;
 import org.agmas.noellesroles.client.renderer.ShortFuseFirecrackerEntityRenderer;
 import org.agmas.noellesroles.packet.AbilityC2SPacket;
 import org.agmas.noellesroles.packet.MorphC2SPacket;
+import org.agmas.noellesroles.packet.VoodooWarnKillerS2CPacket;
 import org.agmas.noellesroles.packet.VultureEatC2SPacket;
+import org.agmas.noellesroles.voodoo.VoodooPlayerComponent;
 import org.lwjgl.glfw.GLFW;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.entity.Entity;
 
 import java.util.*;
 
@@ -47,9 +52,11 @@ public class NoellesrolesClient implements ClientModInitializer {
 
 
     public static int insanityTime = 0;
+    public static int killerWarningTicks = 0;
     public static KeyBinding abilityBind;
     public static PlayerEntity target;
     public static PlayerBodyEntity targetBody;
+    public static PlayerEntity lookingAt = null;
 
     public static Map<UUID, UUID> SHUFFLED_PLAYER_ENTRIES_CACHE = Maps.newHashMap();
 
@@ -72,11 +79,32 @@ public class NoellesrolesClient implements ClientModInitializer {
                     i++;
                 }
             }
+            if (client.crosshairTarget != null && client.crosshairTarget.getType() == HitResult.Type.ENTITY) {
+                Entity entity = ((EntityHitResult) client.crosshairTarget).getEntity();
+                if (entity instanceof PlayerEntity player && player != client.player && client.player.squaredDistanceTo(player) <= 2.25 * 2.25) {
+                    lookingAt = player;
+                } else {
+                    lookingAt = null;
+                }
+            } else {
+                lookingAt = null;
+            }
             if (abilityBind.wasPressed()) {
                 PacketByteBuf data = PacketByteBufs.create();
                 client.execute(() -> {
                     if (MinecraftClient.getInstance().player == null) return;
                     GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(MinecraftClient.getInstance().player.getWorld());
+                    if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.VOODOO)) {
+                        VoodooPlayerComponent voodoo = VoodooPlayerComponent.KEY.get(MinecraftClient.getInstance().player);
+                        if (voodoo.target.equals(MinecraftClient.getInstance().player.getUuid())) {
+                            if (lookingAt != null) {
+                                ClientPlayNetworking.send(new MorphC2SPacket(lookingAt.getUuid()));
+                            }
+                        } else {
+                            ClientPlayNetworking.send(new AbilityC2SPacket());
+                        }
+                        return;
+                    }
                     if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.VULTURE)) {
                         if (targetBody == null) return;
                         ClientPlayNetworking.send(new VultureEatC2SPacket(targetBody.getUuid()));
@@ -95,6 +123,10 @@ public class NoellesrolesClient implements ClientModInitializer {
             tooltipHelper(ModItems.DELUSION_VIAL, itemStack, list);
             tooltipHelper(ModItems.SHORTFUSE_FIRECRACKER, itemStack, list);
         }));
+
+        ClientPlayNetworking.registerGlobalReceiver(VoodooWarnKillerS2CPacket.ID, (payload, context) -> {
+            killerWarningTicks = 20 * 15;
+        });
     }
 
     public void tooltipHelper(Item item, ItemStack itemStack, List<Text> list) {

@@ -144,6 +144,7 @@ public class Noellesroles implements ModInitializer {
     public static final CustomPayload.Id<AbilityC2SPacket> ABILITY_PACKET = AbilityC2SPacket.ID;
     public static final CustomPayload.Id<VultureEatC2SPacket> VULTURE_PACKET = VultureEatC2SPacket.ID;
     public static final CustomPayload.Id<GuessC2SPacket> GUESS_PACKET = GuessC2SPacket.ID;
+    public static final CustomPayload.Id<VoodooWarnKillerS2CPacket> VOODOO_WARN_KILLER_PACKET = VoodooWarnKillerS2CPacket.ID;
     public static final ArrayList<Role> VANNILA_ROLES = new ArrayList<>();
     public static final ArrayList<Identifier> VANNILA_ROLE_IDS = new ArrayList<>();
     public static final ArrayList<Role> KILLER_SIDED_NEUTRALS = new ArrayList<>();
@@ -199,6 +200,7 @@ public class Noellesroles implements ModInitializer {
         PayloadTypeRegistry.playC2S().register(SwapperC2SPacket.ID, SwapperC2SPacket.CODEC);
         PayloadTypeRegistry.playC2S().register(VultureEatC2SPacket.ID, VultureEatC2SPacket.CODEC);
         PayloadTypeRegistry.playC2S().register(GuessC2SPacket.ID, GuessC2SPacket.CODEC);
+        PayloadTypeRegistry.playS2C().register(VoodooWarnKillerS2CPacket.ID, VoodooWarnKillerS2CPacket.CODEC);
 
         registerEvents();
 
@@ -288,6 +290,11 @@ public class Noellesroles implements ModInitializer {
             AbilityPlayerComponent abilityPlayerComponent = (AbilityPlayerComponent) AbilityPlayerComponent.KEY.get(player);
             GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(player.getWorld());
             abilityPlayerComponent.cooldown = NoellesRolesConfig.HANDLER.instance().generalCooldownTicks;
+            if (role.equals(VOODOO)) {
+                abilityPlayerComponent.cooldown = 20 * 30;
+                VoodooPlayerComponent voodoo = VoodooPlayerComponent.KEY.get(player);
+                voodoo.sync();
+            }
             if (role.equals(EXECUTIONER)) {
                 ExecutionerPlayerComponent executionerPlayerComponent = (ExecutionerPlayerComponent) ExecutionerPlayerComponent.KEY.get(player);
                 executionerPlayerComponent.won = false;
@@ -373,6 +380,22 @@ public class Noellesroles implements ModInitializer {
             }
         }));
         ServerTickEvents.END_WORLD_TICK.register((world) -> {
+            for (ServerPlayerEntity player : world.getPlayers()) {
+                VoodooPlayerComponent voodoo = VoodooPlayerComponent.KEY.get(player);
+                if (voodoo.isTracking) {
+                    voodoo.trackingTicks++;
+                    if (voodoo.trackingTicks >= 20 * 20) {
+                        voodoo.wasRefunded = false;
+                        voodoo.silentReset();
+                        AbilityPlayerComponent abilityPlayerComponent = AbilityPlayerComponent.KEY.get(player);
+                        abilityPlayerComponent.cooldown = 0;
+                        abilityPlayerComponent.sync();
+                    } else {
+                        voodoo.sync();
+                    }
+                }
+            }
+
             Integer baseBalanceToAdd = GameConstants.PASSIVE_MONEY_TICKER.apply(world.getTime());
             if (baseBalanceToAdd != null && baseBalanceToAdd > 0) {
                 WorldModifierComponent worldModifierComponent = WorldModifierComponent.KEY.get(world);
@@ -424,12 +447,25 @@ public class Noellesroles implements ModInitializer {
             if (context.player().getWorld().getPlayerByUuid(payload.player()) == null) return;
 
             if (gameWorldComponent.isRole(context.player(), VOODOO)) {
-                if (abilityPlayerComponent.cooldown > 0) return;
-                abilityPlayerComponent.cooldown = GameConstants.getInTicks(0, 30);
-                abilityPlayerComponent.sync();
-                VoodooPlayerComponent voodooPlayerComponent = (VoodooPlayerComponent) VoodooPlayerComponent.KEY.get(context.player());
-                voodooPlayerComponent.setTarget(payload.player());
-
+                VoodooPlayerComponent voodoo = VoodooPlayerComponent.KEY.get(context.player());
+                PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(context.player());
+                if (voodoo.target.equals(context.player().getUuid())) {
+                    if (abilityPlayerComponent.cooldown > 0) return;
+                    if (playerShopComponent.balance < 200) return;
+                    playerShopComponent.balance -= 200;
+                    playerShopComponent.sync();
+                    voodoo.setTarget(payload.player());
+                    PlayerEntity targetEntity = context.player().getWorld().getPlayerByUuid(payload.player());
+                    voodoo.targetIsKiller = targetEntity != null && gameWorldComponent.getRole(targetEntity) != null &&
+                            (gameWorldComponent.getRole(targetEntity).canUseKiller() || KILLER_SIDED_NEUTRALS.contains(gameWorldComponent.getRole(targetEntity)));
+                    voodoo.sync();
+                    if (voodoo.targetIsKiller) {
+                        ServerPlayNetworking.send((ServerPlayerEntity) targetEntity, new VoodooWarnKillerS2CPacket());
+                    }
+                    abilityPlayerComponent.cooldown = 0;
+                    abilityPlayerComponent.sync();
+                }
+                return;
             }
             if (gameWorldComponent.isRole(context.player(), MORPHLING)) {
                 MorphlingPlayerComponent morphlingPlayerComponent = (MorphlingPlayerComponent) MorphlingPlayerComponent.KEY.get(context.player());
@@ -557,6 +593,27 @@ public class Noellesroles implements ModInitializer {
         ServerPlayNetworking.registerGlobalReceiver(Noellesroles.ABILITY_PACKET, (payload, context) -> {
             AbilityPlayerComponent abilityPlayerComponent = (AbilityPlayerComponent) AbilityPlayerComponent.KEY.get(context.player());
             GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(context.player().getWorld());
+            if (gameWorldComponent.isRole(context.player(), VOODOO)) {
+                VoodooPlayerComponent voodoo = VoodooPlayerComponent.KEY.get(context.player());
+                if (!voodoo.target.equals(context.player().getUuid()) && abilityPlayerComponent.cooldown <= 0) {
+                    PlayerEntity target = context.player().getWorld().getPlayerByUuid(voodoo.target);
+                    if (target == null || !GameFunctions.isPlayerAliveAndSurvival(target) || context.player().squaredDistanceTo(target) > 50 * 50) {
+                        PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(context.player());
+                        playerShopComponent.addToBalance(100);
+                        playerShopComponent.sync();
+                        voodoo.silentReset();
+                        voodoo.wasRefunded = true;
+                        voodoo.sync();
+                    } else {
+                        voodoo.isTracking = true;
+                        voodoo.trackingTicks = 0;
+                        voodoo.sync();
+                        abilityPlayerComponent.cooldown = 20 * 20;
+                        abilityPlayerComponent.sync();
+                    }
+                }
+                return;
+            }
             if (gameWorldComponent.isRole(context.player(), RECALLER) && abilityPlayerComponent.cooldown <= 0) {
                 RecallerPlayerComponent recallerPlayerComponent = RecallerPlayerComponent.KEY.get(context.player());
                 PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(context.player());

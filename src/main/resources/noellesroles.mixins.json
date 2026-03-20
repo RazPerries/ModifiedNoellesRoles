@@ -29,8 +29,7 @@
     "morphling.MorphlingReseterMixin",
     "noisemaker.NoisemakerKillMixin",
     "noisemaker.NoisemakerPlayerShopComponentMixin",
-    "trapper.TrapperPlayerShopComponentMixin",
-    "voodoo.VoodooVooMixin"
+    "trapper.TrapperPlayerShopComponentMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -26,7 +26,7 @@
   "announcement.goals.noellesroles.noisemaker": "Alert players of your location upon your death.",
   "announcement.role.noellesroles.noisemaker": "Noisemaker",
 
-  "announcement.goals.noellesroles.voodoo": "Choose another player to go down with you.",
+  "announcement.goals.noellesroles.voodoo": "Select a target. Then track them via magic.",
   "announcement.role.noellesroles.voodoo": "Voodoo",
   "hud.voodoo.player_deaths_only": "Voodoo deaths must be triggered by another player!",
 
@@ -117,6 +117,12 @@
   "tip.morphling.disguise_required": "Requires a morph to use.",
   "tip.morphling.remove_disguise": "%ss until morph ends. Use %s to demorph.",
   "tip.executioner.target_reroll":"Use %s to change your target. (One time only!)",
+  "tip.voodoo.select_target": "Press %s on a player to curse them.",
+  "tip.voodoo.activate": "Press %s to reveal %s.",
+  "tip.voodoo.tracking": "%s has been revealed for the next %ss.",
+  "tip.voodoo.not_enough_money": "200\uE781 required to select a target.",
+  "tip.voodoo.refund": "You try to track %s, but it requires too much power.",
+  "tip.voodoo.warning": "You feel as though you are about to be watched by someone...",
 
   "subtitles.noellesroles.role_mine_beep": "Role Mine Beeps"
 }

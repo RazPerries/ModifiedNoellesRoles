@@ -30,7 +30,8 @@
     "trapper.TrapperHandMixin",
     "trapper.TrapperInvisPaperMixin",
     "trapper.TrapperShopMixin",
-    "voodoo.VoodoScreenMixin",
+    "voodoo.VoodooHudMixin",
+    "voodoo.VoodooWarnKillerHudMixin",
     "vulture.VultureEatenBodyMixin",
     "vulture.VultureHudMixin"
   ],
