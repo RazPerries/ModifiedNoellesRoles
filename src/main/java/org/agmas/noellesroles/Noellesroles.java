@@ -413,7 +413,7 @@ public class Noellesroles implements ModInitializer {
                             }
                         }
                         if (nearbyPlayers > 0) {
-                            int extraGold = Math.min(nearbyPlayers * 5, 20);
+                            int extraGold = Math.min(((nearbyPlayers + 1) / 2) * 5, 20);
                             PlayerShopComponent.KEY.get(player).addToBalance(extraGold);
                         }
                     }
