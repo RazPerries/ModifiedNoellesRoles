@@ -4,10 +4,12 @@ import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
+import dev.doctor4t.wathe.index.WatheItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.agmas.noellesroles.Noellesroles;
 import org.jetbrains.annotations.NotNull;
@@ -28,11 +30,13 @@ public class ExecutionerPlayerComponent implements AutoSyncedComponent, ServerTi
     public UUID target;
     public boolean won = false;
     public boolean hasRerolled = false;
+    public int gunDropTimer;
 
 
     public void reset() {
         this.hasRerolled = false;
         this.target = player.getUuid();
+        this.gunDropTimer = -1;
         this.sync();
     }
 
@@ -49,6 +53,17 @@ public class ExecutionerPlayerComponent implements AutoSyncedComponent, ServerTi
     }
 
     public void serverTick() {
+        if (this.gunDropTimer > 0 && this.won) {
+            this.gunDropTimer--;
+        }
+        if (this.gunDropTimer == 0){
+            if (player.getInventory().contains((itemStack) -> itemStack.isOf(WatheItems.REVOLVER))) {
+                this.player.getInventory().remove((s) -> s.isOf(WatheItems.REVOLVER), 1, this.player.getInventory());
+                this.player.dropItem(WatheItems.REVOLVER.getDefaultStack(), true, false);
+            }
+            this.gunDropTimer = -1;
+        }
+
         GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(player.getWorld());
         if (!gameWorldComponent.isRole(player, Noellesroles.EXECUTIONER)) return;
         PlayerEntity player1 = player.getWorld().getPlayerByUuid(target);
@@ -69,6 +84,10 @@ public class ExecutionerPlayerComponent implements AutoSyncedComponent, ServerTi
         sync();
     }
 
+    public void setGunDropTimer() {
+        gunDropTimer = 20 * 20;
+        this.player.sendMessage(Text.literal("I cannot hold onto this revolver any longer. I must use it or lose it.").formatted(Formatting.RED), true);
+    }
 
     public void setTarget(UUID target) {
         this.target = target;

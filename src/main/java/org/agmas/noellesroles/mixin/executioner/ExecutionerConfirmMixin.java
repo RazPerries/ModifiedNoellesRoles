@@ -7,10 +7,13 @@ import dev.doctor4t.wathe.cca.PlayerPoisonComponent;
 import dev.doctor4t.wathe.cca.PlayerShopComponent;
 import dev.doctor4t.wathe.client.gui.RoleAnnouncementTexts;
 import dev.doctor4t.wathe.game.GameFunctions;
+import dev.doctor4t.wathe.index.WatheItems;
+import dev.doctor4t.wathe.index.tag.WatheItemTags;
 import dev.doctor4t.wathe.util.AnnounceWelcomePayload;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.impl.util.log.Log;
 import net.fabricmc.loader.impl.util.log.LogCategory;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -18,6 +21,7 @@ import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.config.HarpyModLoaderConfig;
 import org.agmas.harpymodloader.events.ModdedRoleAssigned;
 import org.agmas.noellesroles.Noellesroles;
+import org.agmas.noellesroles.bartender.BartenderPlayerComponent;
 import org.agmas.noellesroles.executioner.ExecutionerPlayerComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,26 +36,34 @@ import java.util.UUID;
 public class ExecutionerConfirmMixin {
     @Inject(method = "killPlayer(Lnet/minecraft/entity/player/PlayerEntity;ZLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Identifier;)V", at = @At("HEAD"))
     private static void executionerConfirm(PlayerEntity victim, boolean spawnBody, PlayerEntity killer, Identifier identifier, CallbackInfo ci) {
-        GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(victim.getWorld());
+        GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(victim.getWorld());
+        if (victim.getWorld().isClient) return;
+        if (BartenderPlayerComponent.KEY.get(victim).armor > 0) return;
         for (UUID uuid : gameWorldComponent.getAllWithRole(Noellesroles.EXECUTIONER)) {
             PlayerEntity executioner = victim.getWorld().getPlayerByUuid(uuid);
             if (executioner == null) continue;
             boolean invalidKill = false;
             if (killer != null) {
-                if (gameWorldComponent.getRole(killer).canUseKiller()) invalidKill = true;
+                if (gameWorldComponent.getRole(killer).canUseKiller() || (Noellesroles.KILLER_SIDED_NEUTRALS.contains(gameWorldComponent.getRole(killer)) && !gameWorldComponent.isRole(killer, Noellesroles.EXECUTIONER))) invalidKill = true;
             }
             ExecutionerPlayerComponent executionerPlayerComponent = ExecutionerPlayerComponent.KEY.get(executioner);
-            PlayerShopComponent playerShopComponent = (PlayerShopComponent) PlayerShopComponent.KEY.get(executioner);
+            PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(executioner);
             if (executionerPlayerComponent.target.equals(victim.getUuid()) && !invalidKill) {
                 executionerPlayerComponent.won = true;
                 ArrayList<Role> shuffledKillerRoles = new ArrayList<>(WatheRoles.ROLES);
-                shuffledKillerRoles.removeIf(role -> Harpymodloader.NON_MURDER_ROLES.contains(role) ||Harpymodloader.VANNILA_ROLES.contains(role) || !role.canUseKiller() || HarpyModLoaderConfig.HANDLER.instance().disabled.contains(role.identifier().getPath()));
+                shuffledKillerRoles.removeIf(role -> Harpymodloader.NON_MURDER_ROLES.contains(role) || Harpymodloader.VANNILA_ROLES.contains(role) || !role.canUseKiller() || HarpyModLoaderConfig.HANDLER.instance().disabled.contains(role.identifier().toString()));
                 if (shuffledKillerRoles.isEmpty()) shuffledKillerRoles.add(WatheRoles.KILLER);
                 Collections.shuffle(shuffledKillerRoles);
-
                 gameWorldComponent.addRole(executioner,shuffledKillerRoles.getFirst());
                 ModdedRoleAssigned.EVENT.invoker().assignModdedRole(executioner,shuffledKillerRoles.getFirst());
-                playerShopComponent.setBalance(200);
+                if (killer == executioner){
+                    playerShopComponent.setBalance(Math.clamp(playerShopComponent.balance,25,75));
+                } else {
+                    playerShopComponent.setBalance(Math.clamp(playerShopComponent.balance, 100, 150));
+                }
+                if (executioner.getInventory().contains((itemStack) -> itemStack.isOf(WatheItems.REVOLVER))){
+                    executionerPlayerComponent.setGunDropTimer();
+                }
                 PlayerPoisonComponent.KEY.get(executioner).reset();
                 if (Harpymodloader.VANNILA_ROLES.contains(gameWorldComponent.getRole(executioner))) {
                     ServerPlayNetworking.send((ServerPlayerEntity) executioner, new AnnounceWelcomePayload(RoleAnnouncementTexts.ROLE_ANNOUNCEMENT_TEXTS.indexOf(WatheRoles.KILLER), gameWorldComponent.getAllKillerTeamPlayers().size(), 0));

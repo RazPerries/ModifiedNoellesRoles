@@ -1,4 +1,4 @@
-package org.agmas.noellesroles.client.mixin.vulture;
+package org.agmas.noellesroles.client.mixin.jester;
 
 import dev.doctor4t.wathe.cca.GameWorldComponent;
 import net.minecraft.client.MinecraftClient;
@@ -11,7 +11,7 @@ import net.minecraft.util.Colors;
 import org.agmas.noellesroles.AbilityPlayerComponent;
 import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.client.NoellesrolesClient;
-import org.agmas.noellesroles.vulture.VulturePlayerComponent;
+import org.agmas.noellesroles.jester.JesterPlayerComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,25 +19,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(InGameHud.class)
-public abstract class VultureHudMixin {
+public abstract class JesterHudMixin {
     @Shadow public abstract TextRenderer getTextRenderer();
 
     @Inject(method = "render", at = @At("TAIL"))
     public void phantomHud(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(MinecraftClient.getInstance().player.getWorld());
-        AbilityPlayerComponent abilityPlayerComponent = (AbilityPlayerComponent) AbilityPlayerComponent.KEY.get(MinecraftClient.getInstance().player);
-        if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.VULTURE)) {
-            VulturePlayerComponent vulturePlayerComponent = VulturePlayerComponent.KEY.get(MinecraftClient.getInstance().player);
+        if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.JESTER)) {
+            JesterPlayerComponent jesterPlayerComponent = JesterPlayerComponent.KEY.get(MinecraftClient.getInstance().player);
             int drawY = context.getScaledWindowHeight();
 
-            Text line = Text.translatable("tip.vulture", vulturePlayerComponent.bodiesEaten, vulturePlayerComponent.bodiesRequired);
-
-            if (abilityPlayerComponent.cooldown > 0) {
-                line = Text.translatable("tip.noellesroles.cooldown", abilityPlayerComponent.cooldown/20);
-            }
-
+            Text line = Text.translatable("tip.jester", jesterPlayerComponent.jestCount, jesterPlayerComponent.jestRequired);
             drawY -= getTextRenderer().getWrappedLinesHeight(line, 999999);
-            context.drawTextWithShadow(getTextRenderer(), line, context.getScaledWindowWidth() - getTextRenderer().getWidth(line), drawY, NoellesrolesClient.targetBody == null ? Colors.GRAY : Noellesroles.VULTURE.color());
+            context.drawTextWithShadow(getTextRenderer(), line, context.getScaledWindowWidth() - getTextRenderer().getWidth(line), drawY, Noellesroles.JESTER.color());
         }
     }
 }

@@ -24,12 +24,16 @@
     "host.MoneyIncreaseMixin",
     "jester.FakeRevolverMixin",
     "jester.JesterItemEntityMixin",
-    "jester.JesterJestMixin",
+    "framing.ConspiratorShopComponentMixin",
     "morphling.MorphlingReseterMixin",
     "noisemaker.NoisemakerKillMixin",
     "noisemaker.NoisemakerPlayerShopComponentMixin",
     "trapper.TrapperPlayerShopComponentMixin",
-    "voodoo.VoodooVooMixin"
+    "voodoo.VoodooVooMixin",
+    "jester.JesterFirecrackerUseMixin",
+    "jester.JesterKillPlayerMixin",
+    "jester.JesterCrowbarUseMixin",
+    "jester.JesterDeluPlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

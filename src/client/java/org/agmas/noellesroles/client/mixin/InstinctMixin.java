@@ -41,7 +41,7 @@ public abstract class InstinctMixin {
     @Inject(method = "isInstinctEnabled", at = @At("HEAD"), cancellable = true)
     private static void b(CallbackInfoReturnable<Boolean> cir) {
         GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(MinecraftClient.getInstance().player.getWorld());
-        if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.JESTER)) {
+        if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.CONSPIRATOR)) {
             if (instinctKeybind.isPressed()) {
                 cir.setReturnValue(true);
                 cir.cancel();
@@ -67,14 +67,7 @@ public abstract class InstinctMixin {
                 PlayerPoisonComponent playerPoisonComponent =  PlayerPoisonComponent.KEY.get((PlayerEntity) target);
                 if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.BARTENDER) && bartenderPlayerComponent.glowTicks > 0) {
                     cir.setReturnValue(Color.GREEN.getRGB());
-                } /*
-                if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.BARTENDER) && bartenderPlayerComponent.armor > 0) {
-                    cir.setReturnValue(Color.BLUE.getRGB());
-                    cir.cancel();
                 }
-                if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.BARTENDER) && playerPoisonComponent.poisonTicks > 0) {
-                    cir.setReturnValue(Color.RED.getRGB());
-                } */
             }
         }
         if (target instanceof PlayerEntity) {
@@ -85,13 +78,12 @@ public abstract class InstinctMixin {
                     cir.cancel();
                 }
             }
-            if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.JESTER) && WatheClient.isInstinctEnabled()) {
-                    cir.setReturnValue(Color.PINK.getRGB());
+            if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.CONSPIRATOR) && WatheClient.isInstinctEnabled()) {
+                if ((gameWorldComponent.canUseKillerFeatures((PlayerEntity) target) || Noellesroles.KILLER_SIDED_NEUTRALS.contains(gameWorldComponent.getRole((PlayerEntity) target)))) {
+                    cir.setReturnValue(Color.RED.getRGB());
                     cir.cancel();
-            }
-            if (!((PlayerEntity)target).isSpectator() && WatheClient.isInstinctEnabled()) {
-                if (gameWorldComponent.isRole((PlayerEntity) target, Noellesroles.MIMIC) && WatheClient.isKiller()  && WatheClient.isPlayerAliveAndInSurvival()) {
-                    cir.setReturnValue(MathHelper.hsvToRgb(0.0F, 1.0F, 0.6F));
+                } else {
+                    cir.setReturnValue(Color.GREEN.getRGB());
                     cir.cancel();
                 }
             }

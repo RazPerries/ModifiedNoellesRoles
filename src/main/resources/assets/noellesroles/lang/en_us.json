@@ -7,9 +7,6 @@
   "announcement.goals.noellesroles.morphling": "Frame others by disguising as them.",
   "announcement.role.noellesroles.morphling": "Morphling",
 
-  "announcement.goals.noellesroles.awesome_binglus": "Awesome Binglu",
-  "announcement.role.noellesroles.awesome_binglus": "Awesome Binglus",
-
   "announcement.goals.noellesroles.conductor": "Use your master keys to access any door.",
   "announcement.role.noellesroles.conductor": "Conductor",
 
@@ -25,6 +22,9 @@
 
   "announcement.goals.noellesroles.noisemaker": "Alert players of your location upon your death.",
   "announcement.role.noellesroles.noisemaker": "Noisemaker",
+
+  "announcement.goals.noellesroles.conspirator": "Conspire with the Killers against the other Passengers.",
+  "announcement.role.noellesroles.conspirator": "Conspirator",
 
   "announcement.goals.noellesroles.voodoo": "Choose another player to go down with you.",
   "announcement.role.noellesroles.voodoo": "Voodoo",
@@ -105,6 +105,8 @@
   "tip.recaller.place": "Use %s to save your location (One time only!)",
   "tip.recaller.teleport": "Use %s to teleport (One time only!)",
   "tip.vulture": "%s/%s bodies eaten.",
+  "tip.jester": "%s/%s pranks done.",
+  "tip.jester.delusion_poisoned": "A victim has sipped on your delusion vial!",
   "tip.recaller.not_enough_money": "200\uE781 required to teleport.",
   "tip.selected": "Selected",
   "tip.noellesroles.cooldown": "Ability usable in %ss",

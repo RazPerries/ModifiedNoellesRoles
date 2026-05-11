@@ -39,7 +39,8 @@
       "noellesroles:recaller",
       "noellesroles:vulture",
       "noellesroles:chameleon",
-      "noellesroles:phantom"
+      "noellesroles:phantom",
+      "noellesroles:jester"
     ]
   },
   "mixins": [
