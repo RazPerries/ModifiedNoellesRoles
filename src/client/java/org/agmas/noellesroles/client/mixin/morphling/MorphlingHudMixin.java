@@ -38,13 +38,13 @@ public abstract class MorphlingHudMixin {
 
             Text line = Text.translatable("tip.morphling.remove_disguise", morphlingPlayerComponent.getMorphTicks()/20, NoellesrolesClient.abilityBind.getBoundKeyLocalizedText());
             if (morphlingPlayerComponent.getMorphTicks() == 0) {
-                line = Text.translatable("tip.morphling.disguise_required", NoellesrolesClient.abilityBind.getBoundKeyLocalizedText());
+                line = Text.translatable("tip.morphling.disguise_required", morphlingPlayerComponent.morphCost);
             }
             if (morphlingPlayerComponent.getMorphTicks() < 0) {
                 line = Text.translatable("tip.noellesroles.cooldown", morphlingPlayerComponent.getMorphTicks()/-20);
             }
             if (playerPsychoComponent.psychoTicks > 0){
-                line = Text.translatable("tip.noellesroles.phsycho_ability_disable");
+                line = Text.translatable("tip.noellesroles.psycho_ability_disable");
             }
 
             drawY -= getTextRenderer().getWrappedLinesHeight(line, 999999);

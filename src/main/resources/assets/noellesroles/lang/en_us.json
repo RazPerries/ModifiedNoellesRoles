@@ -100,7 +100,7 @@
   "death_reason.noellesroles.voodoo": "voodoo magic.",
   "death_reason.noellesroles.modded_backfire": "guilt.",
 
-  "tip.phantom": "Use %s to go invisible! (%s charges left.)",
+  "tip.phantom": "Use %s to go invisible! (Costs %s coins)",
   "tip.phantom.invisibility": "%ss until invisibility ends.",
   "tip.recaller.place": "Use %s to save your location (One time only!)",
   "tip.recaller.teleport": "Use %s to teleport (One time only!)",
@@ -112,13 +112,16 @@
   "tip.selected": "Selected",
   "tip.noellesroles.cooldown": "Ability usable in %ss",
   "tip.noellesroles.ability_used": "Ability cannot be used anymore.",
-  "tip.noellesroles.phsycho_ability_disable": "Ability cannot be used during psycho.",
+  "tip.noellesroles.ability_cannot_afford":"You require %s coins to use this ability.",
+  "tip.noellesroles.psycho_ability_disable": "Ability cannot be used during your psychosis.",
+  "tip.noellesroles.global_psycho_ability_disable": "Ability cannot be used while psycho is active.",
   "tip.master_key_invisible_count": "Master Keys look like lockpicks with less than %s people.",
   "tip.master_key_invisible": "Master Keys look like lockpicks.",
   "tip.trapper.caught": "You caught %s players in your trap. Their roles were:",
-  "tip.morphling.disguise_required": "Requires a morph to use.",
+  "tip.morphling.disguise_required": "Morphing is ready! (Costs %s coins)",
   "tip.morphling.remove_disguise": "%ss until morph ends. Use %s to demorph.",
   "tip.executioner.target_reroll":"Use %s to change your target. (One time only!)",
+  "tip.swapper": "Swapping is ready! (Costs %s coins)",
 
   "subtitles.noellesroles.role_mine_beep": "Role Mine Beeps"
 }

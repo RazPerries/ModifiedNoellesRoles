@@ -11,6 +11,7 @@ import dev.doctor4t.wathe.api.event.CanSeePoison;
 import dev.doctor4t.wathe.api.event.ShouldDropOnDeath;
 import dev.doctor4t.wathe.game.GameConstants;
 import dev.doctor4t.wathe.game.GameFunctions;
+import dev.doctor4t.wathe.index.WatheBlocks;
 import dev.doctor4t.wathe.index.WatheItems;
 import dev.doctor4t.wathe.index.WatheParticles;
 import dev.doctor4t.wathe.index.WatheSounds;
@@ -20,6 +21,9 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -55,6 +59,7 @@ import org.agmas.noellesroles.morphling.MorphlingPlayerComponent;
 import org.agmas.noellesroles.packet.*;
 import org.agmas.noellesroles.phantom.PhantomPlayerComponent;
 import org.agmas.noellesroles.recaller.RecallerPlayerComponent;
+import org.agmas.noellesroles.swapper.SwapperPlayerComponent;
 import org.agmas.noellesroles.voodoo.VoodooPlayerComponent;
 import org.agmas.noellesroles.vulture.VulturePlayerComponent;
 import org.jetbrains.annotations.NotNull;
@@ -262,6 +267,10 @@ public class Noellesroles implements ModInitializer {
             if (modifier.equals(FEATHER)) {
                 playerEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, StatusEffectInstance.INFINITE, 0, true, false));
             }
+            if (modifier.equals(CELEBRITY)) {
+                PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(playerEntity);
+                playerShopComponent.setBalance(playerShopComponent.balance - 25);
+            }
         }));
         ResetPlayerEvent.EVENT.register(((playerEntity) -> {
             playerEntity.removeStatusEffect(StatusEffects.SLOW_FALLING);
@@ -424,8 +433,19 @@ public class Noellesroles implements ModInitializer {
 
             }
             if (gameWorldComponent.isRole(context.player(), MORPHLING)) {
-                MorphlingPlayerComponent morphlingPlayerComponent = (MorphlingPlayerComponent) MorphlingPlayerComponent.KEY.get(context.player());
-                morphlingPlayerComponent.startMorph(payload.player());
+                PlayerPsychoComponent playerPsychoComponent = PlayerPsychoComponent.KEY.get(context.player());
+                PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(context.player());
+                MorphlingPlayerComponent morphlingPlayerComponent = MorphlingPlayerComponent.KEY.get(context.player());
+                if (playerPsychoComponent.psychoTicks != 0) {
+                    context.player().sendMessage(Text.translatable("tip.noellesroles.psycho_ability_disable").formatted(Formatting.DARK_RED), true);
+                } else {
+                    if (playerShopComponent.balance < morphlingPlayerComponent.morphCost) {
+                        context.player().sendMessage(Text.translatable("tip.noellesroles.ability_cannot_afford", morphlingPlayerComponent.morphCost).formatted(Formatting.DARK_RED), true);
+                    } else {
+                        morphlingPlayerComponent.startMorph(payload.player());
+                        playerShopComponent.setBalance(playerShopComponent.balance - morphlingPlayerComponent.morphCost);
+                    }
+                }
             }
         });
         ServerPlayNetworking.registerGlobalReceiver(Noellesroles.VULTURE_PACKET, (payload, context) -> {
@@ -472,28 +492,52 @@ public class Noellesroles implements ModInitializer {
 
             }
         });
+        // Nested if statements is the only way I can think to do this. Holy does this look horrible though.
         ServerPlayNetworking.registerGlobalReceiver(Noellesroles.SWAP_PACKET, (payload, context) -> {
-            GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(context.player().getWorld());
+            GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(context.player().getWorld());
+            SwapperPlayerComponent swapperPlayerComponent = SwapperPlayerComponent.KEY.get(context.player());
             if (gameWorldComponent.isRole(context.player(), SWAPPER)) {
                 if (payload.player() != null) {
                     if (context.player().getWorld().getPlayerByUuid(payload.player()) != null) {
                         if (payload.player2() != null) {
                             if (context.player().getWorld().getPlayerByUuid(payload.player2()) != null) {
-                                PlayerEntity player1 = context.player().getWorld().getPlayerByUuid(payload.player2());
-                                PlayerEntity player2 = context.player().getWorld().getPlayerByUuid(payload.player());
-                                Vec3d swapperPos = context.player().getWorld().getPlayerByUuid(payload.player2()).getPos();
-                                Vec3d swappedPos = context.player().getWorld().getPlayerByUuid(payload.player()).getPos();
-                                if (!context.player().getWorld().isSpaceEmpty(player1)) return;
-                                if (!context.player().getWorld().isSpaceEmpty(player2)) return;
-                                context.player().getWorld().getPlayerByUuid(payload.player2()).refreshPositionAfterTeleport(swappedPos.x, swappedPos.y, swappedPos.z);
-                                context.player().getWorld().getPlayerByUuid(payload.player()).refreshPositionAfterTeleport(swapperPos.x, swapperPos.y, swapperPos.z);
+                                PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(context.player());
+                                if (gameWorldComponent.isPsychoActive()) {
+                                    context.player().sendMessage(Text.literal("You cannot swap players while psycho is active.").formatted(Formatting.DARK_RED), true);
+                                } else {
+                                    if (playerShopComponent.balance < swapperPlayerComponent.swapCost) {
+                                        context.player().sendMessage(Text.translatable("tip.noellesroles.ability_cannot_afford", swapperPlayerComponent.swapCost).formatted(Formatting.DARK_RED), true);
+                                    } else {
+                                        AbilityPlayerComponent abilityPlayerComponent = AbilityPlayerComponent.KEY.get(context.player());
+                                        PlayerEntity player1 = context.player().getWorld().getPlayerByUuid(payload.player2());
+                                        PlayerEntity player2 = context.player().getWorld().getPlayerByUuid(payload.player());
+                                        Block playerBlock1 = player1.getWorld().getBlockState(player1.getBlockPos().down()).getBlock();
+                                        Block playerBlock2 = player2.getWorld().getBlockState(player2.getBlockPos().down()).getBlock();
+                                        if (player1.getPose() != EntityPose.STANDING || player2.getPose() != EntityPose.STANDING ||
+                                                player1.isClimbing() || player2.isClimbing() || player1.isCreative() || player2.isCreative() ||
+                                                (playerBlock1 == WatheBlocks.GOLD_LEDGE) || playerBlock1 == Blocks.AIR ||
+                                                (playerBlock2 == WatheBlocks.GOLD_LEDGE) || playerBlock2 == Blocks.AIR) {
+                                            context.player().sendMessage(Text.literal("Ability failed. One or both of the players could not be teleported.").formatted(Formatting.DARK_RED), true);
+                                            abilityPlayerComponent.cooldown = GameConstants.getInTicks(0, 20);
+                                            abilityPlayerComponent.sync();
+                                        } else {
+                                            if (player1 != context.player() && player2 != context.player()) {
+                                                context.player().sendMessage(Text.literal("Swapping " + player1.getDisplayName().getString() + " with " + player2.getDisplayName().getString() + ".").formatted(Formatting.RED), true);
+                                            }
+                                            playerShopComponent.setBalance(playerShopComponent.balance - swapperPlayerComponent.swapCost);
+                                            player1.sendMessage(Text.literal("You feel the air around you warp. You're being swapped!").formatted(Formatting.RED), true);
+                                            player2.sendMessage(Text.literal("You feel the air around you warp. You're being swapped!").formatted(Formatting.RED), true);
+                                            swapperPlayerComponent.getPlayerLocations(player1, player2);
+                                            swapperPlayerComponent.setSwapTime();
+                                            abilityPlayerComponent.cooldown = GameConstants.getInTicks(0, 40);
+                                            abilityPlayerComponent.sync();
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                 }
-                AbilityPlayerComponent abilityPlayerComponent = (AbilityPlayerComponent) AbilityPlayerComponent.KEY.get(context.player());
-                abilityPlayerComponent.cooldown = GameConstants.getInTicks(1, 0);
-                abilityPlayerComponent.sync();
             }
         });
 
@@ -568,12 +612,17 @@ public class Noellesroles implements ModInitializer {
             if (gameWorldComponent.isRole(context.player(), PHANTOM) && abilityPlayerComponent.cooldown <= 0) {
                 PhantomPlayerComponent phantomPlayerComponent = PhantomPlayerComponent.KEY.get(context.player());
                 PlayerPsychoComponent playerPsychoComponent = PlayerPsychoComponent.KEY.get(context.player());
-                if (phantomPlayerComponent.invisCount > 0 && playerPsychoComponent.psychoTicks == 0) {
-                    context.player().addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, phantomPlayerComponent.invisTimer * 20, 0, true, false, true));
-                    // NOTE: The ability cooldown, uptime, and charges are all handled in the PhantomPlayerComponent.java file. See there to modify the phantom.
-                    abilityPlayerComponent.cooldown = GameConstants.getInTicks(0, phantomPlayerComponent.invisCooldown);
-                    phantomPlayerComponent.invisCount--;
-                    phantomPlayerComponent.sync();
+                PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(context.player());
+                if (playerShopComponent.balance < phantomPlayerComponent.invisCost) {
+                    context.player().sendMessage(Text.translatable("tip.noellesroles.ability_cannot_afford", phantomPlayerComponent.invisCost).formatted(Formatting.DARK_RED), true);
+                } else {
+                    if (playerPsychoComponent.psychoTicks == 0) {
+                        context.player().addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, phantomPlayerComponent.invisTimer * 20, 0, true, false, true));
+                        // NOTE: The ability cooldown, uptime, and charges are all handled in the PhantomPlayerComponent.java file. See there to modify the phantom.
+                        abilityPlayerComponent.cooldown = GameConstants.getInTicks(0, phantomPlayerComponent.invisCooldown);
+                        playerShopComponent.setBalance(playerShopComponent.balance - phantomPlayerComponent.invisCost);
+                        phantomPlayerComponent.sync();
+                    }
                 }
             }
 

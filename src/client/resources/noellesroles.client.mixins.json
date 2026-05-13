@@ -27,6 +27,7 @@
     "phantom.PhantomRattatoulieMixin",
     "recaller.RecallerHudMixin",
     "swapper.SwapperScreenMixin",
+    "swapper.SwapperHudMixin",
     "trapper.TrapperHandMixin",
     "trapper.TrapperInvisPaperMixin",
     "trapper.TrapperShopMixin",

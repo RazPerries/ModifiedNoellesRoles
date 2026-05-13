@@ -16,6 +16,7 @@ import org.agmas.noellesroles.jester.JesterPlayerComponent;
 import org.agmas.noellesroles.morphling.MorphlingPlayerComponent;
 import org.agmas.noellesroles.phantom.PhantomPlayerComponent;
 import org.agmas.noellesroles.recaller.RecallerPlayerComponent;
+import org.agmas.noellesroles.swapper.SwapperPlayerComponent;
 import org.agmas.noellesroles.voodoo.VoodooPlayerComponent;
 import org.agmas.noellesroles.vulture.VulturePlayerComponent;
 import org.jetbrains.annotations.NotNull;
@@ -43,5 +44,6 @@ public abstract class MorphlingReseterMixin {
         (ExecutionerPlayerComponent.KEY.get(player)).reset();
         (PhantomPlayerComponent.KEY.get(player)).reset();
         (JesterPlayerComponent.KEY.get(player)).reset();
+        (SwapperPlayerComponent.KEY.get(player)).reset();
     }
 }

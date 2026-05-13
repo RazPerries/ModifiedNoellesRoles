@@ -40,7 +40,9 @@
       "noellesroles:vulture",
       "noellesroles:chameleon",
       "noellesroles:phantom",
-      "noellesroles:jester"
+      "noellesroles:jester",
+      "noellesroles:phantom",
+      "noellesroles:swapper"
     ]
   },
   "mixins": [

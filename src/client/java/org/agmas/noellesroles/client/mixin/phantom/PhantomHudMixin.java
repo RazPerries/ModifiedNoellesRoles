@@ -36,11 +36,8 @@ public abstract class PhantomHudMixin {
             //Invisibility ability cooldown (in seconds). Subtract from the ability uptime.
             int abilityCooldown = phantomPlayerComponent.invisCooldown - phantomPlayerComponent.invisTimer;
 
-            Text line = Text.translatable("tip.phantom", NoellesrolesClient.abilityBind.getBoundKeyLocalizedText(), phantomPlayerComponent.invisCount);
+            Text line = Text.translatable("tip.phantom", NoellesrolesClient.abilityBind.getBoundKeyLocalizedText(), phantomPlayerComponent.invisCost);
 
-            if (phantomPlayerComponent.invisCount == 0){
-                line = Text.translatable("tip.noellesroles.ability_used");
-            }
             // NOTE: The ability cooldown, uptime, and charges are all handled in the PhantomPlayerComponent.java file. See there to modify the phantom.
             if (abilityCooldown <= abilityPlayerComponent.cooldown/20)  {
                 line = Text.translatable("tip.phantom.invisibility", (abilityPlayerComponent.cooldown/20) - abilityCooldown);
@@ -48,7 +45,7 @@ public abstract class PhantomHudMixin {
                 line = Text.translatable("tip.noellesroles.cooldown", abilityPlayerComponent.cooldown/20);
             }
             if (playerPsychoComponent.psychoTicks > 0){
-                line = Text.translatable("tip.noellesroles.phsycho_ability_disable");
+                line = Text.translatable("tip.noellesroles.psycho_ability_disable");
             }
 
             drawY -= getTextRenderer().getWrappedLinesHeight(line, 999999);

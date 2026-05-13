@@ -31,6 +31,9 @@ public class MorphlingPlayerComponent implements AutoSyncedComponent, ServerTick
     public UUID disguise;
     public int morphTicks = 0;
 
+    // Ability cost
+    public int morphCost = 25;
+
     public void reset() {
         this.stopMorph();
         this.sync();

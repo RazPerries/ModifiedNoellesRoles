@@ -1,0 +1,108 @@
+package org.agmas.noellesroles.swapper;
+
+import de.maxhenkel.voicechat.api.Player;
+import dev.doctor4t.wathe.game.GameConstants;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3d;
+import org.agmas.noellesroles.Noellesroles;
+import org.jetbrains.annotations.NotNull;
+import org.ladysnake.cca.api.v3.component.ComponentKey;
+import org.ladysnake.cca.api.v3.component.ComponentRegistry;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
+import org.ladysnake.cca.api.v3.component.tick.ClientTickingComponent;
+import org.ladysnake.cca.api.v3.component.tick.ServerTickingComponent;
+
+import java.util.Random;
+
+public class SwapperPlayerComponent implements AutoSyncedComponent, ServerTickingComponent, ClientTickingComponent {
+    public static final ComponentKey<SwapperPlayerComponent> KEY = ComponentRegistry.getOrCreate(Identifier.of(Noellesroles.MOD_ID, "swapper"), SwapperPlayerComponent.class);
+    private final PlayerEntity player;
+    public int swapTicks = -1;
+    // Minimum time for teleport
+    public int minSwapTime = 2;
+    // Maximum time for teleport
+    public int maxSwapTime = 3;
+
+    // Ability cost
+    public int swapCost = 75;
+
+    public PlayerEntity player1 = null;
+    public PlayerEntity player2 = null;
+
+    Vec3d swapperPos = null;
+    Vec3d swappedPos = null;
+
+    public void reset() {
+        this.swapTicks = -1;
+        this.swapperPos = null;
+        this.swappedPos = null;
+        this.player1 = null;
+        this.player2 = null;
+        this.sync();
+    }
+
+    public SwapperPlayerComponent(PlayerEntity player) {
+        this.player = player;
+    }
+
+    public void sync() {
+        KEY.sync(this.player);
+    }
+
+    public void clientTick() {
+    }
+
+    public void serverTick() {
+        if (this.swapTicks > 0) {
+            --this.swapTicks;
+        }
+        if (this.swapTicks == 0) {
+            if (player1 != null && player2 != null && !player1.isSpectator() && !player2.isSpectator()) {
+                if (this.swapperPos != null && this.swappedPos != null) {
+                    //player.sendMessage(Text.literal("Swapped " + player1.getDisplayName().getString() + " at " + (int) swappedPos.x + ", " + (int) swappedPos.y + ", " + (int) swappedPos.z + " with " + player2.getDisplayName().getString() + " at " + (int) swapperPos.x + ", " + (int) swapperPos.y + ", " + (int) swapperPos.z).formatted(Formatting.GOLD), true);
+                    player1.teleport(swappedPos.x, swappedPos.y, swappedPos.z, true);
+                    player2.teleport(swapperPos.x, swapperPos.y, swapperPos.z, true);
+                }
+            }
+            swapTicks = -1;
+        }
+        this.sync();
+    }
+
+    public void getPlayerLocations(PlayerEntity player1, PlayerEntity player2) {
+        this.player1 = player1;
+        this.player2 = player2;
+        Vec3d swapperPos = player1.getPos();
+        Vec3d swappedPos = player2.getPos();
+        this.swapperPos = swapperPos;
+        this.swappedPos = swappedPos;
+        this.sync();
+    }
+
+    public void setSwapTime() {
+        Random random = new Random();
+        this.swapTicks = (GameConstants.getInTicks(0, random.nextInt(minSwapTime,maxSwapTime)));
+        this.sync();
+    }
+
+    public PlayerEntity getPlayer1() {
+        return this.player1;
+    }
+
+    public PlayerEntity getPlayer2() {
+        return this.player2;
+    }
+
+    public void writeToNbt(@NotNull NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
+        tag.putInt("swapTicks", this.swapTicks);
+    }
+
+    public void readFromNbt(@NotNull NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
+        this.swapTicks = tag.getInt("swapTicks");
+    }
+}

@@ -16,15 +16,15 @@ import org.ladysnake.cca.api.v3.component.tick.ServerTickingComponent;
 public class PhantomPlayerComponent implements AutoSyncedComponent, ServerTickingComponent, ClientTickingComponent {
     public static final ComponentKey<PhantomPlayerComponent> KEY = ComponentRegistry.getOrCreate(Identifier.of(Noellesroles.MOD_ID, "phantom"), PhantomPlayerComponent.class);
     private final PlayerEntity player;
-    // How many invis charges phantom has
-    public int invisCount = 3;
     // How long invis lasts for
     public int invisTimer = 20;
     // Cooldown goes down during invisibility. Add timer to cooldown to compensate.
     public int invisCooldown = 80;
 
+    // Ability cost
+    public int invisCost = 50;
+
     public void reset() {
-        this.invisCount = 3;
         this.sync();
     }
 
@@ -44,11 +44,8 @@ public class PhantomPlayerComponent implements AutoSyncedComponent, ServerTickin
     }
 
     public void writeToNbt(@NotNull NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
-        tag.putInt("invisCount", this.invisCount);
-
     }
 
     public void readFromNbt(@NotNull NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
-        this.invisCount = tag.getInt("invisCount");
     }
 }
