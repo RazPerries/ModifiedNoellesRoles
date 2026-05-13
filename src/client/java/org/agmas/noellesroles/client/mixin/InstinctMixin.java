@@ -79,11 +79,20 @@ public abstract class InstinctMixin {
                 }
             }
             if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.CONSPIRATOR) && WatheClient.isInstinctEnabled()) {
+                double distance = MinecraftClient.getInstance().player.squaredDistanceTo(target);
                 if ((gameWorldComponent.canUseKillerFeatures((PlayerEntity) target) || Noellesroles.KILLER_SIDED_NEUTRALS.contains(gameWorldComponent.getRole((PlayerEntity) target)))) {
-                    cir.setReturnValue(Color.RED.getRGB());
+                    if (distance <= 30 * 30){
+                        cir.setReturnValue(Color.RED.getRGB());
+                    } else {
+                        cir.setReturnValue(-1);
+                    }
                     cir.cancel();
                 } else {
-                    cir.setReturnValue(Color.GREEN.getRGB());
+                    if (distance <= 15 * 15){
+                        cir.setReturnValue(Color.GREEN.getRGB());
+                    } else {
+                        cir.setReturnValue(-1);
+                    }
                     cir.cancel();
                 }
             }

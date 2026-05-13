@@ -123,7 +123,7 @@ public class Noellesroles implements ModInitializer {
     public static Modifier GUESSER = HMLModifiers.registerModifier(new Modifier(GUESSER_ID, new Color(158, 43, 25, 255).getRGB(),new ArrayList<>(List.of(THE_INSANE_DAMNED_PARANOID_KILLER_OF_DOOM_DEATH_DESTRUCTION_AND_WAFFLES)),null,true,false));
     public static Modifier CELEBRITY = HMLModifiers.registerModifier(new Modifier(CELEBRITY_ID, new Color(174, 4, 109, 255).getRGB(), null, null, true, false));
     public static Modifier GRAVEROBBER = HMLModifiers.registerModifier(new Modifier(GRAVEROBBER_ID, new Color(174, 95, 95, 255).getRGB(),null,null,true,false));
-    public static Modifier SIXTH_SENSE = HMLModifiers.registerModifier(new Modifier(SIXTH_SENSE_ID, new Color(244, 201, 152, 255).getRGB(), new ArrayList<>(List.of(WatheRoles.VIGILANTE, JESTER, VULTURE, EXECUTIONER, BARTENDER)), null, false, true));
+    public static Modifier SIXTH_SENSE = HMLModifiers.registerModifier(new Modifier(SIXTH_SENSE_ID, new Color(244, 201, 152, 255).getRGB(), new ArrayList<>(List.of(WatheRoles.VIGILANTE, JESTER, VULTURE, EXECUTIONER, BARTENDER, CONSPIRATOR)), null, false, true));
 
     public static final CustomPayload.Id<MorphC2SPacket> MORPH_PACKET = MorphC2SPacket.ID;
     public static final CustomPayload.Id<SwapperC2SPacket> SWAP_PACKET = SwapperC2SPacket.ID;
@@ -167,14 +167,14 @@ public class Noellesroles implements ModInitializer {
         FRAMING_ROLES_SHOP.add(new FramingShopEntry(WatheItems.FIRECRACKER.getDefaultStack(), 5, ShopEntry.Type.TOOL));
         FRAMING_ROLES_SHOP.add(new FramingShopEntry(ModItems.SHORTFUSE_FIRECRACKER.getDefaultStack(), 5, ShopEntry.Type.TOOL));
 
-        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.LOCKPICK.getDefaultStack(), 100, ShopEntry.Type.TOOL));
-        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(ModItems.DELUSION_VIAL.getDefaultStack(), 50, ShopEntry.Type.POISON));
-        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.NOTE.getDefaultStack(), 15, ShopEntry.Type.TOOL));
-        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.FIRECRACKER.getDefaultStack(), 15, ShopEntry.Type.TOOL));
-        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(ModItems.SHORTFUSE_FIRECRACKER.getDefaultStack(), 15, ShopEntry.Type.TOOL));
-        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.BODY_BAG.getDefaultStack(), 150, ShopEntry.Type.TOOL));
+        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.LOCKPICK.getDefaultStack(), 80, ShopEntry.Type.TOOL));
+        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(ModItems.DELUSION_VIAL.getDefaultStack(), 30, ShopEntry.Type.POISON));
+        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.NOTE.getDefaultStack(), 10, ShopEntry.Type.TOOL));
+        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.FIRECRACKER.getDefaultStack(), 10, ShopEntry.Type.TOOL));
+        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(ModItems.SHORTFUSE_FIRECRACKER.getDefaultStack(), 10, ShopEntry.Type.TOOL));
+        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.BODY_BAG.getDefaultStack(), 125, ShopEntry.Type.TOOL));
         CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.CROWBAR.getDefaultStack(), 50, ShopEntry.Type.TOOL));
-        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.BLACKOUT.getDefaultStack(), 300, ShopEntry.Type.TOOL) {
+        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.BLACKOUT.getDefaultStack(), 275, ShopEntry.Type.TOOL) {
             @Override
             public boolean onBuy(@NotNull PlayerEntity player) {
                 return PlayerShopComponent.useBlackout(player);

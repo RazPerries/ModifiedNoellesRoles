@@ -107,6 +107,7 @@
   "tip.vulture": "%s/%s bodies eaten.",
   "tip.jester": "%s/%s pranks done.",
   "tip.jester.delusion_poisoned": "A victim has sipped on your delusion vial!",
+  "tip.conspirator.delusion_reimbursement": "Your delusion poison was taken. You have been rewarded.",
   "tip.recaller.not_enough_money": "200\uE781 required to teleport.",
   "tip.selected": "Selected",
   "tip.noellesroles.cooldown": "Ability usable in %ss",

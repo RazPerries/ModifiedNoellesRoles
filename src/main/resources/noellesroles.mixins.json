@@ -33,7 +33,8 @@
     "jester.JesterFirecrackerUseMixin",
     "jester.JesterKillPlayerMixin",
     "jester.JesterCrowbarUseMixin",
-    "jester.JesterDeluPlayerMixin"
+    "jester.JesterDeluPlayerMixin",
+    "conspirator.ConspiratorDeluPlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
