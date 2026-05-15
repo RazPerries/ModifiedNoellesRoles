@@ -42,7 +42,9 @@ public abstract class MorphlingRendererMixin {
                 cir.setReturnValue(getTexture((AbstractClientPlayerEntity) abstractClientPlayerEntity.getEntityWorld().getPlayerByUuid((MorphlingPlayerComponent.KEY.get(abstractClientPlayerEntity)).disguise)));
                 cir.cancel();
             } else {
-                Log.info(LogCategory.GENERAL, "Morphling disguise is null!!!");
+                cir.setReturnValue(WatheClient.PLAYER_ENTRIES_CACHE.get((MorphlingPlayerComponent.KEY.get(abstractClientPlayerEntity)).disguise).getSkinTextures().texture());
+                cir.cancel();
+                // Log.info(LogCategory.GENERAL, "Morphling disguise is null!!!");
             }
             if (MorphlingPlayerComponent.KEY.get(abstractClientPlayerEntity).disguise.equals(MinecraftClient.getInstance().player.getUuid())) {
                 cir.setReturnValue(getTexture(MinecraftClient.getInstance().player));
@@ -56,6 +58,8 @@ public abstract class MorphlingRendererMixin {
         if ((MorphlingPlayerComponent.KEY.get(instance)).getMorphTicks() > 0) {
             if (instance.getEntityWorld().getPlayerByUuid((MorphlingPlayerComponent.KEY.get(instance)).disguise) != null) {
                  return ((AbstractClientPlayerEntity) instance.getEntityWorld().getPlayerByUuid((MorphlingPlayerComponent.KEY.get(instance)).disguise)).getSkinTextures();
+            } else if (WatheClient.PLAYER_ENTRIES_CACHE.containsKey((MorphlingPlayerComponent.KEY.get(instance)).disguise)) {
+                return WatheClient.PLAYER_ENTRIES_CACHE.get((MorphlingPlayerComponent.KEY.get(instance)).disguise).getSkinTextures();
             } else {
                 Log.info(LogCategory.GENERAL, "Morphling disguise is null!!!");
             }

@@ -49,13 +49,13 @@ public class MorphlingPlayerComponent implements AutoSyncedComponent, ServerTick
 
     public void serverTick() {
         if (this.morphTicks > 0 && disguise != null) {
-            if (player.getWorld().getPlayerByUuid(disguise) != null) {
-                if (((ServerPlayerEntity)player.getWorld().getPlayerByUuid(disguise)).interactionManager.getGameMode() == GameMode.SPECTATOR) {
-                    stopMorph();
-                }
-            } else {
-                stopMorph();
-            }
+            // if (player.getWorld().getPlayerByUuid(disguise) != null) {
+            //     if (((ServerPlayerEntity)player.getWorld().getPlayerByUuid(disguise)).interactionManager.getGameMode() == GameMode.SPECTATOR) {
+            //         stopMorph();
+            //     }
+            // } else {
+            //     stopMorph();
+            // }
             if (--this.morphTicks == 0) {
                 this.stopMorph();
             }
