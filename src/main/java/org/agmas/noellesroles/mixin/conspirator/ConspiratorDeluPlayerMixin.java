@@ -27,7 +27,7 @@ public abstract class ConspiratorDeluPlayerMixin  {
     @Final
     private PlayerEntity player;
 
-    @Inject(method = "setPoisonTicks", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "setPoisonTicks", at = @At("HEAD"))
     private void conspiratorPoisonCheck(int ticks, @NotNull UUID poisoner, CallbackInfo ci) {
         GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(player.getWorld());
         if (gameWorldComponent.isRole(poisoner, Noellesroles.CONSPIRATOR) && !gameWorldComponent.canUseKillerFeatures(player) && !Noellesroles.KILLER_SIDED_NEUTRALS.contains(gameWorldComponent.getRole(player))) {
@@ -38,7 +38,6 @@ public abstract class ConspiratorDeluPlayerMixin  {
                     PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(serverPlayer);
                     serverPlayer.sendMessage(Text.translatable("tip.conspirator.delusion_reimbursement").withColor(Colors.LIGHT_GRAY), true);
                     playerShopComponent.addToBalance(60);
-                    ci.cancel();
                 }
             }
         }

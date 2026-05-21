@@ -25,7 +25,7 @@ public abstract class JesterDeluPlayerMixin {
 
     @Shadow @Final private PlayerEntity player;
 
-    @Inject(method = "setPoisonTicks", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "setPoisonTicks", at = @At("HEAD"))
     private void jesterPoisonCheck(int ticks, @NotNull UUID poisoner, CallbackInfo ci) {
         GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(player.getWorld());
         if (gameWorldComponent.isRole(poisoner, Noellesroles.JESTER) && !gameWorldComponent.canUseKillerFeatures(player) && !Noellesroles.KILLER_SIDED_NEUTRALS.contains(gameWorldComponent.getRole(player))) {
@@ -37,7 +37,6 @@ public abstract class JesterDeluPlayerMixin {
                     serverPlayer.sendMessage(Text.translatable("tip.jester.delusion_poisoned").withColor(Noellesroles.JESTER.color()), true);
                     jesterPlayerComponent.jestCount += jesterPlayerComponent.jestDelusionPlayer;
                     jesterPlayerComponent.sync();
-                    ci.cancel();
                 }
             }
         }
