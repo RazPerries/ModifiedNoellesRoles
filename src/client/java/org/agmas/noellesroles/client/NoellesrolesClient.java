@@ -24,12 +24,15 @@ import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.HitResult;
 import org.agmas.noellesroles.AbilityPlayerComponent;
 import org.agmas.noellesroles.ModItems;
 import org.agmas.noellesroles.NoellesRolesEntities;
@@ -38,6 +41,7 @@ import org.agmas.noellesroles.client.renderer.RoleMineEntityRenderer;
 import org.agmas.noellesroles.client.renderer.ShortFuseFirecrackerEntityRenderer;
 import org.agmas.noellesroles.packet.AbilityC2SPacket;
 import org.agmas.noellesroles.packet.MorphC2SPacket;
+import org.agmas.noellesroles.packet.VoodooTrackC2SPacket;
 import org.agmas.noellesroles.packet.VultureEatC2SPacket;
 import org.lwjgl.glfw.GLFW;
 
@@ -77,9 +81,23 @@ public class NoellesrolesClient implements ClientModInitializer {
                 client.execute(() -> {
                     if (MinecraftClient.getInstance().player == null) return;
                     GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(MinecraftClient.getInstance().player.getWorld());
+
                     if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.VULTURE)) {
                         if (targetBody == null) return;
                         ClientPlayNetworking.send(new VultureEatC2SPacket(targetBody.getUuid()));
+                        return;
+                    }
+
+                    if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.VOODOO)) {
+                        if (client.crosshairTarget.getType() == HitResult.Type.ENTITY) {
+                            Entity entity = ((EntityHitResult) client.crosshairTarget).getEntity();
+                            if (entity instanceof PlayerEntity targetPlayer && targetPlayer != MinecraftClient.getInstance().player) {
+                                ClientPlayNetworking.send(new VoodooTrackC2SPacket(targetPlayer.getUuid()));
+                            }
+                        }
+                        else {
+                            ClientPlayNetworking.send(new VoodooTrackC2SPacket(MinecraftClient.getInstance().player.getUuid()));
+                        }
                         return;
                     }
                     ClientPlayNetworking.send(new AbilityC2SPacket());

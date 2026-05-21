@@ -6,6 +6,7 @@
   "mixins": [
     "DoNotCollideWithFeatherMixin",
     "GiveCoinsOnMoodCompletionMixin",
+    "IronWillMoodMixin",
     "bartender.BartenderPlayerShopComponentMixin",
     "bartender.BartenderReseterMixin",
     "bartender.CocktailItemMixin",
@@ -29,7 +30,6 @@
     "noisemaker.NoisemakerKillMixin",
     "noisemaker.NoisemakerPlayerShopComponentMixin",
     "trapper.TrapperPlayerShopComponentMixin",
-    "voodoo.VoodooVooMixin",
     "jester.JesterFirecrackerUseMixin",
     "jester.JesterKillPlayerMixin",
     "jester.JesterCrowbarUseMixin",

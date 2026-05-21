@@ -23,6 +23,7 @@ import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.bartender.BartenderPlayerComponent;
 import org.agmas.noellesroles.client.NoellesrolesClient;
 import org.agmas.noellesroles.executioner.ExecutionerPlayerComponent;
+import org.agmas.noellesroles.voodoo.VoodooPlayerComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -67,6 +68,17 @@ public abstract class InstinctMixin {
                 PlayerPoisonComponent playerPoisonComponent =  PlayerPoisonComponent.KEY.get((PlayerEntity) target);
                 if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.BARTENDER) && bartenderPlayerComponent.glowTicks > 0) {
                     cir.setReturnValue(Color.GREEN.getRGB());
+                }
+            }
+        }
+        if (target instanceof PlayerEntity) {
+            if (!((PlayerEntity)target).isSpectator()) {
+                VoodooPlayerComponent voodooPlayerComponent = VoodooPlayerComponent.KEY.get((PlayerEntity) MinecraftClient.getInstance().player);
+                if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.VOODOO) && voodooPlayerComponent.glowTicks > 0) {
+                    if (voodooPlayerComponent.target.equals(target.getUuid())) {
+                        cir.setReturnValue(Noellesroles.VOODOO.color());
+                        cir.cancel();
+                    }
                 }
             }
         }

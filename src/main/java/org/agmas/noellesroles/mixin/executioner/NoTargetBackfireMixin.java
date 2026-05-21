@@ -28,9 +28,6 @@ public class NoTargetBackfireMixin {
                 return false;
             }
         }
-        if (gameWorldComponent.isRole(player, Noellesroles.VOODOO) && NoellesRolesConfig.HANDLER.instance().voodooShotLikeEvil) {
-            return false;
-        }
         return original.call(instance,player);
     }
 }

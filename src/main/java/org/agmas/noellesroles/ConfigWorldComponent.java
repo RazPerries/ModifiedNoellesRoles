@@ -21,7 +21,6 @@ import java.util.UUID;
 public class ConfigWorldComponent implements AutoSyncedComponent, ServerTickingComponent {
     public static final ComponentKey<ConfigWorldComponent> KEY = ComponentRegistry.getOrCreate(Identifier.of(Noellesroles.MOD_ID, "config"), ConfigWorldComponent.class);
     public boolean insaneSeesMorphs = true;
-    public boolean naturalVoodoosAllowed = false;
     public int masterKeyVisibleCount = 0;
     public boolean masterKeyIsVisible = false;
 
@@ -45,14 +44,12 @@ public class ConfigWorldComponent implements AutoSyncedComponent, ServerTickingC
 
     public void writeToNbt(@NotNull NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         insaneSeesMorphs = NoellesRolesConfig.HANDLER.instance().insanePlayersSeeMorphs;
-        naturalVoodoosAllowed = NoellesRolesConfig.HANDLER.instance().voodooNonKillerDeaths;
         masterKeyVisibleCount = NoellesRolesConfig.HANDLER.instance().playerCountToMakeConducterKeyVisible;
         defenseVialPrice = NoellesRolesConfig.HANDLER.instance().defenseVialPrice;
         roleMinePrice = NoellesRolesConfig.HANDLER.instance().roleMinePrice;
         maximumDefenseVials = NoellesRolesConfig.HANDLER.instance().maximumDefenseVials;
 
         tag.putBoolean("insaneSeesMorphs", this.insaneSeesMorphs);
-        tag.putBoolean("naturalVoodoosAllowed", this.naturalVoodoosAllowed);
         tag.putBoolean("masterKeyIsVisible", this.masterKeyIsVisible);
         tag.putInt("masterKeyVisibleCount", this.masterKeyVisibleCount);
 
@@ -65,7 +62,6 @@ public class ConfigWorldComponent implements AutoSyncedComponent, ServerTickingC
 
     public void readFromNbt(@NotNull NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         if (tag.contains("insaneSeesMorphs"))   this.insaneSeesMorphs = tag.getBoolean("insaneSeesMorphs");
-        if (tag.contains("naturalVoodoosAllowed"))   this.naturalVoodoosAllowed = tag.getBoolean("naturalVoodoosAllowed");
         if (tag.contains("masterKeyIsVisible"))   this.masterKeyIsVisible = tag.getBoolean("masterKeyIsVisible");
         if (tag.contains("masterKeyVisibleCount"))   this.masterKeyVisibleCount = tag.getInt("masterKeyVisibleCount");
 

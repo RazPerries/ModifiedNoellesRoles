@@ -26,9 +26,9 @@
   "announcement.goals.noellesroles.conspirator": "Conspire with the Killers against the other Passengers.",
   "announcement.role.noellesroles.conspirator": "Conspirator",
 
-  "announcement.goals.noellesroles.voodoo": "Choose another player to go down with you.",
+  "announcement.goals.noellesroles.voodoo": " Briefly track the movement of other passengers.",
   "announcement.role.noellesroles.voodoo": "Voodoo",
-  "hud.voodoo.player_deaths_only": "Voodoo deaths must be triggered by another player!",
+  "hud.voodoo.track": "Track Player",
 
   "announcement.goals.noellesroles.swapper": "Swap places with other players.",
   "announcement.role.noellesroles.swapper": "Swapper",
@@ -66,7 +66,8 @@
   "announcement.modifier.noellesroles.feather": "Feather",
   "announcement.modifier.noellesroles.celebrity": "Celebrity",
   "announcement.modifier.noellesroles.sixth_sense": "Sixth Sense",
-
+  "announcement.modifier.noellesroles.iron_willed": "Iron-Willed",
+  "announcement.modifier.noellesroles.bellringer": "Bellringer",
 
   "announcement.goals.noellesroles.better_vigilante": "Uhhhhhhhhhhhhh",
   "announcement.role.noellesroles.better_vigilante": "Better Vigilante",
@@ -122,6 +123,14 @@
   "tip.morphling.remove_disguise": "%ss until morph ends. Use %s to demorph.",
   "tip.executioner.target_reroll":"Use %s to change your target. (One time only!)",
   "tip.swapper": "Swapping is ready! (Costs %s coins)",
+  "tip.voodoo.select_target": "Use %s while looking at a player to track them! (Costs %s coins)",
+  "tip.voodoo.target_tracked": "Use %s to watch your tracked player.",
+  "tip.voodoo.track_timer": "%ss until tracking ends.",
+  "tip.voodoo.hint.target_chosen": "Successfully selected player for tracking.",
+  "tip.voodoo.hint.tracking_active": "The tracked player is highlighted to you.",
+  "tip.voodoo.hint.tracking_failed": "Your track dissipates into nothingness. Perhaps they wandered too far from you or has perished.",
+  "tip.voodoo.hint.evil_tracked_warning": "You feel a force over you as if you're being watched.",
+  "tip.voodoo.hint.invalid_target_track": "Get close to see the name of another player to track them.",
 
   "subtitles.noellesroles.role_mine_beep": "Role Mine Beeps"
 }

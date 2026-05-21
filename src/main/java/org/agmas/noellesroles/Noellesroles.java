@@ -97,20 +97,22 @@ public class Noellesroles implements ModInitializer {
     public static Identifier CELEBRITY_ID = Identifier.of(MOD_ID, "celebrity");
     public static Identifier SIXTH_SENSE_ID = Identifier.of(MOD_ID, "sixth_sense");
     public static Identifier CONSPIRATOR_ID = Identifier.of(MOD_ID, "conspirator");
+    public static Identifier IRON_WILLED_ID = Identifier.of(MOD_ID, "iron_willed");
+    public static Identifier BELLRINGER_ID = Identifier.of(MOD_ID, "bellringer");
 
     public static HashMap<Role, RoleAnnouncementTexts.RoleAnnouncementText> roleRoleAnnouncementTextHashMap = new HashMap<>();
-    public static Role JESTER = WatheRoles.registerRole(new Role(JESTER_ID,new Color(200, 13, 156).getRGB() ,false,false, Role.MoodType.FAKE,Integer.MAX_VALUE,true));
-    public static Role MORPHLING =WatheRoles.registerRole(new Role(MORPHLING_ID, new Color(170, 2, 86).getRGB(),false,true, Role.MoodType.FAKE,Integer.MAX_VALUE,true));
+    public static Role JESTER = WatheRoles.registerRole(new Role(JESTER_ID,new Color(200, 13, 156).getRGB() ,false,false, Role.MoodType.FAKE,WatheRoles.CIVILIAN.getMaxSprintTime(),true));
+    public static Role MORPHLING =WatheRoles.registerRole(new Role(MORPHLING_ID, new Color(170, 2, 86).getRGB(),false,true, Role.MoodType.FAKE,WatheRoles.CIVILIAN.getMaxSprintTime()*2,true));
     public static Role CONDUCTOR =WatheRoles.registerRole(new Role(CONDUCTOR_ID, new Color(255, 205, 84).getRGB(),true,false, Role.MoodType.REAL,WatheRoles.CIVILIAN.getMaxSprintTime(),false));
 
     public static Role BARTENDER =WatheRoles.registerRole(new Role(BARTENDER_ID, new Color(217,241,240).getRGB(),true,false, Role.MoodType.REAL,WatheRoles.CIVILIAN.getMaxSprintTime(),false));
     public static Role NOISEMAKER =WatheRoles.registerRole(new Role(NOISEMAKER_ID, new Color(200, 255, 0).getRGB(),true,false, Role.MoodType.REAL,WatheRoles.CIVILIAN.getMaxSprintTime(),false));
-    public static Role SWAPPER = WatheRoles.registerRole(new Role(SWAPPER_ID, new Color(77, 12, 213).getRGB(),false,true, Role.MoodType.FAKE,Integer.MAX_VALUE,true));
-    public static Role PHANTOM =WatheRoles.registerRole(new Role(PHANTOM_ID, new Color(129, 3, 3, 192).getRGB(),false,true, Role.MoodType.FAKE,Integer.MAX_VALUE,true));
+    public static Role SWAPPER = WatheRoles.registerRole(new Role(SWAPPER_ID, new Color(77, 12, 213).getRGB(),false,true, Role.MoodType.FAKE,WatheRoles.CIVILIAN.getMaxSprintTime()*2,true));
+    public static Role PHANTOM =WatheRoles.registerRole(new Role(PHANTOM_ID, new Color(129, 3, 3, 192).getRGB(),false,true, Role.MoodType.FAKE,WatheRoles.CIVILIAN.getMaxSprintTime()*2,true));
 
     public static Role CONSPIRATOR =WatheRoles.registerRole(new Role(CONSPIRATOR_ID, new Color(64, 44, 36).getRGB(),false,false,Role.MoodType.FAKE, WatheRoles.CIVILIAN.getMaxSprintTime(),true));
     public static Role VOODOO =WatheRoles.registerRole(new Role(VOODOO_ID, new Color(171, 172, 241).getRGB(),true,false,Role.MoodType.REAL, WatheRoles.CIVILIAN.getMaxSprintTime(),false));
-    public static Role THE_INSANE_DAMNED_PARANOID_KILLER_OF_DOOM_DEATH_DESTRUCTION_AND_WAFFLES =WatheRoles.registerRole(new Role(THE_INSANE_DAMNED_PARANOID_KILLER_OF_DOOM_DEATH_DESTRUCTION_AND_WAFFLES_ID, new Color(255, 0, 0, 192).getRGB(),false,true, Role.MoodType.FAKE,Integer.MAX_VALUE,true));
+    public static Role THE_INSANE_DAMNED_PARANOID_KILLER_OF_DOOM_DEATH_DESTRUCTION_AND_WAFFLES =WatheRoles.registerRole(new Role(THE_INSANE_DAMNED_PARANOID_KILLER_OF_DOOM_DEATH_DESTRUCTION_AND_WAFFLES_ID, new Color(255, 0, 0, 192).getRGB(),false,true, Role.MoodType.FAKE,WatheRoles.CIVILIAN.getMaxSprintTime()*2,true));
     public static Role TRAPPER =WatheRoles.registerRole(new Role(TRAPPER_ID, new Color(155, 218, 197).getRGB(),true,false,Role.MoodType.REAL, WatheRoles.CIVILIAN.getMaxSprintTime(),false));
     public static Role CORONER =WatheRoles.registerRole(new Role(CORONER_ID, new Color(154, 154, 154).getRGB(),true,false,Role.MoodType.REAL, WatheRoles.CIVILIAN.getMaxSprintTime(),false));
 
@@ -129,11 +131,15 @@ public class Noellesroles implements ModInitializer {
     public static Modifier CELEBRITY = HMLModifiers.registerModifier(new Modifier(CELEBRITY_ID, new Color(174, 4, 109, 255).getRGB(), null, null, true, false));
     public static Modifier GRAVEROBBER = HMLModifiers.registerModifier(new Modifier(GRAVEROBBER_ID, new Color(174, 95, 95, 255).getRGB(),null,null,true,false));
     public static Modifier SIXTH_SENSE = HMLModifiers.registerModifier(new Modifier(SIXTH_SENSE_ID, new Color(244, 201, 152, 255).getRGB(), new ArrayList<>(List.of(WatheRoles.VIGILANTE, JESTER, VULTURE, EXECUTIONER, BARTENDER, CONSPIRATOR)), null, false, true));
+    public static Modifier IRON_WILLED = HMLModifiers.registerModifier(new Modifier(IRON_WILLED_ID, new Color(197, 197, 197).getRGB(), null, null, false, true));
+    public static Modifier BELLRINGER = HMLModifiers.registerModifier(new Modifier(BELLRINGER_ID, new Color(250, 220, 126).getRGB(), null, null, false, true));
+
 
     public static final CustomPayload.Id<MorphC2SPacket> MORPH_PACKET = MorphC2SPacket.ID;
     public static final CustomPayload.Id<SwapperC2SPacket> SWAP_PACKET = SwapperC2SPacket.ID;
     public static final CustomPayload.Id<AbilityC2SPacket> ABILITY_PACKET = AbilityC2SPacket.ID;
     public static final CustomPayload.Id<VultureEatC2SPacket> VULTURE_PACKET = VultureEatC2SPacket.ID;
+    public static final CustomPayload.Id<VoodooTrackC2SPacket> VOODOO_PACKET = VoodooTrackC2SPacket.ID;
     public static final CustomPayload.Id<GuessC2SPacket> GUESS_PACKET = GuessC2SPacket.ID;
     public static final ArrayList<Role> VANNILA_ROLES = new ArrayList<>();
     public static final ArrayList<Identifier> VANNILA_ROLE_IDS = new ArrayList<>();
@@ -200,11 +206,14 @@ public class Noellesroles implements ModInitializer {
 
         Harpymodloader.MODIFIER_MAX.put(SIXTH_SENSE_ID, 1);
         Harpymodloader.MODIFIER_MAX.put(TINY_ID, 1);
+        Harpymodloader.MODIFIER_MAX.put(IRON_WILLED_ID, 1);
+        Harpymodloader.MODIFIER_MAX.put(BELLRINGER_ID, 1);
 
         PayloadTypeRegistry.playC2S().register(MorphC2SPacket.ID, MorphC2SPacket.CODEC);
         PayloadTypeRegistry.playC2S().register(AbilityC2SPacket.ID, AbilityC2SPacket.CODEC);
         PayloadTypeRegistry.playC2S().register(SwapperC2SPacket.ID, SwapperC2SPacket.CODEC);
         PayloadTypeRegistry.playC2S().register(VultureEatC2SPacket.ID, VultureEatC2SPacket.CODEC);
+        PayloadTypeRegistry.playC2S().register(VoodooTrackC2SPacket.ID, VoodooTrackC2SPacket.CODEC);
         PayloadTypeRegistry.playC2S().register(GuessC2SPacket.ID, GuessC2SPacket.CODEC);
 
         registerEvents();
@@ -424,14 +433,6 @@ public class Noellesroles implements ModInitializer {
             if (payload.player() == null) return;
             if (context.player().getWorld().getPlayerByUuid(payload.player()) == null) return;
 
-            if (gameWorldComponent.isRole(context.player(), VOODOO)) {
-                if (abilityPlayerComponent.cooldown > 0) return;
-                abilityPlayerComponent.cooldown = GameConstants.getInTicks(0, 30);
-                abilityPlayerComponent.sync();
-                VoodooPlayerComponent voodooPlayerComponent = (VoodooPlayerComponent) VoodooPlayerComponent.KEY.get(context.player());
-                voodooPlayerComponent.setTarget(payload.player());
-
-            }
             if (gameWorldComponent.isRole(context.player(), MORPHLING)) {
                 PlayerPsychoComponent playerPsychoComponent = PlayerPsychoComponent.KEY.get(context.player());
                 PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(context.player());
@@ -492,6 +493,50 @@ public class Noellesroles implements ModInitializer {
 
             }
         });
+        ServerPlayNetworking.registerGlobalReceiver(Noellesroles.VOODOO_PACKET, (payload, context) -> {
+            GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(context.player().getWorld());
+            if (gameWorldComponent.isRole(context.player(), VOODOO) && GameFunctions.isPlayerAliveAndSurvival(context.player())) {
+
+                AbilityPlayerComponent abilityPlayerComponent = AbilityPlayerComponent.KEY.get(context.player());
+                if (abilityPlayerComponent.cooldown <= 0) {
+                    VoodooPlayerComponent voodooPlayerComponent = VoodooPlayerComponent.KEY.get(context.player());
+                    PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(context.player());
+                    if (!voodooPlayerComponent.hasTarget) {
+
+                        if (playerShopComponent.balance >= voodooPlayerComponent.abilityCost) {
+                            if (payload.player() != null && !payload.player().equals(context.player().getUuid())) {
+                                playerShopComponent.setBalance(playerShopComponent.balance - voodooPlayerComponent.abilityCost);
+                                voodooPlayerComponent.setTarget(payload.player());
+                                context.player().sendMessage(Text.translatable("tip.voodoo.hint.target_chosen").withColor(Noellesroles.VOODOO.color()), true);
+                                abilityPlayerComponent.cooldown = GameConstants.getInTicks(0, 10);
+                            } else {
+                                context.player().sendMessage(Text.translatable("tip.voodoo.hint.invalid_target_track").withColor(Noellesroles.VOODOO.color()), true);
+                            }
+                        } else {
+                            context.player().sendMessage(Text.translatable("tip.noellesroles.ability_cannot_afford", voodooPlayerComponent.abilityCost).withColor(Noellesroles.VOODOO.color()), true);
+                        }
+                    } else {
+                        PlayerEntity targetPlayer = context.player().getWorld().getPlayerByUuid(voodooPlayerComponent.target);
+                        if (!targetPlayer.isSpectator() && context.player().squaredDistanceTo(targetPlayer) <= 50 * 50) {
+                            if (gameWorldComponent.canUseKillerFeatures(targetPlayer) || KILLER_SIDED_NEUTRALS.contains(gameWorldComponent.getRole(targetPlayer))) {
+                                targetPlayer.sendMessage(Text.translatable("tip.voodoo.hint.evil_tracked_warning").formatted(Formatting.RED), true);
+                            }
+                            voodooPlayerComponent.startGlow();
+                            context.player().sendMessage(Text.translatable("tip.voodoo.hint.tracking_active").withColor(Noellesroles.VOODOO.color()), true);
+                            abilityPlayerComponent.cooldown = GameConstants.getInTicks(0, 90);
+                        } else {
+                            voodooPlayerComponent.abilityFail();
+                            playerShopComponent.addToBalance(voodooPlayerComponent.abilityCost/2);
+                            context.player().sendMessage(Text.translatable("tip.voodoo.hint.tracking_failed").withColor(Noellesroles.VOODOO.color()), true);
+                            abilityPlayerComponent.cooldown = GameConstants.getInTicks(0, 20);
+                        }
+                    }
+                    voodooPlayerComponent.sync();
+                }
+                abilityPlayerComponent.sync();
+            }
+        });
+
         // Nested if statements is the only way I can think to do this. Holy does this look horrible though.
         ServerPlayNetworking.registerGlobalReceiver(Noellesroles.SWAP_PACKET, (payload, context) -> {
             GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(context.player().getWorld());
@@ -658,6 +703,12 @@ public class Noellesroles implements ModInitializer {
                     executionerPlayerComponent.hasRerolled = true;
                     executionerPlayerComponent.sync();
                 }
+            }
+
+            // Voodoo activate tracking
+            if (gameWorldComponent.isRole(context.player(), VOODOO)) {
+                context.player().sendMessage(Text.literal("You should not be seeing this!!").formatted(Formatting.WHITE), true);
+
             }
         });
     }
