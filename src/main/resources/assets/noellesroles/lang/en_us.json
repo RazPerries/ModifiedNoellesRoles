@@ -123,7 +123,7 @@
   "tip.morphling.remove_disguise": "%ss until morph ends. Use %s to demorph.",
   "tip.executioner.target_reroll":"Use %s to change your target. (One time only!)",
   "tip.swapper": "Swapping is ready! (Costs %s coins)",
-  "tip.voodoo.select_target": "Use %s while looking at a player to track them! (Costs %s coins)",
+  "tip.voodoo.select_target": "Use %s on a player to track them! (Costs %s coins)",
   "tip.voodoo.target_tracked": "Use %s to watch your tracked player.",
   "tip.voodoo.track_timer": "%ss until tracking ends.",
   "tip.voodoo.hint.target_chosen": "Successfully selected player for tracking.",

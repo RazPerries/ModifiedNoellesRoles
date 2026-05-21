@@ -131,8 +131,8 @@ public class Noellesroles implements ModInitializer {
     public static Modifier CELEBRITY = HMLModifiers.registerModifier(new Modifier(CELEBRITY_ID, new Color(174, 4, 109, 255).getRGB(), null, null, true, false));
     public static Modifier GRAVEROBBER = HMLModifiers.registerModifier(new Modifier(GRAVEROBBER_ID, new Color(174, 95, 95, 255).getRGB(),null,null,true,false));
     public static Modifier SIXTH_SENSE = HMLModifiers.registerModifier(new Modifier(SIXTH_SENSE_ID, new Color(244, 201, 152, 255).getRGB(), new ArrayList<>(List.of(WatheRoles.VIGILANTE, JESTER, VULTURE, EXECUTIONER, BARTENDER, CONSPIRATOR)), null, false, true));
-    public static Modifier IRON_WILLED = HMLModifiers.registerModifier(new Modifier(IRON_WILLED_ID, new Color(197, 197, 197).getRGB(), null, null, false, true));
-    public static Modifier BELLRINGER = HMLModifiers.registerModifier(new Modifier(BELLRINGER_ID, new Color(250, 220, 126).getRGB(), null, null, false, true));
+    public static Modifier IRON_WILLED = HMLModifiers.registerModifier(new Modifier(IRON_WILLED_ID, new Color(197, 197, 197).getRGB(), new ArrayList<>(List.of(JESTER, VULTURE, EXECUTIONER, CONSPIRATOR)), null, false, true));
+    public static Modifier BELLRINGER = HMLModifiers.registerModifier(new Modifier(BELLRINGER_ID, new Color(250, 220, 126).getRGB(), new ArrayList<>(List.of(JESTER, VULTURE, EXECUTIONER, CONSPIRATOR)), null, false, true));
 
 
     public static final CustomPayload.Id<MorphC2SPacket> MORPH_PACKET = MorphC2SPacket.ID;
@@ -144,7 +144,7 @@ public class Noellesroles implements ModInitializer {
     public static final ArrayList<Role> VANNILA_ROLES = new ArrayList<>();
     public static final ArrayList<Identifier> VANNILA_ROLE_IDS = new ArrayList<>();
     public static final ArrayList<Role> KILLER_SIDED_NEUTRALS = new ArrayList<>();
-    public static final ArrayList<Role> ENABLED_NEUTRALS = new ArrayList<>();
+    public static final ArrayList<Modifier> KILLER_MODIFIERS = new ArrayList<>();
 
     public static ArrayList<ShopEntry> FRAMING_ROLES_SHOP = new ArrayList<>();
     public static ArrayList<ShopEntry> CONSPIRATOR_SHOP = new ArrayList<>();
@@ -163,8 +163,9 @@ public class Noellesroles implements ModInitializer {
         KILLER_SIDED_NEUTRALS.add(EXECUTIONER);
         KILLER_SIDED_NEUTRALS.add(CONSPIRATOR);
 
-        ENABLED_NEUTRALS.add(VULTURE);
-        ENABLED_NEUTRALS.add(EXECUTIONER);
+        KILLER_MODIFIERS.add(CELEBRITY);
+        KILLER_MODIFIERS.add(GUESSER);
+        KILLER_MODIFIERS.add(GRAVEROBBER);
 
         VANNILA_ROLE_IDS.add(WatheRoles.LOOSE_END.identifier());
         VANNILA_ROLE_IDS.add(WatheRoles.VIGILANTE.identifier());
@@ -172,11 +173,11 @@ public class Noellesroles implements ModInitializer {
         VANNILA_ROLE_IDS.add(WatheRoles.KILLER.identifier());
 
         FRAMING_ROLES_SHOP.add(new FramingShopEntry(WatheItems.LOCKPICK.getDefaultStack(), 50, ShopEntry.Type.TOOL));
-        FRAMING_ROLES_SHOP.add(new FramingShopEntry(WatheItems.CROWBAR.getDefaultStack(), 25, ShopEntry.Type.TOOL));
+        FRAMING_ROLES_SHOP.add(new FramingShopEntry(WatheItems.CROWBAR.getDefaultStack(), 40, ShopEntry.Type.TOOL));
         FRAMING_ROLES_SHOP.add(new FramingShopEntry(ModItems.DELUSION_VIAL.getDefaultStack(), 30, ShopEntry.Type.POISON));
         FRAMING_ROLES_SHOP.add(new FramingShopEntry(WatheItems.NOTE.getDefaultStack(), 5, ShopEntry.Type.TOOL));
-        FRAMING_ROLES_SHOP.add(new FramingShopEntry(WatheItems.FIRECRACKER.getDefaultStack(), 5, ShopEntry.Type.TOOL));
-        FRAMING_ROLES_SHOP.add(new FramingShopEntry(ModItems.SHORTFUSE_FIRECRACKER.getDefaultStack(), 5, ShopEntry.Type.TOOL));
+        FRAMING_ROLES_SHOP.add(new FramingShopEntry(WatheItems.FIRECRACKER.getDefaultStack(), 10, ShopEntry.Type.TOOL));
+        FRAMING_ROLES_SHOP.add(new FramingShopEntry(ModItems.SHORTFUSE_FIRECRACKER.getDefaultStack(), 10, ShopEntry.Type.TOOL));
 
         CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.LOCKPICK.getDefaultStack(), 80, ShopEntry.Type.TOOL));
         CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(ModItems.DELUSION_VIAL.getDefaultStack(), 30, ShopEntry.Type.POISON));
@@ -340,13 +341,13 @@ public class Noellesroles implements ModInitializer {
                 jesterPlayerComponent.reset();
                 if (player.getWorld().getPlayers().size() < 10){
                     // If player count is 9-
-                    jesterPlayerComponent.jestRequired = 10;
+                    jesterPlayerComponent.jestRequired = 15;
                 } else if (player.getWorld().getPlayers().size() >= 10 && player.getWorld().getPlayers().size() < 15){
                     // If player count is 10-14
                     jesterPlayerComponent.jestRequired = 20;
                 } else {
                     // If player count is 15+
-                    jesterPlayerComponent.jestRequired = 30;
+                    jesterPlayerComponent.jestRequired = 25;
                 }
                 jesterPlayerComponent.sync();
             }
@@ -355,28 +356,66 @@ public class Noellesroles implements ModInitializer {
             }
         });
         ServerTickEvents.END_SERVER_TICK.register(((server) -> {
+
+            // If <8 players, add no accomplices.
             if (server.getPlayerManager().getCurrentPlayerCount() < 8) {
-                Harpymodloader.setRoleMaximum(EXECUTIONER,0);
-                Harpymodloader.setRoleMaximum(VULTURE,0);
+                for (Role role : KILLER_SIDED_NEUTRALS) {
+                    if (!HarpyModLoaderConfig.HANDLER.instance().disabled.contains(role.identifier().toString())) {
+                        Harpymodloader.setRoleMaximum(role, 0);
+                    }
+                }
+
+            // If 8-12 players, add 1 accomplice.
+            } else if (server.getPlayerManager().getCurrentPlayerCount() >= 8 && server.getPlayerManager().getCurrentPlayerCount() < 13) {
+                ArrayList<Role> ENABLED_NEUTRALS = new ArrayList<>();
+                for (Role role : KILLER_SIDED_NEUTRALS) {
+                    if (!HarpyModLoaderConfig.HANDLER.instance().disabled.contains(role.identifier().toString())) {
+                        Harpymodloader.setRoleMaximum(role, 0);
+                        ENABLED_NEUTRALS.add(role);
+                    }
+                }
+                Collections.shuffle(ENABLED_NEUTRALS);
+                Harpymodloader.setRoleMaximum(ENABLED_NEUTRALS.getFirst(), 1);
+
+            // If 13-17 players, add 2 accomplices.
+            } else if (server.getPlayerManager().getCurrentPlayerCount() >= 13 && server.getPlayerManager().getCurrentPlayerCount() < 17) {
+                ArrayList<Role> ENABLED_NEUTRALS = new ArrayList<>();
+                for (Role role : KILLER_SIDED_NEUTRALS) {
+                    if (!HarpyModLoaderConfig.HANDLER.instance().disabled.contains(role.identifier().toString())) {
+                        Harpymodloader.setRoleMaximum(role, 0);
+                        ENABLED_NEUTRALS.add(role);
+                    }
+                }
+                Collections.shuffle(ENABLED_NEUTRALS);
+                Harpymodloader.setRoleMaximum(ENABLED_NEUTRALS.getFirst(), 1);
+                Harpymodloader.setRoleMaximum(ENABLED_NEUTRALS.getLast(), 1);
+
+            // If 17+ players, I don't care about accomplice count.
             } else {
-                if (server.getPlayerManager().getCurrentPlayerCount() >= 8 && server.getPlayerManager().getCurrentPlayerCount() < 13) {
-                    Collections.shuffle(ENABLED_NEUTRALS);
-                    Harpymodloader.setRoleMaximum(ENABLED_NEUTRALS.getFirst(),1);
-                    Harpymodloader.setRoleMaximum(ENABLED_NEUTRALS.getLast(),0);
-                } else {
-                    Harpymodloader.setRoleMaximum(VULTURE,1);
-                    Harpymodloader.setRoleMaximum(EXECUTIONER,1);
+                for (Role role : KILLER_SIDED_NEUTRALS) {
+                    if (!HarpyModLoaderConfig.HANDLER.instance().disabled.contains(role.identifier().toString())) {
+                        Harpymodloader.setRoleMaximum(role, 1);
+                    }
                 }
             }
+
+            // If <10 players, don't always guarantee guesser.
             if (server.getPlayerManager().getCurrentPlayerCount() < 10) {
-                ArrayList<Identifier> killerModifiers = new ArrayList<>(List.of(CELEBRITY_ID, GUESSER_ID));
+                ArrayList<Identifier> killerModifiers = new ArrayList<>();
+                for (Modifier modifier : KILLER_MODIFIERS) {
+                    if (!HarpyModLoaderConfig.HANDLER.instance().disabled.contains(modifier.identifier().toString())) {
+                        Harpymodloader.MODIFIER_MAX.put(modifier.identifier, 0);
+                        killerModifiers.add(modifier.identifier);
+                    }
+                }
                 Collections.shuffle(killerModifiers);
                 Harpymodloader.MODIFIER_MAX.put(killerModifiers.getFirst(), 1);
-                Harpymodloader.MODIFIER_MAX.put(killerModifiers.getLast(), 0);
             } else {
-                Harpymodloader.MODIFIER_MAX.put(CELEBRITY_ID, 1);
-                Harpymodloader.MODIFIER_MAX.put(GUESSER_ID, 1);
-                Harpymodloader.MODIFIER_MAX.put(GRAVEROBBER_ID, 1);
+                for (Modifier modifier : KILLER_MODIFIERS) {
+                    if (!HarpyModLoaderConfig.HANDLER.instance().disabled.contains(modifier.identifier().toString())) {
+                        Harpymodloader.MODIFIER_MAX.put(modifier.identifier, 1);
+                    }
+                }
             }
         }));
         ServerTickEvents.END_WORLD_TICK.register((world) -> {
@@ -567,7 +606,7 @@ public class Noellesroles implements ModInitializer {
                                             abilityPlayerComponent.sync();
                                         } else {
                                             if (player1 != context.player() && player2 != context.player()) {
-                                                context.player().sendMessage(Text.literal("Swapping " + player1.getDisplayName().getString() + " with " + player2.getDisplayName().getString() + ".").formatted(Formatting.RED), true);
+                                                context.player().sendMessage(Text.literal("Swapping " + player1.getDisplayName().getString() + " with " + player2.getDisplayName().getString() + ".").formatted(Formatting.DARK_RED), true);
                                             }
                                             playerShopComponent.setBalance(playerShopComponent.balance - swapperPlayerComponent.swapCost);
                                             player1.sendMessage(Text.literal("You feel the air around you warp. You're being swapped!").formatted(Formatting.RED), true);

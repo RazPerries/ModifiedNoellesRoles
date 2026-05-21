@@ -45,10 +45,10 @@ public abstract class BartenderPlayerShopComponentMixin {
         if (gameWorldComponent.isRole(player,Noellesroles.BARTENDER)) {
             // Is this the most efficient way to do this? No. I don't care enough to optimize it.
             if (index == 0) {
-                if (balance >= 75) {
-                    this.balance -= 75;
+                if (balance >= 150) {
+                    this.balance -= 150;
                     sync();
-                    player.giveItemStack(WatheItems.OLD_FASHIONED.getDefaultStack());
+                    player.giveItemStack(ModItems.DEFENSE_VIAL.getDefaultStack());
                     PlayerEntity var6 = this.player;
                     if (var6 instanceof ServerPlayerEntity) {
                         ServerPlayerEntity player = (ServerPlayerEntity) var6;
@@ -62,7 +62,7 @@ public abstract class BartenderPlayerShopComponentMixin {
                 if (balance >= 75) {
                     this.balance -= 75;
                     sync();
-                    player.giveItemStack(WatheItems.MOJITO.getDefaultStack());
+                    player.giveItemStack(WatheItems.OLD_FASHIONED.getDefaultStack());
                     PlayerEntity var6 = this.player;
                     if (var6 instanceof ServerPlayerEntity) {
                         ServerPlayerEntity player = (ServerPlayerEntity) var6;
@@ -76,7 +76,7 @@ public abstract class BartenderPlayerShopComponentMixin {
                 if (balance >= 75) {
                     this.balance -= 75;
                     sync();
-                    player.giveItemStack(WatheItems.MARTINI.getDefaultStack());
+                    player.giveItemStack(WatheItems.MOJITO.getDefaultStack());
                     PlayerEntity var6 = this.player;
                     if (var6 instanceof ServerPlayerEntity) {
                         ServerPlayerEntity player = (ServerPlayerEntity) var6;
@@ -90,7 +90,7 @@ public abstract class BartenderPlayerShopComponentMixin {
                 if (balance >= 75) {
                     this.balance -= 75;
                     sync();
-                    player.giveItemStack(WatheItems.COSMOPOLITAN.getDefaultStack());
+                    player.giveItemStack(WatheItems.MARTINI.getDefaultStack());
                     PlayerEntity var6 = this.player;
                     if (var6 instanceof ServerPlayerEntity) {
                         ServerPlayerEntity player = (ServerPlayerEntity) var6;
@@ -101,6 +101,20 @@ public abstract class BartenderPlayerShopComponentMixin {
                 }
             }
             if (index == 4) {
+                if (balance >= 75) {
+                    this.balance -= 75;
+                    sync();
+                    player.giveItemStack(WatheItems.COSMOPOLITAN.getDefaultStack());
+                    PlayerEntity var6 = this.player;
+                    if (var6 instanceof ServerPlayerEntity) {
+                        ServerPlayerEntity player = (ServerPlayerEntity) var6;
+                        player.networkHandler.sendPacket(new PlaySoundS2CPacket(Registries.SOUND_EVENT.getEntry(WatheSounds.UI_SHOP_BUY), SoundCategory.PLAYERS, player.getX(), player.getY(), player.getZ(), 1.0F, 0.9F + this.player.getRandom().nextFloat() * 0.2F, player.getRandom().nextLong()));
+                    }
+                } else {
+                    ShopComponent.failedPurchase(this.player);
+                }
+            }
+            if (index == 5) {
                 if (balance >= 75) {
                     this.balance -= 75;
                     sync();

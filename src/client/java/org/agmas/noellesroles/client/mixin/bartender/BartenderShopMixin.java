@@ -37,21 +37,20 @@ public abstract class BartenderShopMixin extends LimitedHandledScreen<PlayerScre
     void bartenderShopRenderer(CallbackInfo ci) {
         GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(player.getWorld());
         if (gameWorldComponent.isRole(player,Noellesroles.BARTENDER)) {
-            if (ConfigWorldComponent.KEY.get(player.getWorld()).maximumDefenseVials == 0 || BartenderPlayerComponent.KEY.get(player).vialsBought < ConfigWorldComponent.KEY.get(player.getWorld()).maximumDefenseVials) {
-                List<ShopEntry> entries = new ArrayList<>();
-                entries.add(new ShopEntry(WatheItems.OLD_FASHIONED.getDefaultStack(),75, ShopEntry.Type.POISON));
-                entries.add(new ShopEntry(WatheItems.MOJITO.getDefaultStack(),75, ShopEntry.Type.POISON));
-                entries.add(new ShopEntry(WatheItems.MARTINI.getDefaultStack(),75, ShopEntry.Type.POISON));
-                entries.add(new ShopEntry(WatheItems.COSMOPOLITAN.getDefaultStack(),75, ShopEntry.Type.POISON));
-                entries.add(new ShopEntry(WatheItems.CHAMPAGNE.getDefaultStack(),75, ShopEntry.Type.POISON));
-                int apart = 36;
-                int x = width / 2 - (entries.size()) * apart / 2 + 9;
-                int shouldBeY = (((LimitedInventoryScreen) (Object) this).height - 32) / 2;
-                int y = shouldBeY - 46;
+            List<ShopEntry> entries = new ArrayList<>();
+            entries.add(new ShopEntry(ModItems.DEFENSE_VIAL.getDefaultStack(),150, ShopEntry.Type.TOOL));
+            entries.add(new ShopEntry(WatheItems.OLD_FASHIONED.getDefaultStack(),75, ShopEntry.Type.POISON));
+            entries.add(new ShopEntry(WatheItems.MOJITO.getDefaultStack(),75, ShopEntry.Type.POISON));
+            entries.add(new ShopEntry(WatheItems.MARTINI.getDefaultStack(),75, ShopEntry.Type.POISON));
+            entries.add(new ShopEntry(WatheItems.COSMOPOLITAN.getDefaultStack(),75, ShopEntry.Type.POISON));
+            entries.add(new ShopEntry(WatheItems.CHAMPAGNE.getDefaultStack(),75, ShopEntry.Type.POISON));
+            int apart = 36;
+            int x = width / 2 - (entries.size()) * apart / 2 + 9;
+            int shouldBeY = (((LimitedInventoryScreen) (Object) this).height - 32) / 2;
+            int y = shouldBeY - 46;
 
-                for (int i = 0; i < entries.size(); ++i) {
-                    addDrawableChild(new LimitedInventoryScreen.StoreItemWidget((LimitedInventoryScreen) (Object) this, x + apart * i, y, (ShopEntry) entries.get(i), i));
-                }
+            for (int i = 0; i < entries.size(); ++i) {
+                addDrawableChild(new LimitedInventoryScreen.StoreItemWidget((LimitedInventoryScreen) (Object) this, x + apart * i, y, (ShopEntry) entries.get(i), i));
             }
         }
     }

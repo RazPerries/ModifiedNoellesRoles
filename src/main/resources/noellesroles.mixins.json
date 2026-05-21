@@ -34,7 +34,8 @@
     "jester.JesterKillPlayerMixin",
     "jester.JesterCrowbarUseMixin",
     "jester.JesterDeluPlayerMixin",
-    "conspirator.ConspiratorDeluPlayerMixin"
+    "conspirator.ConspiratorDeluPlayerMixin",
+    "vulture.VultureNoPoisonMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -4,7 +4,11 @@ import dev.doctor4t.wathe.game.GameConstants;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.GameMode;
+import org.agmas.noellesroles.AbilityPlayerComponent;
 import org.agmas.noellesroles.Noellesroles;
 import org.jetbrains.annotations.NotNull;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
@@ -37,6 +41,12 @@ public class VoodooPlayerComponent implements AutoSyncedComponent, ServerTicking
     public void serverTick() {
         if (this.glowTicks > 0 && this.hasTarget) {
             --this.glowTicks;
+            if (((ServerPlayerEntity)player.getWorld().getPlayerByUuid(target)).interactionManager.getGameMode() == GameMode.SPECTATOR) {
+                AbilityPlayerComponent abilityPlayerComponent = AbilityPlayerComponent.KEY.get(player);
+                abilityPlayerComponent.cooldown = GameConstants.getInTicks(0,60);
+                this.glowTicks = 0;
+                player.sendMessage(Text.literal("The connection to the tracked player has severed.").withColor(Noellesroles.VOODOO.color()), true);
+            }
         }
         if (this.glowTicks == 0) {
             this.hasTarget = false;
