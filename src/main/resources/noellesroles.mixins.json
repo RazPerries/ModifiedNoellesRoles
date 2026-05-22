@@ -22,7 +22,6 @@
     "framing.FramingRolesShopComponentMixin",
     "host.MasterKeySmallDoorMixin",
     "host.MasterKeyTrainDoorMixin",
-    "host.MoneyIncreaseMixin",
     "jester.FakeRevolverMixin",
     "jester.JesterItemEntityMixin",
     "framing.ConspiratorShopComponentMixin",
