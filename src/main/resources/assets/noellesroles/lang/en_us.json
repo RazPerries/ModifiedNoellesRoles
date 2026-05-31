@@ -90,6 +90,8 @@
   "item.noellesroles.role_mine.tooltip": "Right click to Place down on Floors or Ceilings.\nInvisible to other players, both placed and in hand.",
   "item.noellesroles.shortfuse_firecracker": "Short-Fused Firecracker",
   "item.noellesroles.shortfuse_firecracker.tooltip": "Detonates after 5 seconds.\nSimulates the sound of a gunshot.",
+  "item.noellesroles.modifier_stealer": "Modifier Stealer",
+  "item.noellesroles.modifier_stealer.tooltip": "Use on a non-vultured body to steal their modifier.\nSingle use, 10s cooldown\nBlacklisted Modifiers: Tiny, Iron-Willed, Bellringer",
 
   "death_reason.wathe.gun_shot": "a bullet.",
   "death_reason.wathe.knife_stab": "a knife!",

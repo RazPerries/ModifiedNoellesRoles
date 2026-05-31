@@ -1,6 +1,5 @@
 package org.agmas.noellesroles.client.mixin.coroner;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import dev.doctor4t.wathe.api.Role;
 import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
@@ -9,24 +8,18 @@ import dev.doctor4t.wathe.client.WatheClient;
 import dev.doctor4t.wathe.client.gui.RoleNameRenderer;
 import dev.doctor4t.wathe.entity.PlayerBodyEntity;
 import dev.doctor4t.wathe.game.GameFunctions;
-import net.fabricmc.loader.impl.util.log.Log;
-import net.fabricmc.loader.impl.util.log.LogCategory;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.text.Text;
 import net.minecraft.util.Colors;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.MathHelper;
 import org.agmas.harpymodloader.Harpymodloader;
-import org.agmas.harpymodloader.client.HarpymodloaderClient;
 import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.harpymodloader.modifiers.HMLModifiers;
 import org.agmas.harpymodloader.modifiers.Modifier;
@@ -85,7 +78,7 @@ public abstract class CoronerHudMixin {
                 for (Modifier modifier : HMLModifiers.MODIFIERS) {
                     if (modifier.identifier().equals(bodyDeathReasonComponent.playerModifier)) foundModifier = modifier;
                 }
-                if (worldModifierComponent.isModifier(MinecraftClient.getInstance().player, Noellesroles.GRAVEROBBER) || WatheClient.isPlayerSpectatingOrCreative()) {
+                if ((worldModifierComponent.isModifier(MinecraftClient.getInstance().player, Noellesroles.GRAVEROBBER) || WatheClient.isPlayerSpectatingOrCreative()) && !bodyDeathReasonComponent.vultured) {
                     if (foundModifier == null) {
                         Text modifierInfo = Text.translatable("hud.coroner.modifier_info_no_modifier").withColor(Colors.RED);
                         context.drawTextWithShadow(renderer, modifierInfo, -renderer.getWidth(modifierInfo) / 2, 64, Colors.WHITE);
@@ -104,8 +97,13 @@ public abstract class CoronerHudMixin {
                     } else {
                         AbilityPlayerComponent abilityPlayerComponent = AbilityPlayerComponent.KEY.get(player);
                         if (abilityPlayerComponent.cooldown <= 0 && WatheClient.isPlayerAliveAndInSurvival()) {
-                            Text roleInfo = Text.translatable("hud.vulture.eat", NoellesrolesClient.abilityBind.getBoundKeyLocalizedText()).withColor(Colors.RED);
-                            context.drawTextWithShadow(renderer, roleInfo, -renderer.getWidth(roleInfo) / 2, 48, Colors.WHITE);
+                            if (worldModifierComponent.isModifier(MinecraftClient.getInstance().player, Noellesroles.GRAVEROBBER)) {
+                                Text vultureInfo = Text.translatable("hud.vulture.eat", NoellesrolesClient.abilityBind.getBoundKeyLocalizedText()).withColor(Colors.RED);
+                                context.drawTextWithShadow(renderer, vultureInfo, -renderer.getWidth(vultureInfo) / 2, 80, Colors.WHITE);
+                            } else {
+                                Text roleInfo = Text.translatable("hud.vulture.eat", NoellesrolesClient.abilityBind.getBoundKeyLocalizedText()).withColor(Colors.RED);
+                                context.drawTextWithShadow(renderer, roleInfo, -renderer.getWidth(roleInfo) / 2, 48, Colors.WHITE);
+                            }
                         }
                     }
                 }

@@ -39,7 +39,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypeFilter;
-import net.minecraft.util.math.Vec3d;
 import org.agmas.harpymodloader.Harpymodloader;
 import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.harpymodloader.config.HarpyModLoaderConfig;
@@ -129,7 +128,7 @@ public class Noellesroles implements ModInitializer {
     public static Modifier FEATHER = HMLModifiers.registerModifier(new Modifier(FEATHER_ID, new Color(255, 236, 161, 255).getRGB(),null,null,false,false));
     public static Modifier GUESSER = HMLModifiers.registerModifier(new Modifier(GUESSER_ID, new Color(158, 43, 25, 255).getRGB(),new ArrayList<>(List.of(THE_INSANE_DAMNED_PARANOID_KILLER_OF_DOOM_DEATH_DESTRUCTION_AND_WAFFLES)),null,true,false));
     public static Modifier CELEBRITY = HMLModifiers.registerModifier(new Modifier(CELEBRITY_ID, new Color(174, 4, 109, 255).getRGB(), null, null, true, false));
-    public static Modifier GRAVEROBBER = HMLModifiers.registerModifier(new Modifier(GRAVEROBBER_ID, new Color(174, 95, 95, 255).getRGB(),null,null,true,false));
+    public static Modifier GRAVEROBBER = HMLModifiers.registerModifier(new Modifier(GRAVEROBBER_ID, new Color(174, 95, 95, 255).getRGB(),null,new ArrayList<>(List.of(VULTURE, EXECUTIONER)),false,true));
     public static Modifier SIXTH_SENSE = HMLModifiers.registerModifier(new Modifier(SIXTH_SENSE_ID, new Color(244, 201, 152, 255).getRGB(), new ArrayList<>(List.of(WatheRoles.VIGILANTE, JESTER, VULTURE, EXECUTIONER, BARTENDER, CONSPIRATOR)), null, false, true));
     public static Modifier IRON_WILLED = HMLModifiers.registerModifier(new Modifier(IRON_WILLED_ID, new Color(197, 197, 197).getRGB(), new ArrayList<>(List.of(JESTER, VULTURE, EXECUTIONER, CONSPIRATOR)), null, false, true));
     public static Modifier BELLRINGER = HMLModifiers.registerModifier(new Modifier(BELLRINGER_ID, new Color(250, 220, 126).getRGB(), new ArrayList<>(List.of(JESTER, VULTURE, EXECUTIONER, CONSPIRATOR)), null, false, true));
@@ -280,6 +279,10 @@ public class Noellesroles implements ModInitializer {
             if (modifier.equals(CELEBRITY)) {
                 PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(playerEntity);
                 playerShopComponent.setBalance(playerShopComponent.balance - 25);
+            }
+            if (modifier.equals(GRAVEROBBER)) {
+                playerEntity.giveItemStack(ModItems.MODIFIER_STEALER.getDefaultStack());
+                playerEntity.giveItemStack(ModItems.MODIFIER_STEALER.getDefaultStack());
             }
         }));
         ResetPlayerEvent.EVENT.register(((playerEntity) -> {
