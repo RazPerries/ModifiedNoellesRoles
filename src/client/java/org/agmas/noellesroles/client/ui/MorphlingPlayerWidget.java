@@ -1,15 +1,15 @@
 package org.agmas.noellesroles.client.ui;
 
 import dev.doctor4t.wathe.client.gui.screen.ingame.LimitedInventoryScreen;
-import dev.doctor4t.wathe.util.ShopEntry;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.morphling.MorphlingPlayerComponent;
@@ -21,11 +21,11 @@ import java.awt.*;
 
 public class MorphlingPlayerWidget extends ButtonWidget{
     public final LimitedInventoryScreen screen;
-    public final AbstractClientPlayerEntity disguiseTarget;
+    public final PlayerListEntry disguiseTarget;
     @Unique private static final Identifier MORPHLING_WIDGET = Identifier.of(Noellesroles.MOD_ID, "hud/shop_slot_morphling");
 
-    public MorphlingPlayerWidget(LimitedInventoryScreen screen, int x, int y, @NotNull AbstractClientPlayerEntity disguiseTarget, int index) {
-        super(x, y, 16, 16, disguiseTarget.getName(), (a) -> {if ((MorphlingPlayerComponent.KEY.get(MinecraftClient.getInstance().player)).getMorphTicks() == 0) {ClientPlayNetworking.send(new MorphC2SPacket(disguiseTarget.getUuid()));}}, DEFAULT_NARRATION_SUPPLIER);
+    public MorphlingPlayerWidget(LimitedInventoryScreen screen, int x, int y, @NotNull PlayerListEntry disguiseTarget, int index) {
+        super(x, y, 16, 16, Text.literal(disguiseTarget.getProfile().getName()), (a) -> {if ((MorphlingPlayerComponent.KEY.get(MinecraftClient.getInstance().player)).getMorphTicks() == 0) {ClientPlayNetworking.send(new MorphC2SPacket(disguiseTarget.getProfile().getId()));}}, DEFAULT_NARRATION_SUPPLIER);
         this.screen = screen;
         this.disguiseTarget = disguiseTarget;
     }
@@ -37,7 +37,7 @@ public class MorphlingPlayerWidget extends ButtonWidget{
             PlayerSkinDrawer.draw(context, disguiseTarget.getSkinTextures().texture(), this.getX(), this.getY(), 16);
             if (this.isHovered()) {
                 this.drawShopSlotHighlight(context, this.getX(), this.getY(), 0);
-                context.drawTooltip(MinecraftClient.getInstance().textRenderer, disguiseTarget.getName(), this.getX() - 4 - MinecraftClient.getInstance().textRenderer.getWidth(disguiseTarget.getName()) / 2, this.getY() - 9);
+                context.drawTooltip(MinecraftClient.getInstance().textRenderer, Text.literal(disguiseTarget.getProfile().getName()), this.getX() - 4 - MinecraftClient.getInstance().textRenderer.getWidth(disguiseTarget.getProfile().getName()) / 2, this.getY() - 9);
             }
 
         }
@@ -49,7 +49,7 @@ public class MorphlingPlayerWidget extends ButtonWidget{
             PlayerSkinDrawer.draw(context, disguiseTarget.getSkinTextures().texture(), this.getX(), this.getY(), 16);
             if (this.isHovered()) {
                 this.drawShopSlotHighlight(context, this.getX(), this.getY(), 0);
-                context.drawTooltip(MinecraftClient.getInstance().textRenderer, disguiseTarget.getName(), this.getX() - 4 - MinecraftClient.getInstance().textRenderer.getWidth(disguiseTarget.getName()) / 2, this.getY() - 9);
+                context.drawTooltip(MinecraftClient.getInstance().textRenderer, Text.literal(disguiseTarget.getProfile().getName()), this.getX() - 4 - MinecraftClient.getInstance().textRenderer.getWidth(disguiseTarget.getProfile().getName()) / 2, this.getY() - 9);
             }
 
 

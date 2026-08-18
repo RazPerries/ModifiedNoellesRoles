@@ -15,10 +15,8 @@ import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.SkinTextures;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.data.client.Models;
 import net.minecraft.util.Identifier;
 import org.agmas.noellesroles.ConfigWorldComponent;
-import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.client.NoellesrolesClient;
 import org.agmas.noellesroles.client.renderer.MorphUtil;
 import org.agmas.noellesroles.morphling.MorphlingPlayerComponent;
@@ -26,7 +24,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -51,13 +48,13 @@ public abstract class MorphlingRendererMixin extends LivingEntityRenderer<Abstra
             }
         }
         if ((MorphlingPlayerComponent.KEY.get(abstractClientPlayerEntity)).getMorphTicks() > 0 ) {
-            if (abstractClientPlayerEntity.getEntityWorld().getPlayerByUuid((MorphlingPlayerComponent.KEY.get(abstractClientPlayerEntity)).disguise) != null) {
-                Identifier tex = getTexture((AbstractClientPlayerEntity) abstractClientPlayerEntity.getEntityWorld().getPlayerByUuid((MorphlingPlayerComponent.KEY.get(abstractClientPlayerEntity)).disguise));
+            if ((MorphlingPlayerComponent.KEY.get(abstractClientPlayerEntity)).disguise != null) {
+                Identifier tex = WatheClient.PLAYER_ENTRIES_CACHE.get((MorphlingPlayerComponent.KEY.get(abstractClientPlayerEntity)).disguise).getSkinTextures().texture();
                 cir.setReturnValue(tex);
-
                 cir.cancel();
             } else {
-                Log.info(LogCategory.GENERAL, "Morphling disguise is null!!!");
+                cir.setReturnValue(WatheClient.PLAYER_ENTRIES_CACHE.get((MorphlingPlayerComponent.KEY.get(abstractClientPlayerEntity)).disguise).getSkinTextures().texture());
+                cir.cancel();
             }
             if (MorphlingPlayerComponent.KEY.get(abstractClientPlayerEntity).disguise.equals(MinecraftClient.getInstance().player.getUuid())) {
                 cir.setReturnValue(getTexture(MinecraftClient.getInstance().player));
@@ -68,17 +65,8 @@ public abstract class MorphlingRendererMixin extends LivingEntityRenderer<Abstra
     @Inject(method = "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("HEAD"))
     void applyModels(AbstractClientPlayerEntity abstractClientPlayerEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
         if (NoellesrolesClient.SHUFFLED_PLAYER_ENTRIES_CACHE == null) return;
-        if (WatheClient.moodComponent != null) {
-            if ((ConfigWorldComponent.KEY.get(abstractClientPlayerEntity.getWorld())).insaneSeesMorphs && WatheClient.moodComponent.isLowerThanDepressed() && NoellesrolesClient.SHUFFLED_PLAYER_ENTRIES_CACHE.containsKey(abstractClientPlayerEntity.getUuid())) {
-                if (WatheClient.PLAYER_ENTRIES_CACHE.get(NoellesrolesClient.SHUFFLED_PLAYER_ENTRIES_CACHE.get(abstractClientPlayerEntity.getUuid())).getSkinTextures().model().equals(SkinTextures.Model.SLIM)) {
-                    model = MorphUtil.SLIM;
-                } else {
-                    model = MorphUtil.CLASSIC;
-                }
-            }
-        }
         if ((MorphlingPlayerComponent.KEY.get(abstractClientPlayerEntity)).getMorphTicks() > 0 ) {
-            if (((AbstractClientPlayerEntity) abstractClientPlayerEntity.getEntityWorld().getPlayerByUuid((MorphlingPlayerComponent.KEY.get(abstractClientPlayerEntity)).disguise)).getSkinTextures().model().equals(SkinTextures.Model.SLIM)) {
+            if (WatheClient.PLAYER_ENTRIES_CACHE.get((MorphlingPlayerComponent.KEY.get(abstractClientPlayerEntity)).disguise).getSkinTextures().model().equals(SkinTextures.Model.SLIM)) {
                 model = MorphUtil.SLIM;
             } else {
                 model = MorphUtil.CLASSIC;
@@ -91,10 +79,21 @@ public abstract class MorphlingRendererMixin extends LivingEntityRenderer<Abstra
                 }
             }
         }
-        if (abstractClientPlayerEntity.getSkinTextures().model().equals(SkinTextures.Model.SLIM)) {
-            model = MorphUtil.SLIM;
-        } else {
-            model = MorphUtil.CLASSIC;
+        if ((MorphlingPlayerComponent.KEY.get(abstractClientPlayerEntity)).getMorphTicks() <= 0 ) {
+            if (abstractClientPlayerEntity.getSkinTextures().model() == SkinTextures.Model.SLIM) {
+                model = MorphUtil.SLIM;
+            } else {
+                model = MorphUtil.CLASSIC;
+            }
+        }
+        if (WatheClient.moodComponent != null) {
+            if ((ConfigWorldComponent.KEY.get(abstractClientPlayerEntity.getWorld())).insaneSeesMorphs && WatheClient.moodComponent.isLowerThanDepressed() && NoellesrolesClient.SHUFFLED_PLAYER_ENTRIES_CACHE.containsKey(abstractClientPlayerEntity.getUuid())) {
+                if (WatheClient.PLAYER_ENTRIES_CACHE.get(NoellesrolesClient.SHUFFLED_PLAYER_ENTRIES_CACHE.get(abstractClientPlayerEntity.getUuid())).getSkinTextures().model().equals(SkinTextures.Model.SLIM)) {
+                    model = MorphUtil.SLIM;
+                } else {
+                    model = MorphUtil.CLASSIC;
+                }
+            }
         }
     }
     @Inject(method = "<init>", at = @At("TAIL"))
@@ -106,8 +105,10 @@ public abstract class MorphlingRendererMixin extends LivingEntityRenderer<Abstra
     SkinTextures renderArm(AbstractClientPlayerEntity instance, Operation<SkinTextures> original) {
         if (NoellesrolesClient.SHUFFLED_PLAYER_ENTRIES_CACHE == null) return original.call(instance);
         if ((MorphlingPlayerComponent.KEY.get(instance)).getMorphTicks() > 0) {
-            if (instance.getEntityWorld().getPlayerByUuid((MorphlingPlayerComponent.KEY.get(instance)).disguise) != null) {
-                return ((AbstractClientPlayerEntity) instance.getEntityWorld().getPlayerByUuid((MorphlingPlayerComponent.KEY.get(instance)).disguise)).getSkinTextures();
+            if (WatheClient.PLAYER_ENTRIES_CACHE.get((MorphlingPlayerComponent.KEY.get(instance)).disguise) != null) {
+                return WatheClient.PLAYER_ENTRIES_CACHE.get((MorphlingPlayerComponent.KEY.get(instance)).disguise).getSkinTextures();
+            } else if (WatheClient.PLAYER_ENTRIES_CACHE.containsKey((MorphlingPlayerComponent.KEY.get(instance)).disguise)) {
+                return WatheClient.PLAYER_ENTRIES_CACHE.get((MorphlingPlayerComponent.KEY.get(instance)).disguise).getSkinTextures();
             } else {
                 Log.info(LogCategory.GENERAL, "Morphling disguise is null!!!");
             }
