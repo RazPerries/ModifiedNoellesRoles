@@ -9,10 +9,9 @@ import org.jetbrains.annotations.NotNull;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
 import org.ladysnake.cca.api.v3.component.ComponentRegistry;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
-import org.ladysnake.cca.api.v3.component.tick.ClientTickingComponent;
 import org.ladysnake.cca.api.v3.component.tick.ServerTickingComponent;
 
-public class VulturePlayerComponent implements AutoSyncedComponent, ServerTickingComponent, ClientTickingComponent {
+public class VulturePlayerComponent implements AutoSyncedComponent, ServerTickingComponent {
     public static final ComponentKey<VulturePlayerComponent> KEY = ComponentRegistry.getOrCreate(Identifier.of(Noellesroles.MOD_ID, "vulture"), VulturePlayerComponent.class);
     private final PlayerEntity player;
     public int bodiesEaten = 0;
@@ -33,9 +32,6 @@ public class VulturePlayerComponent implements AutoSyncedComponent, ServerTickin
 
     public void sync() {
         KEY.sync(this.player);
-    }
-
-    public void clientTick() {
     }
 
     public void serverTick() {

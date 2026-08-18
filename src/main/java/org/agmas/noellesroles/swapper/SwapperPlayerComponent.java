@@ -1,12 +1,9 @@
 package org.agmas.noellesroles.swapper;
 
-import de.maxhenkel.voicechat.api.Player;
 import dev.doctor4t.wathe.game.GameConstants;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import org.agmas.noellesroles.Noellesroles;
@@ -14,12 +11,11 @@ import org.jetbrains.annotations.NotNull;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
 import org.ladysnake.cca.api.v3.component.ComponentRegistry;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
-import org.ladysnake.cca.api.v3.component.tick.ClientTickingComponent;
 import org.ladysnake.cca.api.v3.component.tick.ServerTickingComponent;
 
 import java.util.Random;
 
-public class SwapperPlayerComponent implements AutoSyncedComponent, ServerTickingComponent, ClientTickingComponent {
+public class SwapperPlayerComponent implements AutoSyncedComponent, ServerTickingComponent {
     public static final ComponentKey<SwapperPlayerComponent> KEY = ComponentRegistry.getOrCreate(Identifier.of(Noellesroles.MOD_ID, "swapper"), SwapperPlayerComponent.class);
     private final PlayerEntity player;
     public int swapTicks = -1;
@@ -54,9 +50,6 @@ public class SwapperPlayerComponent implements AutoSyncedComponent, ServerTickin
         KEY.sync(this.player);
     }
 
-    public void clientTick() {
-    }
-
     public void serverTick() {
         if (this.swapTicks > 0) {
             --this.swapTicks;
@@ -64,7 +57,6 @@ public class SwapperPlayerComponent implements AutoSyncedComponent, ServerTickin
         if (this.swapTicks == 0) {
             if (player1 != null && player2 != null && !player1.isSpectator() && !player2.isSpectator()) {
                 if (this.swapperPos != null && this.swappedPos != null) {
-                    //player.sendMessage(Text.literal("Swapped " + player1.getDisplayName().getString() + " at " + (int) swappedPos.x + ", " + (int) swappedPos.y + ", " + (int) swappedPos.z + " with " + player2.getDisplayName().getString() + " at " + (int) swapperPos.x + ", " + (int) swapperPos.y + ", " + (int) swapperPos.z).formatted(Formatting.GOLD), true);
                     player1.teleport(swappedPos.x, swappedPos.y, swappedPos.z, true);
                     player2.teleport(swapperPos.x, swapperPos.y, swapperPos.z, true);
                 }

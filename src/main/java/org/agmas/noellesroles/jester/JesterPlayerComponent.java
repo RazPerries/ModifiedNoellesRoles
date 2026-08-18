@@ -22,13 +22,12 @@ import org.jetbrains.annotations.NotNull;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
 import org.ladysnake.cca.api.v3.component.ComponentRegistry;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
-import org.ladysnake.cca.api.v3.component.tick.ClientTickingComponent;
 import org.ladysnake.cca.api.v3.component.tick.ServerTickingComponent;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class JesterPlayerComponent implements AutoSyncedComponent, ServerTickingComponent, ClientTickingComponent {
+public class JesterPlayerComponent implements AutoSyncedComponent, ServerTickingComponent {
     public static final ComponentKey<JesterPlayerComponent> KEY = ComponentRegistry.getOrCreate(Identifier.of(Noellesroles.MOD_ID, "jester"), JesterPlayerComponent.class);
     private final PlayerEntity player;
     public int jestCount;
@@ -57,9 +56,6 @@ public class JesterPlayerComponent implements AutoSyncedComponent, ServerTicking
 
     public void sync() {
         KEY.sync(this.player);
-    }
-
-    public void clientTick() {
     }
 
     public void serverTick() {
