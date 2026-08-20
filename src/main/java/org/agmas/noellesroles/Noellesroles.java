@@ -98,6 +98,8 @@ public class Noellesroles implements ModInitializer {
     public static Identifier CONSPIRATOR_ID = Identifier.of(MOD_ID, "conspirator");
     public static Identifier IRON_WILLED_ID = Identifier.of(MOD_ID, "iron_willed");
     public static Identifier BELLRINGER_ID = Identifier.of(MOD_ID, "bellringer");
+    public static Identifier HEALTHY_ID = Identifier.of(MOD_ID, "healthy");
+    public static Identifier SERIAL_KILLER_ID = Identifier.of(MOD_ID, "serial_killer");
 
     public static HashMap<Role, RoleAnnouncementTexts.RoleAnnouncementText> roleRoleAnnouncementTextHashMap = new HashMap<>();
     public static Role JESTER = WatheRoles.registerRole(new Role(JESTER_ID,new Color(200, 13, 156).getRGB() ,false,false, Role.MoodType.FAKE,WatheRoles.CIVILIAN.getMaxSprintTime(),true));
@@ -132,7 +134,8 @@ public class Noellesroles implements ModInitializer {
     public static Modifier SIXTH_SENSE = HMLModifiers.registerModifier(new Modifier(SIXTH_SENSE_ID, new Color(244, 201, 152, 255).getRGB(), new ArrayList<>(List.of(WatheRoles.VIGILANTE, JESTER, VULTURE, EXECUTIONER, BARTENDER, CONSPIRATOR)), null, false, true));
     public static Modifier IRON_WILLED = HMLModifiers.registerModifier(new Modifier(IRON_WILLED_ID, new Color(197, 197, 197).getRGB(), new ArrayList<>(List.of(JESTER, VULTURE, EXECUTIONER, CONSPIRATOR)), null, false, true));
     public static Modifier BELLRINGER = HMLModifiers.registerModifier(new Modifier(BELLRINGER_ID, new Color(250, 220, 126).getRGB(), new ArrayList<>(List.of(JESTER, VULTURE, EXECUTIONER, CONSPIRATOR)), null, false, true));
-
+    public static Modifier HEALTHY = HMLModifiers.registerModifier(new Modifier(HEALTHY_ID, new Color(106, 241, 108).getRGB(), new ArrayList<>(List.of(JESTER, VULTURE, EXECUTIONER, CONSPIRATOR)), null, false, true));
+    public static Modifier SERIAL_KILLER = HMLModifiers.registerModifier(new Modifier(SERIAL_KILLER_ID, new Color(12, 74, 191, 255).getRGB(), null, null, true, false));
 
     public static final CustomPayload.Id<MorphC2SPacket> MORPH_PACKET = MorphC2SPacket.ID;
     public static final CustomPayload.Id<SwapperC2SPacket> SWAP_PACKET = SwapperC2SPacket.ID;
@@ -164,7 +167,7 @@ public class Noellesroles implements ModInitializer {
 
         KILLER_MODIFIERS.add(CELEBRITY);
         KILLER_MODIFIERS.add(GUESSER);
-        KILLER_MODIFIERS.add(GRAVEROBBER);
+        KILLER_MODIFIERS.add(SERIAL_KILLER);
 
         VANNILA_ROLE_IDS.add(WatheRoles.LOOSE_END.identifier());
         VANNILA_ROLE_IDS.add(WatheRoles.VIGILANTE.identifier());

@@ -1,34 +1,29 @@
 package org.agmas.noellesroles.client.mixin;
 
-import dev.doctor4t.wathe.Wathe;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import dev.doctor4t.wathe.api.Role;
-import dev.doctor4t.wathe.api.WatheRoles;
 import dev.doctor4t.wathe.cca.GameWorldComponent;
+import dev.doctor4t.wathe.cca.PlayerInstinctComponent;
 import dev.doctor4t.wathe.cca.PlayerPoisonComponent;
 import dev.doctor4t.wathe.client.WatheClient;
-import dev.doctor4t.wathe.client.gui.RoundTextRenderer;
-import dev.doctor4t.wathe.game.GameFunctions;
-import dev.doctor4t.wathe.util.AnnounceWelcomePayload;
+import dev.doctor4t.wathe.util.InstinctUseC2SPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.loader.impl.util.log.Log;
-import net.fabricmc.loader.impl.util.log.LogCategory;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.agmas.harpymodloader.component.WorldModifierComponent;
 import org.agmas.noellesroles.Noellesroles;
 import org.agmas.noellesroles.bartender.BartenderPlayerComponent;
-import org.agmas.noellesroles.client.NoellesrolesClient;
 import org.agmas.noellesroles.executioner.ExecutionerPlayerComponent;
 import org.agmas.noellesroles.voodoo.VoodooPlayerComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.awt.*;
@@ -39,15 +34,30 @@ public abstract class InstinctMixin {
 
     @Shadow public static KeyBinding instinctKeybind;
 
-    @Inject(method = "isInstinctEnabled", at = @At("HEAD"), cancellable = true)
-    private static void b(CallbackInfoReturnable<Boolean> cir) {
-        GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(MinecraftClient.getInstance().player.getWorld());
+    @ModifyReturnValue(method = "isInstinctEnabled", at = @At("RETURN"))
+    private static boolean b(boolean original) {
+        GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(MinecraftClient.getInstance().player.getWorld());
         if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.CONSPIRATOR)) {
-            if (instinctKeybind.isPressed()) {
-                cir.setReturnValue(true);
-                cir.cancel();
+            PlayerInstinctComponent instinctComponent = PlayerInstinctComponent.KEY.get(MinecraftClient.getInstance().player);
+            if (instinctComponent.ticksSinceLastUse == -1) instinctComponent.ticksSinceLastUse = 0;
+
+            if (!instinctKeybind.isPressed()) {
+                ClientPlayNetworking.send(new InstinctUseC2SPayload(false));
+            }
+
+            // If instinct is being held
+            if (instinctKeybind.isPressed() && instinctComponent.ticksSinceLastUse == 0) {
+                return instinctComponent.getCharge() > 0;
+
+                // If instinct is pressed
+            } else if (instinctKeybind.isPressed() && instinctComponent.ticksSinceLastUse > 0) {
+                if (instinctComponent.getCharge() >= instinctComponent.ACTIVATION_THRESHOLD) {
+                    ClientPlayNetworking.send(new InstinctUseC2SPayload(true));
+                    return true;
+                } else {MinecraftClient.getInstance().player.sendMessage(Text.literal("You must have over 10% instinct to use.").formatted(Formatting.DARK_RED), true);}
             }
         }
+        return original;
     }
 
     @Inject(method = "getInstinctHighlight", at = @At("HEAD"), cancellable = true)
@@ -91,20 +101,8 @@ public abstract class InstinctMixin {
                 }
             }
             if (gameWorldComponent.isRole(MinecraftClient.getInstance().player, Noellesroles.CONSPIRATOR) && WatheClient.isInstinctEnabled()) {
-                double distance = MinecraftClient.getInstance().player.squaredDistanceTo(target);
                 if ((gameWorldComponent.canUseKillerFeatures((PlayerEntity) target) || Noellesroles.KILLER_SIDED_NEUTRALS.contains(gameWorldComponent.getRole((PlayerEntity) target)))) {
-                    if (distance <= 30 * 30){
-                        cir.setReturnValue(Color.RED.getRGB());
-                    } else {
-                        cir.setReturnValue(-1);
-                    }
-                    cir.cancel();
-                } else {
-                    if (distance <= 15 * 15){
-                        cir.setReturnValue(Color.GREEN.getRGB());
-                    } else {
-                        cir.setReturnValue(-1);
-                    }
+                    cir.setReturnValue(Color.RED.getRGB());
                     cir.cancel();
                 }
             }

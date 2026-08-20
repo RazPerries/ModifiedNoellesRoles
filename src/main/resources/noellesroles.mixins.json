@@ -34,7 +34,10 @@
     "jester.JesterCrowbarUseMixin",
     "jester.JesterDeluPlayerMixin",
     "conspirator.ConspiratorDeluPlayerMixin",
-    "vulture.VultureNoPoisonMixin"
+    "vulture.VultureNoPoisonMixin",
+    "HealthyMixin",
+    "serial_killer.SerialKillerInstinctMixin",
+    "serial_killer.SerialKillerStaminaMixin"
   ],
   "injectors": {
     "defaultRequire": 1
