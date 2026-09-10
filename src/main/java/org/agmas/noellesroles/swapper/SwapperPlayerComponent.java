@@ -19,13 +19,13 @@ public class SwapperPlayerComponent implements AutoSyncedComponent, ServerTickin
     public static final ComponentKey<SwapperPlayerComponent> KEY = ComponentRegistry.getOrCreate(Identifier.of(Noellesroles.MOD_ID, "swapper"), SwapperPlayerComponent.class);
     private final PlayerEntity player;
     public int swapTicks = -1;
-    // Minimum time for teleport
-    public int minSwapTime = 2;
-    // Maximum time for teleport
-    public int maxSwapTime = 3;
+    // Minimum time for teleport (in ticks)
+    public int minSwapTime = 30;
+    // Maximum time for teleport (in ticks)
+    public int maxSwapTime = 50;
 
     // Ability cost
-    public int swapCost = 75;
+    public int swapCost = 50;
 
     public PlayerEntity player1 = null;
     public PlayerEntity player2 = null;
@@ -57,8 +57,8 @@ public class SwapperPlayerComponent implements AutoSyncedComponent, ServerTickin
         if (this.swapTicks == 0) {
             if (player1 != null && player2 != null && !player1.isSpectator() && !player2.isSpectator()) {
                 if (this.swapperPos != null && this.swappedPos != null) {
-                    player1.teleport(swappedPos.x, swappedPos.y, swappedPos.z, true);
-                    player2.teleport(swapperPos.x, swapperPos.y, swapperPos.z, true);
+                    player1.teleport(swappedPos.x, swappedPos.y, swappedPos.z, false);
+                    player2.teleport(swapperPos.x, swapperPos.y, swapperPos.z, false);
                 }
             }
             swapTicks = -1;
@@ -78,7 +78,7 @@ public class SwapperPlayerComponent implements AutoSyncedComponent, ServerTickin
 
     public void setSwapTime() {
         Random random = new Random();
-        this.swapTicks = (GameConstants.getInTicks(0, random.nextInt(minSwapTime,maxSwapTime)));
+        this.swapTicks = random.nextInt(minSwapTime,maxSwapTime);
         this.sync();
     }
 

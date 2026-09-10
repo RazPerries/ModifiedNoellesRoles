@@ -181,14 +181,14 @@ public class Noellesroles implements ModInitializer {
         FRAMING_ROLES_SHOP.add(new FramingShopEntry(WatheItems.FIRECRACKER.getDefaultStack(), 10, ShopEntry.Type.TOOL));
         FRAMING_ROLES_SHOP.add(new FramingShopEntry(ModItems.SHORTFUSE_FIRECRACKER.getDefaultStack(), 10, ShopEntry.Type.TOOL));
 
-        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.LOCKPICK.getDefaultStack(), 80, ShopEntry.Type.TOOL));
+        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.LOCKPICK.getDefaultStack(), 50, ShopEntry.Type.TOOL));
         CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(ModItems.DELUSION_VIAL.getDefaultStack(), 30, ShopEntry.Type.POISON));
         CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.NOTE.getDefaultStack(), 10, ShopEntry.Type.TOOL));
         CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.FIRECRACKER.getDefaultStack(), 10, ShopEntry.Type.TOOL));
         CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(ModItems.SHORTFUSE_FIRECRACKER.getDefaultStack(), 10, ShopEntry.Type.TOOL));
-        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.BODY_BAG.getDefaultStack(), 125, ShopEntry.Type.TOOL));
-        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.CROWBAR.getDefaultStack(), 50, ShopEntry.Type.TOOL));
-        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.BLACKOUT.getDefaultStack(), 275, ShopEntry.Type.TOOL) {
+        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.BODY_BAG.getDefaultStack(), 100, ShopEntry.Type.TOOL));
+        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.CROWBAR.getDefaultStack(), 40, ShopEntry.Type.TOOL));
+        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.BLACKOUT.getDefaultStack(), 200, ShopEntry.Type.TOOL) {
             @Override
             public boolean onBuy(@NotNull PlayerEntity player) {
                 return PlayerShopComponent.useBlackout(player);
@@ -360,6 +360,9 @@ public class Noellesroles implements ModInitializer {
             if (role.equals(CONDUCTOR)) {
                 player.giveItemStack(ModItems.MASTER_KEY.getDefaultStack());
             }
+            if (role.equals(CONSPIRATOR)) {
+                player.giveItemStack(WatheItems.LOCKPICK.getDefaultStack());
+            }
         });
         ServerTickEvents.END_SERVER_TICK.register(((server) -> {
 
@@ -379,6 +382,10 @@ public class Noellesroles implements ModInitializer {
                         Harpymodloader.setRoleMaximum(role, 0);
                         ENABLED_NEUTRALS.add(role);
                     }
+                }
+                // If only 1 killer, remove conspirator
+                if (server.getPlayerManager().getCurrentPlayerCount() < 10) {
+                    ENABLED_NEUTRALS.remove(Noellesroles.CONSPIRATOR);
                 }
                 Collections.shuffle(ENABLED_NEUTRALS);
                 Harpymodloader.setRoleMaximum(ENABLED_NEUTRALS.getFirst(), 1);

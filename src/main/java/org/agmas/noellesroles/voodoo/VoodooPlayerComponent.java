@@ -25,7 +25,7 @@ public class VoodooPlayerComponent implements AutoSyncedComponent, ServerTicking
     public UUID target;
 
     public int glowTicks = -1;
-    public int abilityCost = 200;
+    public int abilityCost = 150;
     public boolean hasTarget = false;
 
     public void reset() {

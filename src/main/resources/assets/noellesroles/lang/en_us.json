@@ -117,7 +117,7 @@
   "tip.selected": "Selected",
   "tip.noellesroles.cooldown": "Ability usable in %ss",
   "tip.noellesroles.ability_used": "Ability cannot be used anymore.",
-  "tip.noellesroles.ability_cannot_afford":"You require %s coins to use this ability.",
+  "tip.noellesroles.ability_cannot_afford":"You require %s\uE781 to use this ability.",
   "tip.noellesroles.psycho_ability_disable": "Ability cannot be used during your psychosis.",
   "tip.noellesroles.global_psycho_ability_disable": "Ability cannot be used while psycho is active.",
   "tip.master_key_invisible_count": "Master Keys look like lockpicks with less than %s people.",
