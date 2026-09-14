@@ -42,7 +42,7 @@ public class ModifierStealerItem extends Item {
                 Modifier stolenModifier = worldModifierComponent.getModifiers(body.getPlayerUuid()).getFirst();
                 if (stolenModifier.equals(Noellesroles.TINY)
                         || ((gameWorldComponent.canUseKillerFeatures(user) || Noellesroles.KILLER_SIDED_NEUTRALS.contains(gameWorldComponent.getRole(user)))
-                        && (stolenModifier.equals(Noellesroles.IRON_WILLED) || stolenModifier.equals(Noellesroles.BELLRINGER)))) {
+                        && (stolenModifier.equals(Noellesroles.BELLRINGER)))) {
 
                     user.sendMessage(Text.literal("This body does not have a valid modifier to take.").withColor(Color.RED.getRGB()), true);
                     return ActionResult.PASS;

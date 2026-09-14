@@ -6,7 +6,8 @@
   "mixins": [
     "DoNotCollideWithFeatherMixin",
     "GiveCoinsOnMoodCompletionMixin",
-    "IronWillMoodMixin",
+    "iron_will.IronWillMoodMixin",
+    "iron_will.IronWillInstinctMixin",
     "bartender.BartenderPlayerShopComponentMixin",
     "bartender.BartenderReseterMixin",
     "bartender.CocktailItemMixin",
