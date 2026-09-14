@@ -389,7 +389,7 @@ public class Noellesroles implements ModInitializer {
                         ENABLED_NEUTRALS.add(role);
                     }
                 }
-                // If only 1 killer, remove conspirator
+                // If only 1 killer, remove conspirator from spawning
                 if (server.getPlayerManager().getCurrentPlayerCount() < 10) {
                     ENABLED_NEUTRALS.remove(Noellesroles.CONSPIRATOR);
                 }

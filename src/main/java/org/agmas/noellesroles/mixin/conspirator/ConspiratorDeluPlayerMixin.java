@@ -37,7 +37,7 @@ public abstract class ConspiratorDeluPlayerMixin  {
                 if (gameWorldComponent.isRole(serverPlayer, Noellesroles.CONSPIRATOR) && GameFunctions.isPlayerAliveAndSurvival(serverPlayer)) {
                     PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(serverPlayer);
                     serverPlayer.sendMessage(Text.translatable("tip.conspirator.delusion_reimbursement").withColor(Colors.LIGHT_GRAY), true);
-                    playerShopComponent.addToBalance(60);
+                    playerShopComponent.addToBalance(75);
                 }
             }
         }
