@@ -20,16 +20,18 @@ public class SerialKillerInstinctMixin {
     private float serialKillerFasterRegen(float original) {
         WorldModifierComponent modifierComponent = WorldModifierComponent.KEY.get(this.player.getWorld());
         if (modifierComponent.isModifier(player, Noellesroles.SERIAL_KILLER)) {
-            return 0.8f;
+            //Original: 0.5f
+            return 0.7f;
         }
         return original;
     }
 
     @ModifyReturnValue(method = "getHOLD_DRAIN_PER_SECOND", at = @At("RETURN"))
-    private float serialKillerHalvedDrain(float original) {
+    private float serialKillerReducedDrain(float original) {
         WorldModifierComponent modifierComponent = WorldModifierComponent.KEY.get(this.player.getWorld());
         if (modifierComponent.isModifier(player, Noellesroles.SERIAL_KILLER)) {
-            return 0.4f;
+            //Original: 0.8f
+            return 0.6f;
         }
         return original;
     }
