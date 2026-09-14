@@ -33,7 +33,7 @@ public class TimeRendererMixin {
 
             if (gameWorldComponent.isRunning()) {
                 int elapsed = BellringerTimeComponent.KEY.get(player.getWorld()).getElapsedTicks();
-                int time = 12000 - elapsed;
+                int time = 9600 - elapsed;
                 boolean isNegative = time < 0;
                 int displayTime = Math.abs(time);
 
