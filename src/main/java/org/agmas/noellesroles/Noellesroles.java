@@ -181,13 +181,13 @@ public class Noellesroles implements ModInitializer {
         FRAMING_ROLES_SHOP.add(new FramingShopEntry(WatheItems.FIRECRACKER.getDefaultStack(), 10, ShopEntry.Type.TOOL));
         FRAMING_ROLES_SHOP.add(new FramingShopEntry(ModItems.SHORTFUSE_FIRECRACKER.getDefaultStack(), 10, ShopEntry.Type.TOOL));
 
-        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.LOCKPICK.getDefaultStack(), 50, ShopEntry.Type.TOOL));
+        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.LOCKPICK.getDefaultStack(), 70, ShopEntry.Type.TOOL));
         CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(ModItems.DELUSION_VIAL.getDefaultStack(), 30, ShopEntry.Type.POISON));
         CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.NOTE.getDefaultStack(), 10, ShopEntry.Type.TOOL));
         CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.FIRECRACKER.getDefaultStack(), 10, ShopEntry.Type.TOOL));
         CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(ModItems.SHORTFUSE_FIRECRACKER.getDefaultStack(), 10, ShopEntry.Type.TOOL));
         CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.BODY_BAG.getDefaultStack(), 100, ShopEntry.Type.TOOL));
-        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.CROWBAR.getDefaultStack(), 40, ShopEntry.Type.TOOL));
+        CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.CROWBAR.getDefaultStack(), 50, ShopEntry.Type.TOOL));
         CONSPIRATOR_SHOP.add(new ConspiratorShopEntry(WatheItems.BLACKOUT.getDefaultStack(), 200, ShopEntry.Type.TOOL) {
             @Override
             public boolean onBuy(@NotNull PlayerEntity player) {
