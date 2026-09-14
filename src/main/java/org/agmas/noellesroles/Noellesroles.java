@@ -681,26 +681,26 @@ public class Noellesroles implements ModInitializer {
                         }
                     }
                 }
-                AbilityPlayerComponent abilityPlayerComponent = (AbilityPlayerComponent) AbilityPlayerComponent.KEY.get(context.player());
+                AbilityPlayerComponent abilityPlayerComponent = AbilityPlayerComponent.KEY.get(context.player());
                 abilityPlayerComponent.cooldown = GameConstants.getInTicks(2, 0);
                 abilityPlayerComponent.sync();
             }
         });
 
         ServerPlayNetworking.registerGlobalReceiver(Noellesroles.ABILITY_PACKET, (payload, context) -> {
-            AbilityPlayerComponent abilityPlayerComponent = (AbilityPlayerComponent) AbilityPlayerComponent.KEY.get(context.player());
-            GameWorldComponent gameWorldComponent = (GameWorldComponent) GameWorldComponent.KEY.get(context.player().getWorld());
+            AbilityPlayerComponent abilityPlayerComponent = AbilityPlayerComponent.KEY.get(context.player());
+            GameWorldComponent gameWorldComponent = GameWorldComponent.KEY.get(context.player().getWorld());
             if (gameWorldComponent.isRole(context.player(), RECALLER) && abilityPlayerComponent.cooldown <= 0) {
                 RecallerPlayerComponent recallerPlayerComponent = RecallerPlayerComponent.KEY.get(context.player());
                 PlayerShopComponent playerShopComponent = PlayerShopComponent.KEY.get(context.player());
-                if (!recallerPlayerComponent.placed && !recallerPlayerComponent.hasRecalled) {
+                if (!recallerPlayerComponent.placed) {
                     abilityPlayerComponent.cooldown = GameConstants.getInTicks(0,10);
                     recallerPlayerComponent.setPosition();
                 }
-                else if (playerShopComponent.balance >= 200 && !recallerPlayerComponent.hasRecalled) {
-                    playerShopComponent.balance -= 200;
+                else if (playerShopComponent.balance >= recallerPlayerComponent.recallCost + (recallerPlayerComponent.recallIncrease * recallerPlayerComponent.recallCount)) {
+                    playerShopComponent.balance -= recallerPlayerComponent.recallCost + (recallerPlayerComponent.recallIncrease * recallerPlayerComponent.recallCount);
                     playerShopComponent.sync();
-                    abilityPlayerComponent.cooldown = GameConstants.getInTicks(0,30);
+                    abilityPlayerComponent.cooldown = GameConstants.getInTicks(0,60);
                     recallerPlayerComponent.teleport();
                 }
 

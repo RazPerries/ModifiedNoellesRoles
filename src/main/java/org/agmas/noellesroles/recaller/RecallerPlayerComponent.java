@@ -20,7 +20,10 @@ public class RecallerPlayerComponent implements AutoSyncedComponent, ServerTicki
     public double x = 0;
     public double y = 0;
     public double z = 0;
-    public boolean hasRecalled = false;
+    public int recallCount = 0;
+
+    public int recallCost = 150;
+    public int recallIncrease = 100;
 
     public void reset() {
         this.placed = false;
@@ -28,7 +31,7 @@ public class RecallerPlayerComponent implements AutoSyncedComponent, ServerTicki
         this.y = 0;
         this.z = 0;
         this.sync();
-        this.hasRecalled = false;
+        this.recallCount = 0;
     }
 
     public RecallerPlayerComponent(PlayerEntity player) {
@@ -57,7 +60,7 @@ public class RecallerPlayerComponent implements AutoSyncedComponent, ServerTicki
 
     public void teleport() {
         player.teleport(x,y,z, false);
-        this.hasRecalled = true;
+        this.recallCount++;
         placed = false;
         this.sync();
     }
@@ -68,7 +71,7 @@ public class RecallerPlayerComponent implements AutoSyncedComponent, ServerTicki
         tag.putDouble("y", this.y);
         tag.putDouble("z", this.z);
         tag.putBoolean("placed", this.placed);
-        tag.putBoolean("hasRecalled", this.hasRecalled);
+        tag.putInt("recallCount", this.recallCount);
     }
 
     public void readFromNbt(@NotNull NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
@@ -76,6 +79,6 @@ public class RecallerPlayerComponent implements AutoSyncedComponent, ServerTicki
         this.y = tag.contains("y") ? tag.getDouble("y") : 0;
         this.z = tag.contains("z") ? tag.getDouble("z") : 0;
         this.placed = tag.contains("placed") && tag.getBoolean("placed");
-        this.hasRecalled = tag.getBoolean("hasRecalled");
+        this.recallCount = tag.getInt("recallCount");
     }
 }
