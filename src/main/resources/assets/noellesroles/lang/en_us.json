@@ -82,6 +82,7 @@
 
   "item.noellesroles.fake_revolver": "Fake Revolver",
   "item.noellesroles.master_key": "Master Key",
+  "item.noellesroles.master_key.tooltip": "Can be used to open any locked door (excluding Vault Doors)",
   "item.noellesroles.fake_knife": "Fake Knife",
   "item.noellesroles.defense_vial": "Cleansing Vial",
   "item.noellesroles.trapper_report": "Trapper Report",
