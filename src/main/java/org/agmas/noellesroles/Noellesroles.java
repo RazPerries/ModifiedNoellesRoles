@@ -397,7 +397,9 @@ public class Noellesroles implements ModInitializer {
                     ENABLED_NEUTRALS.remove(Noellesroles.CONSPIRATOR);
                 }
                 Collections.shuffle(ENABLED_NEUTRALS);
-                Harpymodloader.setRoleMaximum(ENABLED_NEUTRALS.getFirst(), 1);
+                if (!ENABLED_NEUTRALS.isEmpty()) {
+                    Harpymodloader.setRoleMaximum(ENABLED_NEUTRALS.getFirst(), 1);
+                }
 
             // If 13-17 players, add 2 accomplices.
             } else if (server.getPlayerManager().getCurrentPlayerCount() >= 13 && server.getPlayerManager().getCurrentPlayerCount() < 17) {
@@ -409,8 +411,10 @@ public class Noellesroles implements ModInitializer {
                     }
                 }
                 Collections.shuffle(ENABLED_NEUTRALS);
-                Harpymodloader.setRoleMaximum(ENABLED_NEUTRALS.getFirst(), 1);
-                Harpymodloader.setRoleMaximum(ENABLED_NEUTRALS.getLast(), 1);
+                if (!ENABLED_NEUTRALS.isEmpty()) {
+                    Harpymodloader.setRoleMaximum(ENABLED_NEUTRALS.getFirst(), 1);
+                    Harpymodloader.setRoleMaximum(ENABLED_NEUTRALS.getLast(), 1);
+                }
 
             // If 17+ players, I don't care about accomplice count.
             } else {
